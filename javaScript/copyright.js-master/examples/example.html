@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Copyright.js Example</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link type="text/css" rel="stylesheet" href="http://moxiecode.cachefly.net/tinymce/v9/css/all.min.css?v=1" />
+        
+        <script type="text/javascript" src="jquery-1.11.1.min.js"></script>
+        <script type="text/javascript" src="../copyright.min.js"></script>
+        <script src="http://tinymce.cachefly.net/4.1/tinymce.min.js"></script>
+        <!--Добавляет ссылку на автора-начало-->
+        <script type="text/javascript">
+            //<![CDATA[
+            function addLink() {
+                var body_element = document.getElementsByTagName('body')[0];
+                var selection;
+                if(window.getSelection().document.getElementsByClassName('content')){
+                    selection = window.getSelection();
+                }
+                // Вы можете изменить текст в этой строчке
+                var pagelink = "<span> &copy; <a href='"+document.location.href+"'>vipbag.com.ua</a></span>";
+                var copytext = selection + pagelink;
+                var newdiv = document.createElement('div');
+                newdiv.style.position = 'absolute';
+                newdiv.style.left = '-99999px';
+                body_element.appendChild(newdiv);
+                newdiv.innerHTML = copytext;
+                selection.selectAllChildren(newdiv);
+                window.setTimeout(function() {
+                    body_element.removeChild(newdiv);
+                },0);
+            }
+            document.oncopy = addLink;
+            //]]>
+        </script>
+        <!--Добавляет ссылку на автора-конец-->
+
+    </head>
+    <body onload="copyDoc()">
+        <div>
+            <p>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.</p>
+        </div>
+        <div class="content" style="background:#fee;" id="nocopy">
+            <p>PROTECTED CONTENT IS HERE</p>
+            
+            <strong>The standard Lorem Ipsum passage, used since the 1500s</strong>
+
+            <p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."</p>
+
+            <strong>Section 1.10.32 of "de Finibus Bonorum et Malorum", written by Cicero in 45 BC</strong>
+
+            <p>"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?"</p>
+
+            <strong>1914 translation by H. Rackham</strong>
+
+            <p>"But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of the great explorer of the truth, the master-builder of human happiness. No one rejects, dislikes, or avoids pleasure itself, because it is pleasure, but because those who do not know how to pursue pleasure rationally encounter consequences that are extremely painful. Nor again is there anyone who loves or pursues or desires to obtain pain of itself, because it is pain, but because occasionally circumstances occur in which toil and pain can procure him some great pleasure. To take a trivial example, which of us ever undertakes laborious physical exercise, except to obtain some advantage from it? But who has any right to find fault with a man who chooses to enjoy a pleasure that has no annoying consequences, or one who avoids a pain that produces no resultant pleasure?"</p>
+        </div>
+        <div class="pad2">
+            <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.</p>
+        </div>
+        <div>
+            <textarea cols="100" rows="15">Paste copied text here!</textarea>
+        </div>
+
+        <div>ddddddddddddddddddddddddddddddddddddddddddddddddd</div>
+        <table>
+            <tr><td>efrrrrrrrrrrrr</td></tr>
+        </table>
+
+        {foreach $filter->values as $v_id => $v}
+        {if (strlen($category.description) == 0) && !$smarty.get.page}
+
+        {elseif (strlen($category.description) < 500) && !$smarty.get.page}
+        <div class="seotext">{$category.description}</div>
+        {elseif (strlen($category.description) >= 500) && !$smarty.get.page || ($v->isSelected == false)}
+        <div class="home-text">
+            <div class="seotext">{$category.description}</div>
+        </div>
+        <div class="slideToggle home-text-category"><span>Подробнее...</span></div>
+        {/if}
+        {/foreach}
+    </body>
+</html>
