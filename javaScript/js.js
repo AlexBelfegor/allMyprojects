@@ -553,3 +553,4 @@ function Calculator() {
 var calc = new Calculator;
 
 alert(calc.calculate("12 + 34"));
+
