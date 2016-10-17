@@ -518,7 +518,7 @@ var calculator = new Calculator();
 calculator.read();
 
 alert( "Сумма = " + calculator.sum() );
-alert( "Произведение = " + calculator.mul() );*/
+     alert( "Произведение = " + calculator.mul() );
 
 function Accumulator(a) {
 
@@ -532,4 +532,24 @@ function Accumulator(a) {
 var accumulator = new Accumulator(1); // начальное значение 1
 accumulator.read(); // прибавит ввод prompt к текущему значению
 accumulator.read(); // прибавит ввод prompt к текущему значению
-alert( accumulator.value ); // выведет текущее значение
+     alert( accumulator.value ); // выведет текущее значение*/
+
+function Calculator() {
+
+    this.calculate = function (str) {
+        var s = str.split(' ');
+        if (s[1] == '+') {
+            return s = +s[0] + +s[2];
+        } else if (s[1] == '-') {
+            return s = +s[0] - +s[2];
+        }
+    };
+
+    this.addMethod = function () {
+
+    }
+
+}
+var calc = new Calculator;
+
+alert(calc.calculate("12 + 34"));
