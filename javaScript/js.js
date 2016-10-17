@@ -532,25 +532,52 @@ function Accumulator(a) {
 var accumulator = new Accumulator(1); // начальное значение 1
 accumulator.read(); // прибавит ввод prompt к текущему значению
 accumulator.read(); // прибавит ввод prompt к текущему значению
-     alert( accumulator.value ); // выведет текущее значение*/
+     alert( accumulator.value ); // выведет текущее значение
 
 function Calculator() {
 
-    this.calculate = function (str) {
-        var s = str.split(' ');
-        if (s[1] == '+') {
-            return s = +s[0] + +s[2];
-        } else if (s[1] == '-') {
-            return s = +s[0] - +s[2];
+     var methods = {
+     '+': function(a, b) {
+     return a + b;
+     },
+     '-': function(a, b) {
+     return a - b;
         }
     };
 
-    this.addMethod = function () {
+     this.calculate = function (str) {
+     var s = str.split(' '),
+     s0 = s[0],
+     s1 = s[1],
+     s2 = s[2];
 
-    }
+     if (!methods[s1] || isNaN(s0) || isNaN(s2)) {
+     return NaN;
+     }
+     return methods[s1](+s0, +s2);
+     };
+
+     this.addMethod = function(name, func) {
+     methods[name] = func;
+     };
 
 }
 var calc = new Calculator;
 
-alert(calc.calculate("12 + 34"));
+     calc.addMethod("*", function(a, b) {
+     return a * b;
+     });
+     calc.addMethod("/", function(a, b) {
+     return a / b;
+     });
+     calc.addMethod("**", function(a, b) {
+     return Math.pow(a, b);
+     });
+
+     alert(calc.calculate("2 ** 3"));*/
+
+
+
+
+
 
