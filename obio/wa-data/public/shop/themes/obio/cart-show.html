@@ -1,0 +1,12 @@
+<div class="basket{if $cart_data} basketactive{/if}">
+	<div class="btn-group">
+	    <div class="btn-basket">
+	    	<span><a class="click-basket" href="{if !$cart_data}javascript:void(0);{else}/cart/{/if}">КОРЗИНА</a></span>
+
+			{include file="cart-show-items.html" cart_data=$cart_data}
+
+	    </div>
+
+	    <p><nobr class="cart-count">{if $cart_count}{$cart_count}{else}0{/if}</nobr> товара(ов) <nobr class="cart-total">{shop_currency($cart_total, true)}</nobr></p>
+	</div>
+</div>

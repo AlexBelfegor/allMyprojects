@@ -1,0 +1,287 @@
+{*
+* @author Gaponov Igor <gapon2401@gmail.com>
+    *}
+    {* Switcher *}
+    <link rel="stylesheet" href="{$wa_url}wa-content/js/jquery-plugins/ibutton/jquery.ibutton.min.css?v={$wa->version()}">
+    <script src="{$wa_url}wa-content/js/jquery-plugins/ibutton/jquery.ibutton.min.js"></script>
+
+    {* CodeMirror *}
+    <link rel="stylesheet" href="{$wa_url}wa-content/js/codemirror/lib/codemirror.css?v={$wa->version()}">
+    <script src="{$wa_url}wa-content/js/codemirror/lib/codemirror.js?v={$wa->version()}"></script>
+    <script src="{$wa_url}wa-content/js/codemirror/mode/xml/xml.js?v={$wa->version()}"></script>
+    <script src="{$wa_url}wa-content/js/codemirror/mode/htmlmixed/htmlmixed.js?v={$wa->version()}"></script>
+
+    <link rel="stylesheet" href="{$plugin_url}css/quickorder.css" />
+    {* Jquery template *}
+    <script src="{$plugin_url}js/tmpl.min.js"></script>
+    <script type="text/x-tmpl" id="tmpl-field">
+        <div class="field">
+        <input type="text" name="fields[]" value="" placeholder="[`Field name`]" />
+        <select name="values[]">
+        {foreach $fields as $field}
+        <option value="{$field->getId()}">{$field->getName()|escape}</option>
+        {/foreach}
+        <optgroup label="[`Address`]">
+        {foreach $address as $addr}
+        <option value="address::{$addr->getId()}">{$addr->getName()|escape}</option>
+        {/foreach}
+        </optgroup>
+        </select>
+        <input type="hidden" name="required[]" value="0" disabled="disabled" />
+        <input type="checkbox" class="f-checkbox-required" name="required[]" value="1" checked="checked" /><em class="small">[`Required`]</em>
+        <a href="javascript:void(0)" class="remove-field" onclick="$(this).parent().remove()"><i class="icon16 cross"></i></a>
+        </div>
+    </script>
+    <h1>[`1-Click Ordering`]</h1>
+    <p>[`Select the fields that will be filled by customers while ordering`]</p>
+    <div class="fields form">
+        <form action="about:blank" id="fields-form">
+            {$wa->csrf()}
+            {if $active_fields}
+            {foreach $active_fields as $f}
+            <div class="field">
+                <input type="text" name="fields[]" value="{$f['field_name']|escape}" placeholder="[`Field name`]" />
+                <select name="values[]">
+                    {foreach $fields as $field}
+                    <option value="{$field->getId()}" {if $field->getId() == $f['field_value']}selected="selected"{/if}>{$field->getName()|escape}</option>
+                    {/foreach}
+                    <optgroup label="[`Address`]">
+                        {foreach $address as $addr}
+                        <option value="address::{$addr->getId()}" {if $addr->getId() == $f['field_value']}selected="selected"{/if}>{$addr->getName()|escape}</option>
+                        {/foreach}
+                    </optgroup>
+                </select>
+                <input type="hidden" name="required[]" value="0" {if !isset($f['required']) || $f['required']}disabled="disabled"{/if} />
+                <input type="checkbox" class="f-checkbox-required" name="required[]" value="1" {if !isset($f['required']) || $f['required']}checked="checked"{/if} /><em class="small">[`Required`]</em>
+                <a href="javascript:void(0)" class="remove-field" onclick="$(this).parent().remove()"><i class="icon16 cross"></i></a>
+            </div>
+            {/foreach}
+            {else}
+            <div class="field">
+                <input type="text" name="fields[]" value="" placeholder="[`Field name`]" />
+                <select name="values[]">
+                    {foreach $fields as $field}
+                    <option value="{$field->getId()}">{$field->getName()|escape}</option>
+                    {/foreach}
+                    <optgroup label="[`Address`]">
+                        {foreach $address as $addr}
+                        <option value="address::{$addr->getId()}">{$addr->getName()|escape}</option>
+                        {/foreach}
+                    </optgroup>
+                </select>
+                <input type="hidden" name="required[]" value="0" disabled="disabled" />
+                <input type="checkbox" class="f-checkbox-required" name="required[]" value="1" checked="checked" /><em class="small">[`Required`]</em>
+                <a href="javascript:void(0)" class="remove-field" onclick="$(this).parent().remove()"><i class="icon16 cross"></i></a>
+            </div>
+            {/if}
+            <div class="field">
+                <a href="javascript:void(0)" class="add-field inline-link"><i class="icon16 add"></i><b><i>[`Add field`]</i></b></a>
+            </div>
+            <div class="field-group">
+                <div class="field">
+                    <div class="name">[`1-Click button name`]:</div>
+                    <div class="value">
+                        <input type="text" name="settings[button_name]" value="{$settings['button_name']|escape}" />
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="name">[`1-Click button name to order the shopping cart`]:</div>
+                    <div class="value">
+                        <input type="text" name="settings[cart_button_name]" value="{if isset($settings['cart_button_name'])}{$settings['cart_button_name']|escape}{/if}" />
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="name">[`Comment to the order`]:</div>
+                    <div class="value">
+                        <input type="text" name="settings[comment]" value="{if isset($settings['comment'])}{$settings['comment']|escape}{/if}" />
+                    </div>
+                </div>
+                <div class="field">
+                    {$styles = ['default' => 'Default', 'dark-grey' => 'Dark grey', 'dark-red' => 'Dark red', 'creme' => 'Creme',
+                    'brown' => 'Brown', 'blue' => 'Blue', 'light-blue' => 'Light blue', 'orange' => 'Orange','light-orange' => 'Light orange',
+                    'green' => 'Green','olive' => 'Olive', 'purple' => 'Purple', 'white-blue' => 'White blue', 'white' => 'White', 
+                    'light-red' => 'Light red', 'pink' => 'Pink']}
+                    <div class="name">[`Style`]:</div>
+                    <div class="value">
+                        <select name="settings[style]">
+                            {foreach $styles as $scode => $svalue}
+                            <option value="{$scode}" {if isset($settings['style']) && $settings['style'] == {$scode}}selected{/if}>{$svalue}</option>
+                            {/foreach}
+                        </select>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="name">[`Allow customers to leave order comment`]:</div>
+                    <div class="value">
+                        <div class="ibutton-checkbox">
+                            <ul class="menu-h">
+                                <li>
+                                    <span id="switcher-off-label">[`No`]</span>
+                                </li>
+                                <li>
+                                    <input class="switcher" type="checkbox" name="settings[enable_user_comment]" value="1" {if !empty($settings['enable_user_comment'])}checked="checked"{/if} />
+                                </li>
+                                <li>
+                                    <span id="switcher-on-label">[`Yes`]</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="hint">[`You will see the comment in Orders`]</div>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="name">[`Text inside the popup purchase window`]:</div>
+                    <div class="value">
+                        <textarea class='codemirror-area' name="settings[form_text]">{if isset($settings['form_text'])}{$settings['form_text']|escape}{/if}</textarea>
+                        <div class="small">[`Customers will see the text before the button 'Place order'. You can use html.`]</div>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="name">[`Text after successfully accepted order`]:</div>
+                    <div class="value">
+                        <textarea class='codemirror-area' name="settings[order_text]">{if isset($settings['order_text'])}{$settings['order_text']|escape}{/if}</textarea>
+                        <div class="hint">[`Use $order_id to indicate the order number`]</div>
+                        <div class="small">[`Customers will see the text only if they use 1-Click Ordering for item, not the shopping cart`]</div>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="name">[`Additional js-code after successfully accepted order`]:</div>
+                    <div class="value">
+                        <textarea name="settings[js_code]">{if isset($settings['js_code'])}{$settings['js_code']|escape}{/if}</textarea>
+                        <div class="small">[`Use variable 'params' to get info about order. The structure of variable you can find on the plugins's page of Webasyst Store`]</div>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="name">[`Enable hook`] <b>frontend_product</b>:</div>
+                    <div class="value">
+                        <div class="ibutton-checkbox">
+                            <ul class="menu-h">
+                                <li>
+                                    <span id="switcher-off-label">[`No`]</span>
+                                </li>
+                                <li>
+                                    <input class="switcher" type="checkbox" name="settings[enable_frontend_product_hook]" value="1" {if (isset($settings['enable_frontend_product_hook']) && $settings['enable_frontend_product_hook'] !== '0') || !isset($settings['enable_frontend_product_hook'])}checked="checked"{/if} />
+                                </li>
+                                <li>
+                                    <span id="switcher-on-label">[`Yes`]</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="hint">[`Check 'No', if you want to disable default button output on the product page`]</div>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="name">[`Enable hook`] <b>frontend_cart</b>:</div>
+                    <div class="value">
+                        <div class="ibutton-checkbox">
+                            <ul class="menu-h">
+                                <li>
+                                    <span id="switcher-off-label">[`No`]</span>
+                                </li>
+                                <li>
+                                    <input class="switcher" type="checkbox" name="settings[enable_frontend_cart_hook]" value="1" {if (isset($settings['enable_frontend_cart_hook']) && $settings['enable_frontend_cart_hook'] !== '0') || !isset($settings['enable_frontend_cart_hook'])}checked="checked"{/if} />
+                                </li>
+                                <li>
+                                    <span id="switcher-on-label">[`Yes`]</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="hint">[`Check 'No', if you want to disable default button output on the cart page`]</div>
+                    </div>
+                </div>
+            </div>
+            <div class="field"><em class="errormsg"></em></div>
+            <div class="field"><input type="submit" class="button green" value="[`Save`]" /></div>
+        </form>
+    </div>
+
+    <script type="text/javascript">
+                    $(function() {
+                        // Добавление полей
+                        $(".add-field").click(function() {
+                            $(this).parent().before(tmpl("tmpl-field"));
+                        });
+                        
+                        // Выбор обязательного поля. Отправка пустого значение
+                        $(document).on("change", ".f-checkbox-required", function() {
+                            var btn = $(this);
+                            if (!btn.prop('checked')) {
+                                btn.prev().prop('disabled', false);
+                            } else {
+                                btn.prev().prop('disabled', true);
+                            }
+                        });
+
+                        // Сохранение значений формы
+                        $("#fields-form input[type='submit']").click(function() {
+                            var btn = $(this);
+                            var form = btn.parents("form");
+                            var errormsg = form.find(".errormsg");
+                            errormsg.text("");
+
+                            btn.next("i.icon16").remove();
+                            btn.attr('disabled', 'disabled').after("<i class='icon16 loading temp-loader'></i>");
+                            $.ajax({
+                                url: "?plugin=quickorder&module=settings&action=save",
+                                data: form.serializeArray(),
+                                dataType: "json",
+                                type: "post",
+                                success: function(response) {
+                                    btn.removeAttr('disabled').next(".temp-loader").remove();
+                                    if (typeof response.errors != 'undefined') {
+                                        if (typeof response.errors.messages != 'undefined') {
+                                            $.each(response.errors.messages, function(i, v) {
+                                                errormsg.append(v + "<br />");
+                                            });
+                                        }
+                                    } else if (response.status == 'ok' && response.data) {
+                                        btn.after("<i class='icon16 yes'></i>");
+                                    } else {
+                                        btn.after("<i class='icon16 no'></i>");
+                                    }
+                                },
+                                error: function() {
+                                    errormsg.text("[`Something wrong`]");
+                                    btn.removeAttr('disabled').next(".temp-loader").remove();
+                                    btn.after("<i class='icon16 no'></i>");
+                                }
+                            });
+                            return false;
+                        });
+
+                        // IButton switcher
+                        var switcher = $('.switcher');
+                        handler.call(switcher.get(0));
+                        switcher.iButton({
+                            labelOn: '',
+                            labelOff: '',
+                            className: 'mini'
+                        }).change(handler);
+                        function handler()
+                        {
+                            var onLabelSelector = '#' + this.id + '-on-label',
+                                    offLabelSelector = '#' + this.id + '-off-label';
+
+                            if (!this.checked) {
+                                $(onLabelSelector).addClass('unselected');
+                                $(offLabelSelector).removeClass('unselected');
+                            } else {
+                                $(onLabelSelector).removeClass('unselected');
+                                $(offLabelSelector).addClass('unselected');
+                            }
+                        }
+
+                        $.each($(".codemirror-area"), function(i, v) {
+                            var elem = v;
+                            var c = CodeMirror.fromTextArea(elem, {
+                                tabMode: "indent",
+                                height: "dynamic",
+                                lineWrapping: true,
+                                onChange: function(cm, obj) {
+                                    $(elem).val(cm.getValue());
+                                }
+                            });
+
+                        });
+                    });
+    </script>

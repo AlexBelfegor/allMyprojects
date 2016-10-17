@@ -1,0 +1,89 @@
+<style>
+    .checkout-header { display: none; }
+</style>
+
+<div class="checkout-result success steptitle">
+    <h1>[`Thank you!`]</h1>
+    <p>[`We successfully accepted your order, and will contact you asap.`]<br />
+    [`Your order number is `] <strong>{$order.id}</strong>.</p>
+
+    {if !empty($payment)}
+        <div class="plugin">
+            {$payment}
+        </div>
+    {/if}
+
+    {if !empty($payment_success)}
+        <span class="highlighted">[`Your payment has been successfully accepted. We will process your order and contact you shortly.`]</span>
+    {/if}
+
+    <p class="back">
+        &larr; <a href="{$wa_app_url}">[`Back to the store`]</a>
+    </p>
+
+	{*$wa->block("shop.block_social_success")*}
+
+    <!-- plugin hook: 'frontend_checkout' -->
+    {* @event frontend_checkout.%plugin_id% *}
+    {foreach $frontend_checkout as $_}{$_}{/foreach}
+
+</div>
+
+{if $order.id}
+{$coupon = shopDitto::getcouponetosession()}
+
+{*
+<script type="text/javascript">
+{literal}
+var purchase = new Array();
+
+{/literal}{foreach $order.items as $item}{literal}
+{/literal}{$brand = shopDitto::getFeaturesProd($item.product_id)}{literal}
+{/literal}{$category = shopDitto::GetCategoryCart($item.product_id)}{literal}
+var addProduct = new Array();
+
+addProduct = {
+    'id': '{/literal}{$item.product_id}{literal}',
+    'name': '{/literal}{$item.name}{literal}',
+    'category': '{/literal}{$category}{literal}',
+    'brand': '{/literal}{$brand}{literal}',
+    'variant': 'size',
+    'dimension1': '{/literal}{$item.product_id}{literal}',
+    'price': '{/literal}{$item.price * $item.quantity}{literal}',
+    'quantity': '{/literal}{$item.quantity}{literal}'
+};
+
+ga('ec:addProduct', addProduct);
+{/literal}{/foreach}{literal}
+
+ga('ec:setAction', 'purchase', {
+	'id': '{/literal}{$order.id|substr:1}{literal}',
+	'affiliation': 'ditto - store',
+	'revenue': '{/literal}{$order.total}{literal}',
+	'tax': '0',
+	'shipping': '{/literal}{$order.shipping}{literal}',
+	'coupon': '{/literal}{$coupon}{literal}'
+});
+
+ga("ec:setAction", "checkout", {"step": 5});
+{/literal}
+</script>
+
+<script type="text/javascript">
+{literal}
+ga("ec:setAction", "checkout", {"step": 5});
+
+ga('ec:setAction', 'purchase', {
+	'id': '{/literal}{$order.id|substr:1}{literal}',
+	'affiliation': '',
+	'revenue': '{/literal}{$order.total}{literal}',
+	'tax': '0',
+	'shipping': '{/literal}{$order.shipping}{literal}',
+	'coupon': '{/literal}{$coupon}{literal}'
+});
+{/literal}
+</script>
+*}
+
+<script type="text/javascript">{literal}ga("ec:setAction", "checkout", {"step": 5});{/literal}</script>
+{/if}

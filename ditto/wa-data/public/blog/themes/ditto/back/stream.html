@@ -1,0 +1,38 @@
+<div class="content">
+	<p class="breadcrumb"><a href="/">главная</a>&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;<span>статьи</span></p>
+    <div class="stati">
+    	<h1>статьи</h1>
+		<div id="post-stream" role="main" class="lazyloading" {if $wa->param('blog_url')}itemscope itemtype="http://schema.org/Blog"{/if}>
+
+		    {$blogs = $wa->blog->blogs()}
+		    {if count($blogs) > 1}
+	            <ul class="years">
+	            	{foreach $blogs as $blog}
+	            		<li><a href="{$blog.link}">{$blog.name}</a></li>
+	            	{/foreach}
+	            </ul>
+		    {/if}
+
+            <div class="clr"></div>
+
+            {include file="stream_posts.html" inline}
+
+        	<div class="clr"></div>
+		</div>
+
+        {if $pages > 1}
+	        <p class="pagination">
+	        	{for $p=1 to $pages}
+	        		<a href="{if $p eq $page}#page_{$page}{else}?page={$p}{/if}">{$p}</a>
+	        	{/for}
+	        </p>
+        {/if}
+
+        {*<a href="" class="more">показать еще 30 товаров</a>*}
+        <div class="clr"></div>
+    </div>
+
+    {include file="sidebar.html" inline}
+
+    <div class="clr"></div>
+</div>

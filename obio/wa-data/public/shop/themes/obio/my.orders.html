@@ -1,0 +1,81 @@
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <p class="breadcrumb">
+            	<a href="/">Главная</a>&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;
+            	<a href="/my/">Мой кабинет</a>&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;
+            	<span>[`My orders`]</span>
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="katalogbl">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 account">
+				<div class="account">
+					<h1>[`My orders`]</h1>
+
+                    {include file="my.nav.html"}
+
+					<table class="table" width="100%">
+				    <tr>
+				    	<td>Заказ</td>
+				    	<td>Статус</td>
+				    	<td>Товары</td>
+				    	<td>Доставка</td>
+				    	<td>Оплата</td>
+				    	<td>Дата</td>
+				    </tr>
+					{foreach $orders as $o}
+					    <tr>
+					        <td class="nowrap">
+					            <a href="{$o.url}" class="bold">
+					                {$o.id_str}
+					            </a>
+					        </td>
+					        <td class="nowrap">
+					            <span class="nowrap order-status" style="{$o.state->getStyle(1)}">
+					                {$o.state->getName()}
+					            </span>
+					        </td>
+					        <td>
+					            {foreach $o.items as $i}
+					                {$i.name|escape} <span class="gray">x {$i.quantity}</span><br />
+					            {/foreach}
+					        </td>
+					        <td>
+					            {if $o.shipping_name}
+					                {$o.shipping_name|escape}
+					            {else}
+					                &nbsp;
+					            {/if}
+					        </td>
+					        <td>
+					            {if $o.payment_name}
+					                {$o.payment_name|escape}
+					            {else}
+					                &nbsp;
+					            {/if}
+					        </td>
+					        <td>
+					            <span class="gray">{$o.create_datetime|wa_date:'humandate'}</span>
+					        </td>
+					    </tr>
+					{foreachelse}
+						<tr class="no-border">
+					        <td>[`You have no order history yet.`]</td>
+					  	</tr>
+					{/foreach}
+					</table>
+
+					<!-- plugin hook: 'frontend_my_orders' -->
+					{* @event frontend_my_orders.%plugin_id% *}
+					{foreach $frontend_my_orders as $_}{$_}{/foreach}
+
+				</div>
+            </div>
+        </div>
+    </div>
+</div>

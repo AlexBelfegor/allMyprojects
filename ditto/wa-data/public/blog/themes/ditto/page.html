@@ -1,0 +1,32 @@
+<div class="content">
+	<div class="breadcrumb" itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+        <a href="/" itemprop="url"><span itemprop="title">главная</span></a>&nbsp;&nbsp;&nbsp;&gt;&nbsp;&nbsp;&nbsp;
+        <div itemprop="child" itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+            <span class="last_span" itemprop="title">{$page.name}</span>
+        </div>
+    </div>
+
+    <div class="article">
+    	<h1>{$page.name}</h1>
+
+        <div class="text">
+            <div class="img"><img src="images/article.png" /></div>
+            <p>
+	    		{$page.content}
+        	</p>
+        </div>
+        <div class="social">
+            <a href="#" class="socbut"><img src="/wa-apps/shop/themes/ditto/images/vk1.png" /></a>
+            <a href="#" class="socbut"><img src="/wa-apps/shop/themes/ditto/images/fb1.png" /></a>
+            <a href="#" class="socbut"><img src="/wa-apps/shop/themes/ditto/images/tw1.png" /></a>
+            <a href="#" class="socbut"><img src="/wa-apps/shop/themes/ditto/images/gp1.png" /></a>
+            <a href="#" class="socbut"><img src="/wa-apps/shop/themes/ditto/images/ok1.png" /></a>
+        </div>
+        <div class="clr"></div>
+    </div>
+
+	{include file="sidebar.html" inline}
+
+    <div class="clr"></div>
+</div>
+

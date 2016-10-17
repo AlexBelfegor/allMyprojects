@@ -1,0 +1,50 @@
+	{if $category.url == 'novinki' || $category.url == 'rasprodazha'}
+		{if $data = shopDitto::products($category)}
+			{$products = $data.products}
+			{$pages_count = $data.pages_count}
+			{$filters = $data.filters}
+		{/if}
+	{/if}
+
+	<p class="breadcrumb">
+		<a href="/">главная</a>&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;
+		{if $breadcrumbs = shopDitto::breadcrumbscategory($category)}
+		    {foreach $breadcrumbs as $breadcrumb}
+		         <a href="{$breadcrumb.url}">{$breadcrumb.name|escape}</a>&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;
+		    {/foreach}
+		{/if}
+
+	    <span>{$category.name|escape}</span>
+	</p>
+
+    <div class="forfilter">
+    	<h4>{$category.name|escape}</h4>
+
+        {include file="sidebar.html" filters=$filters}
+
+        <div class="clr"></div>
+    </div>
+
+    <div class="filtrkontent">
+    	<div class="baner">
+    		{if $category.params.baner}
+    			{if $category.params.baner_url}<a href="{$category.params.baner_url}">{/if}
+    				<img src="{$category.params.baner}"/>
+    			{if $category.params.baner_url}</a>{/if}
+    		{/if}
+    	</div>
+
+        <div id="product-list">
+	    {if !$products && ($category.url != 'novinki' && $category.url != 'rasprodazha')}
+	        [`This category does not contain any products.`]
+	    {else}
+	        {include file='list-thumbs.html' sorting=!empty($category.params.enable_sorting) products=$products pages_count=$pages_count}
+	    {/if}
+        </div>
+
+        <div class="clr"></div>
+
+        <div class="opis">
+	        {if $category.description}<p>{$category.description}</p>{/if}
+        </div>
+    </div>

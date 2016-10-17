@@ -1,0 +1,47 @@
+<div class="field-group" id="field-categorytitlemask">
+    <div class="field">
+        <div class="name">
+            <label>
+                Title (заголовок) для товаров
+            </label>
+        </div>
+        <div class="value">
+            <input type="text" name="titlemask" value="{$category.titlemask|escape}"><br>
+            <span class="hint">Будет использоваться, если для товара не задан title.</span>
+        </div>
+    </div>
+    <div class="field">
+        <div class="name">
+            <label>
+                META Description для товаров
+            </label><br><br><br><br><br>
+            <label>
+                META Keywords для товаров
+            </label>
+        </div>
+        <div class="value">
+            <div class="float-left">
+                <textarea style="height: 45px" name="descriptionmask">{$category.descriptionmask|escape}</textarea><br>
+                <span class="hint">Будет использоваться, если для товара не задан description.</span>
+                <br><br>
+                <textarea style="height: 45px" name="keywordsmask">{$category.keywordsmask|escape}</textarea><br>
+                <span class="hint">Будет использоваться, если для товара не задан keywords.</span>
+            </div>
+            <div class="float-left" style="margin-left: 10px; color: #808080; background-color: #F7F7F9; border: 1px solid #E1E1E8; padding: 5px 10px; line-height: 1.3em">
+                <b>Доступные переменные:</b><br />
+                <span style="color: #339900">%product%</span>	— название товара<br />
+                <span style="color: #339900">%price%</span>	— цена<br />
+                <span style="color: #339900">%sku%</span>	— артикул товара<br />
+                <span style="color: #339900">%category%</span>	— название категории<br />
+                <span style="color: #339900">%parent_category%</span>	— название категории<br />
+                <span style="color: #339900">%store_name%</span>	— название магазина (из настроек)<br />
+                <span style="color: #339900">%store_phone%</span> — телефон магазина (из настроек)
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    $('#field-categorytitlemask').insertAfter($('#s-product-list-settings-form .s-dialog-form .field-group:last'));
+</script>

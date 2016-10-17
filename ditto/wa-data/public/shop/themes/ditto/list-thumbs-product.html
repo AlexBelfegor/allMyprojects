@@ -1,0 +1,12 @@
+{$i = 0}
+{foreach $products as $p}
+	{$brand = shopDitto::getFeaturesProd($p.id)}
+	{$i = $i + 1}
+	<div class="onepohogtov" data-id="{$p.id}" data-name="{$p.name}" data-price="{shop_currency($p.price)}" data-category="{$p.category_url}" data-brand="{$brand}" data-variant="size" data-list="{$name}" data-position="{$i}">
+		<div class="img"><a class="onProductClick" href="{$p.frontend_url}">{$wa->shop->productImgHtml($p, '220x220', ['alt' => $p.name|escape|cat:' – фото', 'title' => $p.name, 'default' => "`$wa_theme_url`img/dummy200.png"])}</a></div>
+	    <div class="gatatov">
+	    	<p class="titlepoh"><a href="{$p.frontend_url}">{$p.name|truncate:25}</a></p>
+	        <p class="pricepohtov"><span>Цена:</span> {shop_currency($p.price)} {if $p.compare_price}<span class="old_pricepohtov">{shop_currency($p.compare_price)}</span>{/if}</p>
+	    </div>
+	</div>
+{/foreach}

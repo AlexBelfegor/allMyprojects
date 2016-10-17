@@ -1,0 +1,377 @@
+{shopDitto::AddViewProduct($product.id)}
+<link rel="stylesheet" href="{$wa_theme_url}js/zoom/zoom.css" />
+<script type="text/javascript" src="{$wa_theme_url}js/zoom/jquery.zoom.min.js"></script>
+<script type="text/javascript" src="{$wa_url}wa-content/js/jquery-plugins/jquery.cookie.js"></script>
+<script type="text/javascript" src="{$wa_theme_url}js/product.js"></script>
+<script type="text/javascript" src="{$wa_theme_url}js/youtube.ga.js"></script>
+
+<script>$.fn.cycle.defaults.autoSelector = '.slideshow';</script>
+<div itemscope itemtype="http://schema.org/Product">
+	<div class="breadcrumb" itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+		<a href="/" itemprop="url"><span itemprop="title">Магазин обуви Ditto</span></a>&nbsp;&nbsp;&nbsp;&gt;&nbsp;&nbsp;&nbsp;
+		{if $breadcrumbs = shopDitto::breadcrumbs($product)}
+			{foreach $breadcrumbs as $breadcrumb}
+				<div itemprop="child" itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+					<a href="{$breadcrumb.url}" itemprop="url"><span itemprop="title">{$breadcrumb.name|escape}</span></a>&nbsp;&nbsp;&nbsp;&gt;&nbsp;&nbsp;&nbsp;
+				</div>
+			{/foreach}
+		{/if}
+				<div itemprop="child" itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+					<a href="{$wa->shop->productUrl($product)}" itemprop="url"><span class="last_span" itemprop="title">{$product.name|escape}</span></a>
+				</div>
+	</div>
+	<div class="tovarleft">
+		<div id="zoom-window"></div>
+		<div class="forimgtab">
+			{if $product.images}
+			{$wa->shop->badgeHtml($product.badge)}
+			{/if}
+			<div class="forimg" id='zoom-picture'>
+				<div class="zoom"></div>
+				{$wa->shop->productImgHtml($product, '1400', ['itemprop' => 'image', 'id' => 'product-image', 'alt' => $product.name|escape|cat:' – большое фото товара':strip_tags($product.summary)|escape, 'title' => $product.name|escape|cat:'':strip_tags($product.summary)|escape, 'default' => "/wa-apps/shop/themes/ditto/img/dummy340.png"])}
+			</div>
+		</div>
+		{$count_images = count($product.images)}
+		{if $count_images > 1}
+		<div class="minikarusel">
+			<div class="slideshow"
+					data-cycle-slides="> div"
+					data-cycle-fx=carousel
+					data-cycle-timeout="0"
+					data-cycle-carousel-visible="{if $count_images < 6}{$count_images}{else}6{/if}"
+					data-cycle-next=".next-slide"
+					data-cycle-prev=".prev-slide"
+					data-allow-wrap=true
+					>
+				{foreach $product.images as $image}
+				<div>
+					{$src = shopDitto::productImgHtmlPath(['id'=> $product.id, 'image_id' => $image.id, 'ext' => $image.ext],'1400')}
+					<a class="popup-product-photos show-picture" id="product-image-{$image.id}" href="{if $src}{$src}{else}#{/if}">{$wa->shop->productImgHtml(['id'=> $product.id, 'image_id' => $image.id, 'ext' => $image.ext], '60x60', ['itemprop' => 'image', 'alt' => $product.name|escape|cat:' - маленькое фото товара':strip_tags($product.summary)|escape, 'title' => $product.name|escape|cat:'':strip_tags($product.summary)|escape])}</a>
+				</div>
+				{/foreach}
+			</div>
+			{if $count_images > 6}
+			<div class="next-slide next"></div>
+			<div class="prev-slide prev"></div>
+			{/if}
+		</div>
+		{/if}
+		<div class="vibprew">
+			<!-- plugin hook: 'frontend_product.cart' -->
+			{* @event frontend_product.%plugin_id%.cart *}
+			{foreach $frontend_product as $_}{$_.cart}{/foreach}
+			{$src = shopDitto::productImgHtmlPath($product,'1400')}
+			<a class="popup-product-photos" href="{if $src}{$src}{else}#{/if}"><div class="onevibprew onevibprew2">большое фото</div></a>
+			{if $product.features.youtube}
+			<div class="onevibprew onevibprew3"><a class="popup-block-youtube" href="#popup-youtube-open" onclick="ga('send','event','YouTube','click','Play video');return true;">видеообзор</a></div>
+			<div class="block-youtube">
+				<div id="popup-youtube-open">
+					<div id="ytplayer">
+						{$product.features.youtube}
+					</div>
+				</div>
+				<div class="clr"></div>
+			</div>
+			{/if}
+			<div class="clr"></div>
+		</div>
+		{$wa->block("shop.block_tooltips")}
+	</div>
+	<div class="tovarright ">
+		<h1 itemprop="name">{$product.name|escape}{shopEarnberryHelper::getTrackingPlaceholderOnlyId()}</h1>
+		<div class="clr"></div>
+		<form id="cart-form" method="post" action="{$wa->getUrl('/frontendCart/add')}" class="cart">
+			<input type="hidden" name="product_id" value="{$product.id}">
+			<!-- sku -->
+			{$product_code = ""}
+			{if count($product.skus) > 1}
+			<ul class="skus" id="product-skus">
+				{$product_available = false}
+				{foreach $product.skus as $sku}
+				{$sku_available = ($sku.available && ($sku.count === null || $sku.count > 0))}
+				{if $sku.id == $product.sku_id}{$product_code = $sku.sku}{/if}
+				{$product_available = $product_available or $sku_available}
+				{/foreach}
+			</ul>
+			{else}
+			<div>
+				{$sku = $product.skus[$product.sku_id]}
+				{$product_code = $sku.sku}
+				<meta content="{shop_currency($sku.price, $product.currency)}">
+				{$product_available = ($sku.available and $sku.count !== 0)}
+				{if !$product_available}
+				<p><em class="bold out-of-stock nowrap">[`Out of stock`]</em></p>
+				{else}
+				<input name="sku_id" type="hidden" value="{$product.sku_id}">
+				{/if}
+			</div>
+			{/if}
+			{if $services}
+			<div class="services">
+				{foreach $services as $s}
+				<div id="service-{$s.id}">
+					<label>
+						<input data-price="{shop_currency($s.price, $s.currency, null, 0)}" {if !$product_available}disabled="disabled" {/if} type="checkbox" name="services[]" value="{$s.id}"> {$s.name|escape} {if $s.price && !isset($s.variants)}(+<span class="service-price">{shop_currency($s.price, $s.currency)}</span>){/if}
+					</label>
+					{if isset($s.variants)}
+					<select class="service-variants" name="service_variant[{$s.id}]" disabled="disabled">
+						{foreach $s.variants as $v}
+						<option data-price="{shop_currency($v.price, $s.currency, null, 0)}" id="service-variant-{$v.id}" value="{$v.id}">{$v.name|escape} (+{shop_currency($v.price, $s.currency)})</option>
+						{/foreach}
+					</select>
+					{else}
+					<input type="hidden" name="service_variant[{$s.id}]" value="{$s.variant_id}">
+					{/if}
+				</div>
+				{/foreach}
+			</div>
+			{/if}
+			<input type="hidden" name="quantity" value="1">
+			{if $product.features.brand}<p class="proizv" itemprop="brand">{$product.features.brand}</p>{/if}
+			{if $product_code}<p class="kodtov">код товара: <span itemprop="sku">{shopEarnberryHelper::getTrackingPlaceholder($product)}</span></p>{/if}
+			<span itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+				<p class="tovarprice" {if !$product.compare_price}style="line-height:40px;margin-bottom:20px;"{/if}>
+					<meta itemprop="priceCurrency" content="UAH" />
+					<meta itemprop="price" content="{intval($product.price)}" />
+					<span style="font-size:16px;">Цена:</span> {shop_currency($product.price)}
+					{if $product.compare_price > 0}<br /><span class="old_price">{shop_currency($product.compare_price)}</span>{/if}
+				</p>
+				{if $product_available}
+				<div class="buy_btn" data-id="{$product.id}" data-name="{$product.name}" data-price="{shop_currency($product.price)}" data-brand="{if $product.features.brand}{$product.features.brand}{/if}" data-category="{$product.category_url}" data-variant="size" data-dimension1="">
+					<input class="AddToCartProduct" type="submit" {if !$product_available}disabled="disabled" {else}onClick="ga('send', 'event', 'knopka', 'click', 'kupit');return true;" {/if} value="Купить">
+				</div>
+				{/if}
+
+				{if $product.compare_price > 0}
+					<div class="clr"></div>
+					{*(400 / 600 * 100)*}
+					<div style="padding-bottom:20px;font-size: 14px;font-style: italic;"><span style="color:#e74c3c;padding-right:5px;">Скидка {100-round(($product.price/$product.compare_price)*100)}%.</span> <span style="color:#9596a1;">Вы экономите {$product.compare_price - $product.price} грн.</span></div>
+                {/if}
+
+				<div class="clr"></div>
+				<a href="/dostavka-i-oplata/" class="uslov" target="_blank">Условия доставки и возврата товара</a>
+				<div class="clr"></div>
+				<p class="vibrazm">выберите размер</p>
+				<a href="#" class="uznrazm popup-product-size">как узнать размер?</a>
+				<div class="clr"></div>
+				{$isset_in_stock = 0}
+				{if $product.sku_type}
+				{$default_sku_features = $product.sku_features}
+				{$product_available = $product.status}
+				<ul class="razmerlist">
+					{foreach $features_selectable as $f}
+					{foreach $f.values as $v_id => $v}
+					{if !isset($default_sku_features[$f.id])}{$default_sku_features[$f.id]=$v_id}{/if}
+					{*BW show size*}
+					{$show_size = true}
+					{assign var=arr_ids value="`$f.id`:`$v_id`;"}
+					{assign var=count_skus value=$product.skus[$sku_features_selectable[$arr_ids].id].count}
+					{if isset($count_skus) && $count_skus == 0}
+					{$show_size = false}
+					{/if}
+					{if $show_size}
+					{$isset_in_stock = 1}
+					<li>
+						<a data-value="{$v_id}" href="#" {if $v_id== ifset($default_sku_features[$f.id])} class="active" {/if}{if $f.type == 'color'} style="{$v->style};"{/if}>
+						{if $f.type == 'color'}&nbsp;<span class="color_name">{strip_tags($v)}</span>{else}{$v}{/if}
+						</a>
+					</li>
+					{/if}
+					{/foreach}
+					<input type="hidden" data-feature-id="{$f.id}" class="sku-feature" name="features[{$f.id}]" value="{ifset($default_sku_features[$f.id])}">
+					{/foreach}
+				</ul>
+				{/if}
+				{if $isset_in_stock}
+				<p class="nalichtov">
+					<link itemprop="availability" href="http://schema.org/InStock" />
+					Есть в наличии!<br />Заказать cейчас!
+				</p>
+				{else}
+				<p class="nalichtov">
+					<link itemprop="availability" href="http://schema.org/OutOfStock" />
+					Нет в наличии
+				</p>
+				{/if}
+			</span>
+			{*popup select product size - if error adding to cart*}
+			<div class="block-product-select-size-open">
+				<div id="block-product-select-size-open">
+					<div id="product-select-size">
+						<div class="popup-padd">
+							<img src="/wa-data/public/shop/themes/ditto/images/icon-foot-small.png" border="0" alt="Пожалуйста выберите нужный вам размер" title="Пожалуйста выберите нужный вам размер">
+						</div>
+						<div class="popup-title">Выберите размер</div>
+						<div class="clear"></div>
+						<div class="clr"></div>
+						<div class="popup-razmerlist">
+							{$isset_in_stock = 0}
+							{if $product.sku_type}
+							{$default_sku_features = $product.sku_features}
+							{$product_available = $product.status}
+							<ul class="razmerlist cart-popup-select-size">
+								{foreach $features_selectable as $f}
+								{foreach $f.values as $v_id => $v}
+								{if !isset($default_sku_features[$f.id])}{$default_sku_features[$f.id]=$v_id}{/if}
+								{*BW show size*}
+								{$show_size = true}
+								{assign var=arr_ids value="`$f.id`:`$v_id`;"}
+								{assign var=count_skus value=$product.skus[$sku_features_selectable[$arr_ids].id].count}
+								{if isset($count_skus) && $count_skus == 0}
+								{$show_size = false}
+								{/if}
+								{if $show_size}
+								{$isset_in_stock = 1}
+								<li>
+									<a data-value="{$v_id}" href="#" {if $v_id== ifset($default_sku_features[$f.id])} class="active" {/if}{if $f.type == 'color'} style="{$v->style};"{/if}>
+									{if $f.type == 'color'}&nbsp;<span class="color_name">{strip_tags($v)}</span>{else}{$v}{/if}
+									</a>
+								</li>
+								{/if}
+								{/foreach}
+								{/foreach}
+							</ul>
+							{/if}
+						</div>
+						<div class="clear"></div>
+					</div>
+				</div>
+				<div class="clr"></div>
+			</div>
+		</form>
+		{$crossselling = $product->crossSelling()}
+		{if $crossselling}
+		<div class="clr"></div>
+		<p class="vibrazm">другие варианты</p>
+		<div class="clr"></div>
+		<ul class="colorlist">
+			{foreach $crossselling as $id => $p }
+			{$color = shopDitto::getFeatureColorProduct($id)}
+			{if $color}<li><a href="{$p.frontend_url}" class="color {if $color == '#FFFFFF'}colorwhite{/if}" {if $color} style="background-color:{$color};" {/if}></a></li>{/if}
+			{/foreach}
+		</ul>
+		{/if}
+		<div class="clr"></div>
+		<table width="380" border="0" cellspacing="0" cellpadding="0" class="tovdata" itemprop="description">
+			{if $product.features}
+			{$foo = 0}
+			{foreach $product.features as $f_code => $f_value}
+			{if $f_code != "youtube" && $f_code != "size" && $f_code != "vysota_kabluka1" && $f_code != "weight" && $f_code != "god_kollektsii"}
+			{$foo = $foo + 1}
+			<tr>
+				<td>{$features[$f_code].name|escape}</td>
+				<td>{if is_array($f_value)}{implode(', ', $f_value)}{else}{$f_value}{/if}</td>
+			</tr>
+			{/if}
+			{/foreach}
+			{/if}
+		</table>
+		{if $product.description}<p class="texttov">{$product.description}</p>{/if}
+		{shopDitto::SeoShieldProductBlock()}
+	</div>
+	<div class="clr"></div>
+
+	{$upselling = $product->upSelling()}
+	{if $upselling}
+	{$cnt = count($upselling)}
+	<div class="dottedtov"></div>
+	<div class="fordottitl"><p>Вам также может понравиться</p></div>
+	<div class="clr"></div>
+	<div class="forsliderpoh">
+		<div class="slideshow"
+				data-cycle-slides="> div"
+				data-cycle-fx=carousel
+				data-cycle-timeout="0"
+				data-cycle-carousel-visible="{if $cnt <= 4}{$cnt}{else}4{/if}"
+				data-cycle-next=".next-slide1"
+				data-cycle-prev=".prev-slide1"
+				data-allow-wrap=true
+				>
+			{include file="list-thumbs-product.html" products=$upselling name="Вам также может понравиться"}
+		</div>
+		{if $cnt >= 4}
+		<div class="next-slide1 next"></div>
+		<div class="prev-slide1 prev"></div>
+		{/if}
+	</div>
+	{/if}
+
+	{$mostpopular = shopDitto::MostPopularViewProducts()}
+	{if $mostpopular}
+	{$cnt = count($mostpopular)}
+	<div class="dottedtov"></div>
+	<div class="fordottitl"><p>Недавно просмотренные товары</p></div>
+	<div class="forsliderpoh">
+		<div class="slideshow"
+				data-cycle-slides="> div"
+				data-cycle-fx=carousel
+				data-cycle-timeout="0"
+				data-cycle-carousel-visible="{if $cnt <= 4}{$cnt}{else}4{/if}"
+				data-cycle-next=".next-slide2"
+				data-cycle-prev=".prev-slide2"
+				data-allow-wrap=true
+				>
+			{include file="list-thumbs-product.html" products=$mostpopular name="Недавно просмотренные товары"}
+		</div>
+		{if $cnt >= 4}
+		<div class="next-slide2 next"></div>
+		<div class="prev-slide2 prev"></div>
+		{/if}
+	</div>
+	{/if}
+
+	{$similar = shopDitto::SimilarProductsFromCurrentCategory($product)}
+	{if $similar}
+	{$cnt = count($similar)}
+	<div class="dottedtov"></div>
+	<div class="fordottitl"><p>Похожие товары</p></div>
+	<div class="forsliderpoh">
+		<div class="slideshow"
+				data-cycle-slides="> div"
+				data-cycle-fx=carousel
+				data-cycle-timeout="0"
+				data-cycle-carousel-visible="{if $cnt <= 4}{$cnt}{else}4{/if}"
+				data-cycle-next=".next-slide3"
+				data-cycle-prev=".prev-slide3"
+				data-allow-wrap=true
+				>
+			{include file="list-thumbs-product.html" products=$similar name="Похожие товары"}
+		</div>
+		{if $cnt >= 4}
+		<div class="next-slide3 next"></div>
+		<div class="prev-slide3 prev"></div>
+		{/if}
+	</div>
+	{/if}
+
+	<!-- plugin hook: 'frontend_product.block' -->
+	{* @event frontend_product.%plugin_id%.block *}
+	{foreach $frontend_product as $_}{$_.block}{/foreach}
+	<script type="text/javascript">
+		var currency = {json_encode($currency_info)};
+		{if count($product.skus) > 1}
+			var sku_services = {json_encode($sku_services)};
+		{/if}
+	</script>
+	{*код ремаркетинга google (спец параметры)*}
+	<script type="text/javascript">{literal}var google_tag_params = {prodid: '{/literal}{$product.id}{literal}',pagetype: 'product',pname: '{/literal}{$product.name}{literal}',pcat: '{/literal}{$breadcrumb.name}{literal}',value: '{/literal}{(int)$product.price}{literal}'};{/literal}</script>
+	{*код ретаргетинга recreative*}
+	<script type="text/javascript">{literal}
+        	(function(d,w){
+            	var n=d.getElementsByTagName("script")[0],
+            	s=d.createElement("script"),
+            	f=function(){n.parentNode.insertBefore(s,n);};
+            	s.type="text/javascript";
+            	s.async=true;
+            	s.src="http://track.recreativ.ru/trck.php?shop=1779&ttl=30&offer={/literal}{$product.id}{literal}&rnd="+Math.floor(Math.random()*999);
+            	if(window.opera=="[object Opera]"){d.addEventListener("DOMContentLoaded", f, false);}
+            	else{f();}
+            })(document,window);{/literal}
+	</script>
+	{*код ретаргетинга media_trafic*}
+	<script type="text/javascript">{literal}var itemIDs = "{/literal}{$product.id}{literal}";var hldr = "&r" + Math.round((Math.random() * 10000000));document.cookie = "holder=1; path=/";if (document.cookie)hldr += "&c1";(new Image()).src = window.location.protocol + '//r.holder.com.ua/e?s76&e1&k1377626842&i' + itemIDs + hldr;{/literal}</script>
+	<script type='text/javascript'>{literal}window['rnt_aud_params'] = window['rnt_aud_params'] || [];window['rnt_aud_params'].push({ key: 'pId|9169_b018b230-5b11-4014-9fc1-e01cbfe8c9c7|237', val: '{/literal}{$product.id}{literal}'});{/literal}</script>
+    <script type='text/javascript'>{literal}(function (w, d, n) {w[n] = w[n] || [];w[n].push({id:'9169_b018b230-5b11-4014-9fc1-e01cbfe8c9c7', url:'http://uaadcodedsp.rontar.com/'});var a = document.createElement('script');a.type = 'text/javascript';a.async = true;a.src = 'http://uaadcodedsp.rontar.com/rontar_aud_async.js';var b = document.body;d.body.appendChild(a);})(window, document, 'rontar_aud');{/literal}</script>
+</div>
+
+<script type="text/javascript">{literal}ga('ec:setAction', 'detail');{/literal}</script>

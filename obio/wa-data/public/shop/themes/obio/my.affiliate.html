@@ -1,0 +1,78 @@
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <p class="breadcrumb">
+            	<a href="/">Главная</a>&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;
+            	<a href="/my/">Мой кабинет</a>&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;
+            	<span>[`Affiliate program`]</span>
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="katalogbl">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 account">
+				<div class="account">
+					<h1>[`Affiliate program`]</h1>
+
+                    {include file="my.nav.html"}
+
+					{$balance = round($customer.affiliate_bonus, 2)|wa_format_number:false}
+					{if $customer.affiliate_bonus >= 0}{$balance = '+'|cat:$balance}{/if}
+					<p class="large text-center">{sprintf('[`Your current affiliate bonus: <strong class="bonus">%s</strong>`]', $balance)}</strong></p>
+                    <br><br>
+					{$_aff_plugins_active = 0}
+					<!-- plugin hook: 'frontend_my_affiliate' -->
+					{* @event frontend_my_affiliate.%plugin_id% *}
+					{foreach $frontend_my_affiliate as $_}{$_}{$_aff_plugins_active = 1}{/foreach}
+
+					{if $_aff_plugins_active}<br><br><h2>[`Bonus activity log`]</h2>{/if}
+
+					<table class="table">
+					    {if !empty($affiliate_history)}
+					        <tr class="white">
+					            <th>Дата</th>
+					            <th>Действие</th>
+					            <th>[`Credit`]</th>
+					            <th>[`Debit`]</th>
+					            <th>[`Balance`]</th>
+					        </tr>
+					        {foreach $affiliate_history as $h}
+					            <tr>
+					                <td class="gray">{$h.create_datetime|wa_date:'humandatetime'}</td>
+					                <td>
+					                    {if $h.order_id && !empty($h.order_url)}
+					                        <a href="{$h.order_url}">[`Order`] {$wa->shop->orderId($h.order_id)}</a>
+					                        {if $h.comment}<br>{/if}
+					                    {/if}
+					                    {if $h.comment}
+					                        {$h.comment|escape}
+					                    {/if}
+					                </td>
+					                <td class="align-right">
+					                    {if $h.amount > 0}
+					                        {round($h.amount,2)|wa_format_number:false}
+					                    {/if}
+					                </td>
+					                <td class="align-right">
+					                    {if $h.amount < 0}
+					                        {round(abs($h.amount),2)|wa_format_number:false}
+					                    {/if}
+					                </td>
+					                <td class="align-right">{round($h.balance,2)|wa_format_number:false}</td>
+					            </tr>
+					        {/foreach}
+					    {else}
+					        <tr>
+					            <td>[`You have no affiliate history yet.`]</td>
+					        </tr>
+					    {/if}
+					</table>
+
+				</div>
+            </div>
+        </div>
+    </div>
+</div>

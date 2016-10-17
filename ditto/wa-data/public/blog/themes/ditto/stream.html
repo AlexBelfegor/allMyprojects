@@ -1,0 +1,45 @@
+<div class="content">
+	<div class="breadcrumb" itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+		<a href="/" itemprop="url"><span itemprop="title">Магазин обуви Ditto</span></a>&nbsp;&nbsp;&nbsp;&gt;&nbsp;&nbsp;&nbsp;
+		<div itemprop="child" itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+			<a href="{$blog.link}" itemprop="url">
+				<span class="last_span" itemprop="title">{if $post_count}{$wa->title()}{/if}</span>
+			</a>
+		</div>
+	</div>
+    <div class="stati">
+    	<h1>статьи</h1>
+		<div id="post-stream" role="main" class="lazyloading">
+
+		    {$blogs = $wa->blog->blogs()}
+		    {if count($blogs) > 1}
+	            <ul class="years">
+	            	{foreach $blogs as $blog}
+					<li><a href="{$blog.link}">{$blog.name}</a></li>
+					{/foreach}
+	            </ul>
+		    {/if}
+
+            <div class="clr"></div>
+
+            {include file="stream_posts.html" inline}
+
+        	<div class="clr"></div>
+		</div>
+
+        {if $pages > 1}
+	        <p class="pagination">
+	        	{for $p=1 to $pages}
+	        		<a href="{if $p eq $page}#page_{$page}{else}?page={$p}{/if}">{$p}</a>
+	        	{/for}
+	        </p>
+        {/if}
+
+        {*<a href="" class="more">показать еще 30 товаров</a>*}
+        <div class="clr"></div>
+    </div>
+
+    {include file="sidebar.html" inline}
+
+    <div class="clr"></div>
+</div>

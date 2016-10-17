@@ -1,0 +1,16 @@
+.tooltipster-shadow {
+	border-radius: 5px;
+	background: #f9f9f9;
+	box-shadow: 0px 0px 14px rgba(0,0,0,0.3);
+	color: #23242b;
+	text-align:justify;
+}
+.tooltipster-shadow .tooltipster-content {
+	font-family: 'Arial', sans-serif;
+	font-size: 14px;
+	line-height: 22px;
+	padding: 20px 20px;
+	color:#23242b;
+	text-align:justify;
+	width: 215px;
+}

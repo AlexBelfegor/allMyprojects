@@ -1,0 +1,187 @@
+<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+	<ol class="carousel-indicators">
+		<li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+		<li data-target="#carousel-example-generic" data-slide-to="1"></li>
+		<li data-target="#carousel-example-generic" data-slide-to="2"></li>
+		<li data-target="#carousel-example-generic" data-slide-to="3"></li>
+	</ol>
+
+	<div class="carousel-inner" role="listbox">
+		<div class="item active">
+			<img src="/promo/slider/man/1.jpg">
+		</div>
+		<div class="item">
+			<img src="/promo/slider/man/1.jpg">
+		</div>
+		<div class="item">
+			<img src="/promo/slider/man/1.jpg">
+		</div>
+		<div class="item">
+			<img src="/promo/slider/man/1.jpg">
+		</div>
+	</div>
+
+	<a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+		<span class="arr-left" aria-hidden="true"></span>
+	</a>
+	<a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+		<span class="arr-right" aria-hidden="true"></span>
+	</a>
+</div>
+
+<div class="category-promo">
+	<div class="row">
+		<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 padd-l">
+			<a href="#">
+				<div class="p-item">
+					<div><img src="/promo/category/man/p-item-1.jpg" class="img-responsive"></div>
+					<div class="p-block">
+						<div class="p-left">
+							<div>Свадьба</div>
+							<div>Все для невесты</div>
+						</div>
+						<div class="p-right">
+							<div class="p-button"></div>
+						</div>
+					</div>
+				</div>
+			</a>
+		</div>
+		<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 padd-r">
+			<a href="#">
+				<div class="p-item">
+					<div><img src="/promo/category/man/p-item-2.jpg" class="img-responsive"></div>
+					<div class="p-block">
+						<div class="p-left">
+							<div>smart casual</div>
+							<div>Удобно и стильно</div>
+						</div>
+						<div class="p-right">
+							<div class="p-button"></div>
+						</div>
+					</div>
+				</div>
+			</a>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 padd-l">
+			<a href="#">
+				<div class="p-item">
+					<div><img src="/promo/category/man/p-item-3.jpg" class="img-responsive"></div>
+					<div class="p-block">
+						<div class="p-left">
+							<div>sale</div>
+							<div>Скидки -50%</div>
+						</div>
+						<div class="p-right">
+							<div class="p-button"></div>
+						</div>
+					</div>
+				</div>
+			</a>
+		</div>
+		<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 padd-r">
+			<a href="#">
+				<div class="p-item">
+					<div><img src="/promo/category/man/p-item-4.jpg" class="img-responsive"></div>
+					<div class="p-block">
+						<div class="p-left">
+							<div>classic</div>
+							<div>Вечная классика</div>
+						</div>
+						<div class="p-right">
+							<div class="p-button"></div>
+						</div>
+					</div>
+				</div>
+			</a>
+		</div>
+	</div>
+</div>
+
+<div class="category-cats">
+	<div class="border-line">Популярные категории</div>
+
+	<div class="row">
+		<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+			<a href="#">
+				<div class="c-item">
+					<div><img src="/promo/category/man/cat-item-1.jpg" class="img-responsive"></div>
+					<div class="c-title">Боссоножки</div>
+				</div>
+			</a>
+		</div>
+		<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+			<a href="#">
+				<div class="c-item">
+					<div><img src="/promo/category/man/cat-item-2.jpg" class="img-responsive"></div>
+					<div class="c-title">Балетки</div>
+				</div>
+			</a>
+		</div>
+		<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+			<a href="#">
+				<div class="c-item">
+					<div><img src="/promo/category/man/cat-item-3.jpg" class="img-responsive"></div>
+					<div class="c-title">Сандалии</div>
+				</div>
+			</a>
+		</div>
+		<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+			<a href="#">
+				<div class="c-item">
+					<div><img src="/promo/category/man/cat-item-4.jpg" class="img-responsive"></div>
+					<div class="c-title">Туфли</div>
+				</div>
+			</a>
+		</div>
+	</div>
+</div>
+
+{$products = $wa->shop->productSet("category-zhenskie")}
+{if $products}
+<div class="category-title">
+    <div class="title bord">Лучшие товары</div>
+	{include file="list-thumbs-product.html" products=$products name="Лучшие товары" items="3"}
+</div>
+{/if}
+
+<div class="category-brands">
+	<div class="border-line">Популярные Бренды</div>
+
+	<div class="row">
+		<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+			<a href="#">
+				<div class="b-item">
+					<img src="/promo/category/man/brand-1.png" class="img-responsive">
+				</div>
+			</a>
+		</div>
+		<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+			<a href="#">
+				<div class="b-item">
+					<img src="/promo/category/man/brand-2.png" class="img-responsive">
+				</div>
+			</a>
+		</div>
+		<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+			<a href="#">
+				<div class="b-item">
+					<img src="/promo/category/man/brand-3.png" class="img-responsive">
+				</div>
+			</a>
+		</div>
+		<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+			<a href="#">
+				<div class="b-item">
+					<img src="/promo/category/man/brand-4.png" class="img-responsive">
+				</div>
+			</a>
+		</div>
+	</div>
+</div>
+
+<div class="category-title">
+	<div class="border-line">Мужская обувь и аксессуары</div>
+</div>

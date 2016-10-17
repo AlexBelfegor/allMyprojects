@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	{$uri = $smarty.server.REDIRECT_URL}
+	{if $uri == '/journal/fashion-and-style/'}
+		<title>Мода и стиль - выгодные цены на мужскую и женскую обувь, сумки и аксессуары для мужчин и женщин в каталоге интернет магазина Ditto.ua{if $smarty.get.page} - страница {$smarty.get.page}{/if}</title>
+		{if !isset($smarty.get.page)}<meta name="Description" content="Лучшая цена на обувь для мужчин и женщин в каталоге нашего интернет магазина, купить Мода и стиль, а также сумки и аксессуары от производителя с доставкой по Украине на сайте Ditto.ua" />{/if}
+	{elseif $uri == '/journal/obzory/'}
+		<title>Обзоры - выгодные цены на мужскую и женскую обувь, сумки и аксессуары для мужчин и женщин в каталоге интернет магазина Ditto.ua{if $smarty.get.page} - страница {$smarty.get.page}{/if}</title>
+		{if !isset($smarty.get.page)}<meta name="Description" content="Лучшая цена на обувь для мужчин и женщин в каталоге нашего интернет магазина, купить Обзоры, а также сумки и аксессуары от производителя с доставкой по Украине на сайте Ditto.ua" />{/if}
+	{elseif $uri == '/journal/aktsii/'}
+		<title>Акции - выгодные цены на мужскую и женскую обувь, сумки и аксессуары для мужчин и женщин в каталоге интернет магазина Ditto.ua{if $smarty.get.page} - страница {$smarty.get.page}{/if}</title>
+		{if !isset($smarty.get.page)}<meta name="Description" content="Лучшая цена на обувь для мужчин и женщин в каталоге нашего интернет магазина, купить Акции, а также сумки и аксессуары от производителя с доставкой по Украине на сайте Ditto.ua" />{/if}
+	{else}
+		<title>{$wa->title()|escape}</title>
+		<meta name="Description" content="{$wa->meta('description')|escape}" />
+	{/if}
+	<meta name="Keywords" content="{$wa->meta('keywords')|escape}" />
+
+	<link rel="shortcut icon" href="{$wa_theme_url}images/favicon.ico">
+    {if $category && isset($category.full_url)}
+    	<link rel="canonical" href="http://ditto.ua/{$category.full_url}/" />
+    {/if}
+    <!--Meta Fix IE-->
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+	<link href="{$wa_theme_url}css/style.css" rel="stylesheet" />
+	<!--[if lt IE 9]>
+	<link rel="stylesheet" href="{$wa_theme_url}css/ie/style.css" />
+	<script type="text/javascript" src="{$wa_theme_url}js/html5.js"></script>
+	<![endif]-->
+	<link rel="stylesheet" type="text/css" href="{$wa_theme_url}css/jquery.slider.min.css">
+	<script type="text/javascript" src="{$wa_url}wa-content/js/jquery/jquery-1.8.1.min.js"></script>
+	<script type="text/javascript" src="{$wa_theme_url}js/jquery.slider.min.js"></script>
+	<script type="text/javascript" src="{$wa_url}wa-content/js/jquery-wa/wa.core.js"></script>
+	<script type="text/javascript" src="{$wa_theme_url}js/default.js"></script>
+	<script type="text/javascript" src="{$wa_theme_url}js/lazyloading.js"></script>
+	<script type="text/javascript" src="{$wa_theme_url}f3000_theme.js"></script>
+	{if !empty($nofollow)}
+	<meta name="robots" content="noindex,nofollow" />
+	{/if}
+	{$wa->js()}
+	{$wa->headJs()}
+	<script type="text/javascript" src="{$wa_app_static_url}js/lazy.load.js?v={$wa->version()}"></script>
+	<!-- plugin hook: 'frontend_head' -->
+	{* @event frontend_head.%plugin_id% *}
+	{foreach $frontend_head as $_}{$_}{/foreach}
+	<script type="text/javascript" src="{$wa_theme_url}js/jquery.cycle2.js"></script>
+	<script type="text/javascript" src="{$wa_theme_url}js/jquery.cycle2.carousel.js"></script>
+	<script type="text/javascript" src="{$wa_theme_url}js/jquery.mask.min.js"></script>
+	<script type="text/javascript" src="{$wa_theme_url}js/js.js"></script>
+	<link rel="stylesheet" type="text/css" property="stylesheet" href="{$wa_theme_url}js/colorbox/colorbox.css" />
+	<script type="text/javascript" src="{$wa_theme_url}js/colorbox/jquery.colorbox-min.js"></script>
+	<!--copyright code-->
+	<script type="text/javascript" src="{$wa_theme_url}js/copyright.min.js"></script>
+	<script type="text/javascript">
+		{literal}
+		$(document).ready(function () {
+			$('div.seotext, div.article').copyright({
+				extratxt: '&copy; %source%', sourcetxt: 'ditto.ua', hide: true
+			});
+		});
+		{/literal}
+	</script>
+	<!--end copyright code-->
+	<!-- Start SiteHeart code -->
+	<script>
+		{literal}
+		(function () {
+			var widget_id = 719458;
+			_shcp = [{widget_id: widget_id}];
+			var lang = (navigator.language || navigator.systemLanguage || navigator.userLanguage || "en").substr(0, 2).toLowerCase();
+			var url = "widget.siteheart.com/widget/sh/" + widget_id + "/" + lang + "/widget.js";
+			var hcc = document.createElement("script");
+			hcc.type = "text/javascript";
+			hcc.async = true;
+			hcc.src = ("https:" == document.location.protocol ? "https" : "http") + "://" + url;
+			var s = document.getElementsByTagName("script")[0];
+			s.parentNode.insertBefore(hcc, s.nextSibling);
+		})();
+		{/literal}
+	</script>
+	<!-- End SiteHeart code -->
+
+	{if isset($pages_count) && $pages_count > 1}
+		{shopCallbackPlugin::SetPaginationRelInHead($pages_count)}
+	{/if}
+</head>
+<body>
+<div itemscope itemtype="http://schema.org/ShoeStore">
+	<div class="top">
+		<div class="wrap">
+			{$wa->block("shop.block_top_menu")}
+			<div class="clr"></div>
+		</div>
+	</div>
+	<div class="header">
+		<div class="wrap">
+			<div class="headblocks fortel">
+				{$wa->block("shop.block_top_phones")}
+			</div>
+			<div class="headblocks forzv">
+				<div class="zakzv otzyv_zvonok">
+					<a class="click-zakzv">Заказать звонок</a>
+					<div class="headervspl">
+						<div class="vsplwrap">
+							<div class="zakzvvnutrbl">
+								<div class="clr"></div>
+								<p class="p-top">Пожалуйста, заполните контактную информацию, и мы свяжемся с Вами в течение 20 минут в рабочее время</p>
+								<div class="clr"></div>
+								<form name="form-send-phone-callback" method="post" class="form-send-phone-callback">
+									<input type="text" name="phone" value="" class="phone-1 phone" />
+									<input type="submit" class="gduzv" value="я жду звонка" />
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="ostotz otzyv_zvonok">
+					<a class="click-ostotz">оставить отзыв</a>
+					<div class="headervspl">
+						<div class="vsplwrap">
+							<div class="ostotzvnutr">
+								<form name="form-send-review-callback" method="post" id="form-send-review-callback">
+									<p>Ваше имя</p>
+									<input type="text" name="name" id="nameotz" class="form-input" />
+									<p>Ваш телефон или адрес эл. почты</p>
+									<input type="text" name="title" id="mailotz" class="form-input" />
+									<p>сообщение <span>*</span></p>
+									<textarea name="text" class="form-input"></textarea>
+									<input type="submit" class="otprotztop" value="отправить отзыв" />
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<a href="/" class="logo" title="{$wa->shop->settings('name')}" itemprop="url"><img itemprop="logo" src="{$wa_theme_url}images/logo.png" alt="Магазин мужской и женской обуви ditto.ua" /></a>
+			<div class="headblocks forvhreg">
+				{if !$wa->user()->isAuth()}
+				<div class="vhod">
+					<p>
+						<a class="click-vhod">Вход</a>
+						<div class="headervspl">
+							<div class="vsplwrap">
+								<div class="vhodvnutr">
+									<form action="/login/" method="post">
+										<p>ЭЛЕКТРОННАЯ ПОЧТА</p>
+										<input type="text" name="login" id="mailvh" value="">
+										<p>ПАРОЛЬ</p>
+										<input type="password" id="passwvh" name="password">
+										<p class="forgotpassword">Забыли пароль?</p>
+										<a href="/forgotpassword/" class="ssil">ВОСCТАНОВИТЬ ПАРОЛЬ</a>
+										<input type="submit" class="otprotztop" value="войти" />
+										<input type="reset" class="otprotztopreset" value="отмена">
+										<input type="hidden" name="wa_auth_login" value="1">
+										<div class="clr"></div>
+									</form>
+									<div class="netuchz"><p>Нет учетной записи?</p><a href="/signup/" class="ssil">зарегистрироваться</a></div>
+									<div class="netuchz"><p>Войти как пользователь</p>{$wa->authAdapters()}</div>
+								</div>
+							</div>
+						</div>
+					</p>
+				</div>
+				<div class="registr">
+					<p><a href="/signup/" class="bold">Регистрация</a></p>
+					{else}
+						{$mail = shopDitto::GetUserMail($wa->user('id'))}
+						{if $mail}<span id="ScMail" style="display:none;">{$mail}</span>{/if}
+						<div class="vhod"><p><a href="{$wa->getUrl('/frontend/my')}" class="bold">{$wa->user('firstname')|escape|truncate:15}</a></p></div>
+						<div class="registr"><p><a href="?logout">[s`Log out`]</a></p>
+					{/if}
+					</div>
+				</div>
+				<div class="headblocks forbask">
+					{$cart_total = $wa->shop->cart->total()}
+					{$cart_count = $wa->shop->cart->count()}
+					{include file="cart-show.html" cart_total=$cart_total cart_count=$cart_count}
+				</div>
+				<div class="clr"></div>
+				{if $categories = shopDitto::categories()}
+				{$filtr_array = ['/novinki/', '/rasprodazha/', '/sredstva/']}
+				<ul class="menu">
+					{foreach $categories as $c}
+					<li>
+						<a href="{$c.url}">{$c.name|escape}</a>
+						{if count($c.subcategories)}{$flag_short = false}{if in_array($c.url,$filtr_array)}{$flag_short = true}{/if}
+						<ul {if $flag_short}class="short" {/if}>
+							<li><p>КАТЕГОРИЯ</p><ul>{foreach $c.subcategories as $s}{if !isset($s.params.hidden)}<li><a href="{$s.url}">{$s.name|escape}</a>{/if}{/foreach}</ul></li>
+							{if !$flag_short}
+								{* old before 25_09_2015
+								{if count($c.brand)}
+									<li><p>ТОП БРЕНДОВ</p><ul>{foreach $c.brand as $b}<li><a href="{$c.url}?{$b.code}={$b.feature_value_id}">{$b.value|escape}</a>{/foreach}</ul></li>
+								{/if}
+
+								{if count($c.sizon)}
+									<li><p>СЕЗОН</p><ul>{foreach $c.sizon as $z}<li><a href="{$c.url}?{$z.code}={$z.feature_value_id}">{$z.value|escape}</a>{/foreach}</ul>{if count($c.stil)}<br /><p>СТИЛЬ</p><ul>{foreach $c.stil as $z}<li><a href="{$c.url}?{$z.code}={$z.feature_value_id}">{$z.value|escape}</a>{/foreach}</ul>{/if}</li>
+								{elseif count($c.stil)}
+									<li><p>СТИЛЬ</p><ul>{foreach $c.stil as $z}<li><a href="{$c.url}?{$z.code}={$z.feature_value_id}">{$z.value|escape}</a>{/foreach}</ul></li>
+								{/if}
+								*}
+
+								{$wa->block("shop.category_sizon_stile_`$c.alias`")}
+								{$wa->block("shop.category_`$c.alias`")}
+							{/if}
+						</ul>
+						{/if}
+					</li>
+					{/foreach}
+				</ul>
+				{/if}
+				<div class="forsearch">
+					<form method="get" action="{$wa->getUrl('/frontend/search')}" id="search-form">
+						<input type="search" name="query" {if !empty($query)}value="{$query}" {/if} id="search" placeholder="Найти товары"/>
+						<input type="submit" name="submit" class="submitsearch" value="найти" />
+					</form>
+					<div class="headervspl" id="list-items">
+						<div class="vsplwrap">
+							<div class="baskettov list-items"></div>
+						</div>
+					</div>
+				</div>
+				<div class="clr"></div>
+			</div>
+		</div>
+		<script type="text/javascript" src="{$wa_theme_url}js/sticky/jquery-contained-sticky-scroll.js"></script>
+		<div id="social-block">
+			<a class="nou online-chat" href="https://siteheart.com/webconsultation/719458?" target="siteheart_sitewindow_719458" onclick="o=window.open;o('https://siteheart.com/webconsultation/719458?', 'siteheart_sitewindow_719458', 'width=550,height=400,top=30,left=30,resizable=yes'); return false;" title="онлайн консультант" rel="nofollow"></a>
+		</div>
+		<!-- plugin hook: 'frontend_header' -->
+		{* @event frontend_header.%plugin_id% *}
+		{foreach $frontend_header as $_}{$_}{/foreach}
+		{if $action == "default"}
+		{$content}
+		{else}
+		<div class="content">
+			{$content}
+			<div class="clr"></div>
+		</div>
+		{/if}
+		<div class="footer">
+			<div class="wrap">
+				{$wa->block("shop.block_bottom_menu")}
+				<div class="rassil" id="mail2_iFrame">
+					<p>РАССЫЛКА</p>
+				</div>
+				<div class="forsoc">
+					{$wa->block("shop.block_social_bottom")}
+					<div class="d-journal">
+						<span style="margin-top:19px;"><a href="/journal/">DITTO JOURNAL</a></span>
+						<span>E-mail: <a href="mailto:info@ditto.ua">info@ditto.ua</a></span>
+					</div>
+					<div class="clr"></div>
+				</div>
+				<div class="clr"></div>
+				<div class="copy_payment">
+				{$wa->block("shop.block_copy_bottom")}
+					<div class="logobot">
+						<a href="{$wa_app_url}" title="{$wa->shop->settings('name')}"><img src="{$wa_theme_url}images/logo1.png" alt="Интернет-магазин обуви ditto.ua в Украине" /></a>
+					</div>
+				</div>
+				<div class="clr"></div>
+			</div>
+		</div>
+		{foreach $frontend_footer as $_}{$_}{/foreach}
+		<script type="text/javascript">
+			{literal}
+			(function () {
+				var siteId = 'C8B3E1158AFC478EA260A0BA86451CB3';
+				var scScr = document.createElement('script');
+				scScr.async = true;
+				scScr.src = 'https://cdnanalytics.datasoftcube.com/' + siteId + '/sc.js?r=' + 1 * new Date();
+				document.body.appendChild(scScr);
+			}());
+			{/literal}
+		</script>
+		<div class="tabs">
+			<div class="wrap-bottom">
+				<ul class="menu-2">
+					<li><a href="/dostavka-i-oplata/">Доставка и оплата</a></li>
+					<li><a href="/garantiya-i-servis/">Гарантия и сервис</a></li>
+					<li class="active-callme">
+						<a href="#">Перезвоните мне</a>
+						<div class="headervspl-bottom">
+							<div class="vsplwrap" style="border:1px solid #ccc;">
+								<div class="zakzvvnutrbl">
+									<div class="clr"></div>
+									<p class="p-top">Пожалуйста, заполните контактную информацию, и мы свяжемся с Вами в течение 20 минут в рабочее время</p>
+									<div class="clr"></div>
+									<form name="form-send-phone-callback" method="post" class="form-send-phone-callback">
+										<input type="text" name="phone" value="" class="phone-1 phone" />
+										<input type="submit" class="gduzv" value="я жду звонка" />
+									</form>
+								</div>
+							</div>
+						</div>
+					</li>
+					<li class="active-action">
+						<a href="#">Розыгрыш: 1000 грн.тут</a>
+						<div class="headervspl-bottom">
+							<div class="vsplwrap" style="border:1px solid #ccc;">
+								<div class="zakzvvnutrbl" id="mail3_iFrame">
+									<script type="text/javascript">
+										{literal}
+										var linker;
+										function addiFrame(divId, url, opt_hash) {
+											return function (tracker) {
+												window.linker = window.linker || new window.gaplugins.Linker(tracker);
+												var iFrame = document.createElement('iFrame');
+												iFrame.src = window.linker.decorate(url, opt_hash);
+												iFrame.style.border = '0';
+												iFrame.width = '100%';
+												iFrame.height = '100%';
+												iFrame.scrolling = 'no';
+												document.getElementById(divId).appendChild(iFrame);
+											};
+										}
+										// Dynamically add the iFrame to the page with proper linker parameters.
+										ga(addiFrame('mail_iFrame', 'http://sn.am/MxHInc4COs')); //подписка в журнале (шаблон sidebar.html)
+										ga(addiFrame('mail2_iFrame', 'http://sn.am/MxLzSrGGes')); //подписка в футере
+										ga(addiFrame('mail3_iFrame', 'http://sn.am/JfGfyP48Os')); //подписка в pop_up окне
+										{/literal}
+									</script>
+								</div>
+							</div>
+						</div>
+					</li>
+				</ul>
+				<div class="clr"></div>
+			</div>
+		</div>
+	</div>
+	<!-- Add the remarketing tag for Google -->
+	<script type="text/javascript">
+		{literal}
+		/* <![CDATA[ */
+		var google_conversion_id = 960541211;
+		var google_custom_params = window.google_tag_params;
+		var google_remarketing_only = true;
+		/* ]]> */
+		{/literal}
+	</script>
+	<div style="display:none;">
+		<script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js"></script>
+	</div>
+	<noscript>
+		<div style="display:inline;">
+			<img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/939368245/?value=0&amp;guid=ON&amp;script=0" />
+		</div>
+	</noscript>
+	<!-- end remarketing tag for Google -->
+
+	<script type="text/javascript">{literal}ga('send', 'pageview');{/literal}</script>
+</body>
+</html>

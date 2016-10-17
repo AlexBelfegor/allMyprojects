@@ -1,0 +1,192 @@
+<h1>Earnberry settings</h1>
+
+{if isset($earnberry_tip_to_change_ga)}
+    <h2 style="color:red">Предупреждение!</h2>
+    <div>
+        На данный момент ваш магазин подлючен к Google Analytics через стандартные средства WebAsyst. Для корректной обработки аналитики нужно сделать такие шаги:
+        <ul>
+            <li>
+                <strong>Перейдите на <a href="/webasyst/site/#/settings/" target="_blank">страницу настроек домена</a></strong>
+            </li>
+            <li>
+                <strong>Отключить стандартную интеграцию с Google Analytics.</strong>
+                <div>
+                     Установите поле <i>Google Analytics Property ID</i> в пустое значение.
+                </div>
+            </li>
+            <li>
+                <strong>Подключите Google analytics вручную.</strong>
+                <div>В поле <b>Дополнительный JavaScript-код для вставки перед закрывающим тегом {'</head>'|escape}:</b> вставьте код счетчика.</div>
+                <div>
+                    
+                    Выбрать нужный код вам помогут официальные руководства Google:
+                    <ul>
+                        <li>Для Universal analytics: <a href="https://developers.google.com/analytics/devguides/collection/analyticsjs/" target="_blank">https://developers.google.com/analytics/devguides/collection/analyticsjs/</a>
+                        <li>Для Classic analytics: <a href="https://developers.google.com/analytics/devguides/collection/gajs/">https://developers.google.com/analytics/devguides/collection/gajs/</a></li>
+                    </ul>
+                </div>
+            </li>
+            <li>
+                <strong>Сохраните настройки</strong>
+            </li>
+        </ul>
+    </div>
+{else}
+<div class="block fields form">
+    <form action="?module=plugins&id=earnberry&action=save" method="post" id="plugins-settings-form">
+        {$wa->csrf()}
+
+        <h3>Авторизация</h3>
+        <div class="field-group">
+            <div class="field">
+                <div class="name">API ключ</div>
+                <div class="value"><input type="text" name="shop_earnberry[api_key]" class="bold api_key" value="{$earnberry_settings.api_key}" style="width: 400px;"/></div>
+            </div>
+            <div class="field">
+                <div class="name">ID площадки</div>
+                <div class="value"><input type="text" name="shop_earnberry[api_id]" class="bold api_id" value="{$earnberry_settings.api_id}" style="width: 400px;" /></div>
+            </div>
+            <div class="field">
+                <input type="button" value="Проверить" onclick="check_api_auth()">
+            </div>
+        </div>
+
+        <h3>Подсчет прибыли чека</h3>
+        <div class="field-group">
+            <div class="field">
+                <div class="name">Метод</div>
+                {foreach $total_calc_variants as $tcv}
+                    <div class="value">
+                        <label>
+                            <input type="radio" name="shop_earnberry[revenue_calc_type]" class="revenue_type" value="{$tcv@key}" {if $tcv@key == $earnberry_settings.revenue_calc_type}checked="true"{/if}>
+                            &nbsp {$tcv.name}
+                            <br>
+                            <p class="hint">{$tcv.desc}</p>
+                        </label>
+                    </div>
+                {/foreach}
+            </div>
+            <div class="field revenue_income_type _marge_percent" {if $earnberry_settings.revenue_calc_type == '_marge_percent'}{else}style="display:none;"{/if}>
+                <div class="name">Процент маржи, %</div>
+                <div class="value"><input type="text" name="shop_earnberry[revenue_marge_percent]" class="bold" value="{if is_numeric($earnberry_settings.revenue_marge_percent)}{$earnberry_settings.revenue_marge_percent}{else}100{/if}" /></div>
+            </div>
+            <div class="field revenue_income_type _price_margin" {if $earnberry_settings.revenue_calc_type == '_price_margin'}{else}style="display:none;"{/if}>
+                <div class="name">Наценка, %</div>
+                <div class="value"><input type="text" name="shop_earnberry[revenue_price_margin]" class="bold" value="{if is_numeric($earnberry_settings.revenue_price_margin)}{$earnberry_settings.revenue_price_margin}{else}0{/if}" /></div>
+            </div>
+        </div>
+
+        <h3>Маркеры</h3>
+        <div class="field-group">
+            <div class="field">
+                <div class="name">Маркеры</div>
+                <div class="value">
+                    <input type="text" name="shop_earnberry[markers]" class="bold" value="{$earnberry_settings.markers}" />
+                    <p class="hint">Список маркеров для создания транзакции через админку. Каждый маркер - слово из английских букв. Разделитель списка - запятая.</p>
+
+                </div>
+            </div>
+        </div>
+
+        <h3>Аналитика и статистика</h3>
+        <div class="field-group">
+            <div class="field">
+                        <div class="name">Тип аналитики:</div>
+                        
+
+                        <div class="value">
+                            <label>
+                                <input type="radio" name="shop_earnberry[universal_analytics]" value="1" {if (isset($earnberry_settings.universal_analytics) && $earnberry_settings.universal_analytics == '1')}checked="checked"{/if}>
+                                &nbsp Google Universal Analytics
+                                <br>
+                                <p class="hint">Используется Google Universal Analytics</p>
+                            </label>
+                        </div>
+                        <div class="value">
+                            <label>
+                                <input type="radio" name="shop_earnberry[universal_analytics]" value="0" {if (!isset($earnberry_settings.universal_analytics) || $earnberry_settings.universal_analytics == '0')}checked="checked"{/if}>
+                                &nbsp Google Classic Analytics
+                                <br>
+                                <p class="hint">Используется Google Universal Analytics</p>
+                            </label>
+                        </div>
+                        <div class="value">
+                            <label>
+                                <input type="radio" name="shop_earnberry[universal_analytics]" value="2" {if (!isset($earnberry_settings.universal_analytics) || $earnberry_settings.universal_analytics == '2')}checked="checked"{/if}>
+                                &nbsp Google Universal Analytics (Enhanced ecommerce)
+                                <br>
+                                <p class="hint">Используется Google Universal Analytics, но enhanced ecommerce purchase транзакция.</p>
+                            </label>
+                        </div>
+            </div>
+        </div>
+
+        <div class="field-group">
+            <div class="field">
+                        <div class="name">Учет холостых транзакций:</div>
+                        
+                        <div class="value">
+                            <label>
+                                <input type="radio" name="shop_earnberry[celibate_transactions]" value="1" {if (isset($earnberry_settings.celibate_transactions) && $earnberry_settings.celibate_transactions == '1')}checked="checked"{/if}>
+                                &nbsp Да
+                                <br>
+                                <p class="hint">Транзакции без кода клиента будут попадать в Earnberry для статистики.</p>
+                            </label>
+                        </div>
+                        <div class="value">
+                            <label>
+                                <input type="radio" name="shop_earnberry[celibate_transactions]" value="0" {if (!isset($earnberry_settings.celibate_transactions) || $earnberry_settings.celibate_transactions == '0')}checked="checked"{/if}>
+                                &nbsp Нет
+                                <br>
+                                <p class="hint">Транзакции без кода не будут попадать в Earnberry.</p>
+                            </label>
+                        </div>
+                        
+            </div>
+        </div>
+
+        <div class="field">
+            <div class="value submit">
+                <input type="submit" class="button green" value="Сохранить">
+            <span id="plugins-settings-form-status" style="display:none">
+                <i style="vertical-align:middle" class="icon16 yes"></i> Сохранено
+            </span>
+            </div>
+        </div>
+    </form>
+</div>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('.revenue_type').on('change', function() {
+            $('.revenue_income_type').hide();
+            $('.' + $(this).val()).show();
+        });
+    });
+    function check_api_auth()
+    {
+        var url = earnberry_ajax_actions.checkapi + '&apikey=' + $('.api_key').val() + '&apid=' + $('.api_id').val();
+        $.getJSON(url, function(json) {
+            if (json.data.result == 'OK')
+            {
+                alert('Ключи правильные и действительные!');
+            }
+            else
+            {
+                alert('Ошибка! ' + json.data.error_text);
+            }
+        });
+    }
+</script>
+
+<script type="text/javascript">
+    $("#plugins-settings-form").submit(function () {
+        var f = $(this);
+        $.post(f.attr('action'), f.serialize(), function (response) {
+            $("#plugins-settings-form-status").fadeIn('slow', function () {
+                $(this).fadeOut(1000);
+            });
+        }, "json")
+        return false;
+    });
+</script>
+{/if}

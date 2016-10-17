@@ -1,0 +1,285 @@
+<script type="text/javascript">
+    Filters3000Core.container_selector = '{$f3000_elements_selector}';
+    Filters3000Core.url = '{$filters3000_url}';
+    Filters3000Core.currency_rate = '{$filters3000_currency_rate}';
+</script>
+
+<form method="get" action="" id="filters3000">
+{*if $features3000->hasPriceFilter()}
+	<p class="filtrname">цена</p>
+	<div class="filtrslide">
+		{$c = $wa->shop->currency(true)}
+		<input id="f3000_price_slider" type="slider" name="price" disabled value="{if $priceMinFilter > 0}{$priceMinFilter}{else}{shop_currency($features3000->minPriceCurrent, false, false, false)}{/if};{if $priceMaxFilter > 0}{$priceMaxFilter}{else}{shop_currency($features3000->maxPriceCurrent, false, false, false)}{/if}" />
+		<script type="text/javascript" charset="utf-8">
+		$(document).ready(function() {
+		    jQuery("#f3000_price_slider").slider({ from: {shop_currency($features3000->minPrice, false, false, false)}, to: {shop_currency($features3000->maxPrice, false, false, false)}, step: 1, dimension: '',
+		        callback: function(value) {
+		            var minMax = value.split(';');
+		            var min = minMax[0];
+		            var max = minMax[1];
+		            $('input[name=price_min]').val(min);
+		            $('input[name=price_max]').val(max);
+		            $('#filters3000').submit();
+		        } });
+
+
+
+		});
+		</script>
+		<input class="f3000_price_flush f3000_price" type="hidden" name="price_min" {if $priceMinFilter}value="{$priceMinFilter}"{/if}>
+		<input class="f3000_price_flush f3000_price" type="hidden" name="price_max" {if $priceMaxFilter}value="{$priceMaxFilter}"{/if}>
+
+	</div>
+{/if*}
+
+{if $features3000->hasPriceFilter()}
+	<div style="padding-top:20px;">
+		<p class="filtrname">сортировать по цене</p>
+		<div class="filtrslide">
+			<div class="new-price">
+				<span class="new-price-left{if $smarty.post.sort == 'price' && $smarty.post.order == 'asc'} bold{/if} order_submit" data-sort="price" data-order="asc">Дешевле</span>
+				<span class="new-price-right{if $smarty.post.sort == 'price' && $smarty.post.order == 'desc'} bold{/if} order_submit" data-sort="price" data-order="desc">Дороже</span>
+				<input name="sort" type="hidden" value="id">
+				<input name="order" type="hidden" value="desc">
+			</div>
+		</div>
+	</div>
+{/if}
+
+{foreach $f3000_conditions as $key => $condition}
+	{if $condition.type == 'price'}
+		<a href="javascript: void(0);" onclick="f3000_flush_price();" class="sbros">сбросить цену</a>
+		<div class="clr"></div>
+		<p class="filtrprice">от  {if $condition.min > 0}{shop_currency($condition.min)}{else}0{/if}  до  {if $condition.max > 0}{shop_currency($condition.max)}{else}...{/if}</p>
+	{else}
+		{assign var="f3000_ccf" value=$condition.filter}
+	{/if}
+{/foreach}
+
+{if $f3000_ccf}
+	<p class="filtrname">
+	    <a href="./" class="sbrosprice">сбросить всё</a>
+	</p>
+{/if}
+
+{foreach $filters3000->filters as $fid => $filter}
+	{if $filter->id|trim|strlen}
+		<p class="filtrname">{$filter->getDataKey('name')|escape}</p>
+		{if $filter->id == 'size'}
+			<ul class="razmerlist">
+				{$i = 0}
+				{foreach $filter->values as $v_id => $v}
+					{if $v->status != 'invisible'}
+					<li style="position:relative;">
+						<a data-href-id="f3000_show-submit-{$filter->id}" data-input-id="f3000_{$filter->id}_{$v->id}" class="f3000_value_href {if $v->isSelected == true}active{/if}" style="cursor:pointer;">{$v->getDataKey('name')}</a>
+						<input style="display:none;" data-parent-id="f3000_{$filter->id}_{$v->id}-submit" id="f3000_{$filter->id}_{$v->id}" class="f3000_value f3000_{$filter->id} f3000_{$filter->id}_{$v->id}" type="checkbox" name="{$filter->id}[]" {if $v->isSelected == true}checked{/if} value="{$v->id}" {if $v->status == 'invisible'}disabled="disabled"{/if}>
+						{if $i == 0}<input class="f3000_submit_filter filter_submit_button"  id="f3000_show-submit-{$filter->id}"  style="display: none;" type="submit" value="применить">{/if}
+					</li>
+					{$i = $i+1}
+					{/if}
+				{/foreach}
+			</ul>
+			<div class="clr"></div>
+		{elseif $filter->id == 'color'}
+			<ul class="colorlist2">
+				{$i = 0}
+				{foreach $filter->values as $v_id => $v}
+					{if $v->status != 'invisible'}
+					<li style="position:relative;">
+						<a data-href-id="f3000_show-submit-{$filter->id}" style="cursor:pointer;background: {$v->data['color_value']->rgb};border:1px solid {$v->data['color_value']->rgb};" data-input-id="f3000_{$filter->id}_{$v->id}" class="f3000_value_href{if $v->data['color_value']->rgb == 'rgb(255,255,255)'} border-white{/if}">
+
+
+
+
+							<i class="{if $v->isSelected == true}active{/if}" id="{mb_strtolower($filter->id)}-{print_r($v->getDataKey('name_translit'))}"></i>
+							<div class="box-color">{$v->getDataKey('name')}</div>
+						</a>
+
+						<input style="display:none;" data-parent-id="f3000_{$filter->id}_{$v->id}-submit" id="f3000_{$filter->id}_{$v->id}" class="f3000_value f3000_{$filter->id} f3000_{$filter->id}_{$v->id}" type="checkbox" name="{$filter->id}[]" {if $v->isSelected == true}checked{/if} value="{$v->id}" {if $v->status == 'invisible'}disabled="disabled"{/if}>
+
+						<input class="f3000_submit_filter filter_submit_button"  id="f3000_show-submit-{$filter->id}"  style="display: none;" type="submit" value="применить">
+
+
+
+
+					</li>
+					{$i = $i+1}
+					{/if}
+				{/foreach}
+			</ul>
+			<div class="clr"></div>
+		{else}
+			<ul class="filtrlist">
+			{$i = 0}
+			{foreach $filter->values as $v_id => $v}
+				<li style="position:relative;" class="{if $i >= 6}{if isset($smarty.post.link_show_more) && $smarty.post.link_show_more==$filter->id}show{else}hidden{/if} hidden-{$filter->id}{/if}">
+					<input data-parent-id="f3000_{$filter->id}_{$v->id}-submit" id="f3000_{$filter->id}_{$v->id}" class="f3000_value f3000_{$filter->id} f3000_{$filter->id}_{$v->id}" type="checkbox" name="{$filter->id}[]" {if $v->isSelected == true}checked{/if} value="{$v->id}" {if $v->status == 'invisible'}disabled="disabled"{/if}>
+					
+					<label class="{mb_strtolower($filter->id)}-{$v->getDataKey('name_translit')}" for="f3000_{$filter->id}_{$v->id}" style="{if $v->status == 'invisible' && !$v->hasDuplicatesOnly()}opacity: 0.4;{/if}">
+
+
+					{if $filter->id == 'color'}
+						{$v->getDataKey('name')} <i style="display:inline-block; background: {$v->data['color_value']->rgb};width: 12px; height: 12px;border: 1px solid black; border-radius: 2px;"></i>
+					{else}
+						{$v->getDataKey('name')}
+					{/if}
+
+					</label>
+
+					<input class="f3000_submit_filter filter_submit_button"  id="f3000_{$filter->id}_{$v->id}-submit"  style="display: none;" type="submit" value="применить">
+				</li>
+				{$i = $i+1}
+			{/foreach}
+
+			{if $i > 6}
+				{if isset($smarty.post.link_show_more) && $smarty.post.link_show_more==$filter->id}
+					<li><a class="link-show-more show" data-hidden-id="hidden-{$filter->id}" data-filter-id="{$filter->id}">Свернуть</a></li>
+					<input style="display:none;" name="link_show_more" id="link_show_more_{$filter->id}" type="checkbox" value="{$filter->id}" checked="checked">
+				{else}
+					<li><a class="link-show-more" data-hidden-id="hidden-{$filter->id}" data-filter-id="{$filter->id}">Показать все</a></li>
+					<input style="display:none;" name="link_show_more" id="link_show_more_{$filter->id}" type="checkbox" value="{$filter->id}">
+				{/if}
+			{/if}
+			</ul>
+		{/if}
+	{/if}
+{/foreach}
+</form>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+
+		$('.sbrosprice').click(function(){
+			var href = document.location.href;
+			var route = $('.REQUEST_URI').first().text();
+
+			if (href.match(/(filters.*)/)){
+				match = href.match(/(filters.*)/);
+				del = match[1];
+				href = href.replace(del, '');
+			}
+
+			document.location.href = href;
+			return false;
+		});
+
+		// ПАГИНАЦИЯ
+		$(".pagination span").click(function(){
+				var href = document.location.href;
+				var number = $(this).find('a').text();
+				var pagination = "page-" + number + "/";
+				var route = "";
+				var del = "";
+
+				if (href.match(/(page-.*)\//)){
+					match = href.match(/(page-.*)\//);
+					del = match[1]+"/";
+					href = href.replace(del, '');
+				}
+				
+				route = href + pagination;
+				document.location.href = route;
+				return false;
+		});
+
+
+		// ЦЕНА
+		$(".order_submit").click(function(){
+
+			
+			var href = document.location.href;
+			var name_filter = "price";
+			var order = $(this).attr("data-order");
+			var price = name_filter + "-" + order;
+			var route = "";
+			var del = "";
+
+			if (href.match(/(price-.*)\//)){
+				match = href.match(/(price-.*)\//);
+				del = match[1]+"/";
+				href = href.replace(del, '');
+			}
+
+			route = href + price + "/";
+
+			document.location.href = route;
+			return false;
+
+		});
+
+
+		$(".filter_submit_button").click(function(){
+			
+			var data_color = [];
+			var color = '';
+			var color_value = '';
+			var col = '';
+			var routes = $('.REQUEST_URI').first().text();
+			if (routes.slice(-1) == '/') {
+				routes = routes.slice(0, -1);
+			}
+			// ================= ЦВЕТ ====================			
+			$("ul.colorlist2 li i.active").each(function(){
+					color = $(this).attr('id');
+					var	match = color.match(/<i>(.*)<span>/);
+					data_color.push(match[1]);
+				
+			});
+			color_value = '/color-' + data_color.join('/color-');
+			// ================== !ЦВЕТ ===================
+			
+			var data_filter = [];
+			var filter_value = '';
+
+			$("ul.filtrlist li input:checked ").each(function(){
+				var filter = $(this).next('label').attr('class');
+				data_filter.push(filter);
+			});
+
+			filter_value = '/' + data_filter.join('/');
+		
+			var data_size = [];
+			var size_value = '';
+			$("ul.razmerlist li input:checked").each(function(){
+				var size = $(this).prev('a').text();
+				data_size.push(size);
+
+			});
+
+			size_value = '/size-' + data_size.join('/size-');
+
+			href = filter_value + color_value + size_value;	
+
+			if (href.match(/color-$/)){
+				match = href.match(/color-$/);
+				href = href.replace(match, '');
+			}
+
+			if (href.match(/size-$/)){
+				match = href.match(/size-$/);
+				href = href.replace(match, '');
+			}
+
+			if (href.match(/color-\//)){
+				match = href.match(/color-\//);
+				href = href.replace(match, '');
+			}
+
+			if (href.match(/\/\//)){
+				match = href.match(/\/\//);
+				href = href.replace(match, '/');
+			}
+
+			var final_href = routes + "/filters" + href;
+
+			if (final_href.slice(-1) != '/') {
+				final_href = final_href + '/';
+			}
+
+
+
+			document.location.href = final_href;
+			return false;
+		});
+	});
+</script>

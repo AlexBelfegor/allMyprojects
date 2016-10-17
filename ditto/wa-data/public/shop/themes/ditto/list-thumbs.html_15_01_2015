@@ -1,0 +1,115 @@
+<div class="katalog">
+	<script>$.fn.cycle.defaults.autoSelector = '.slideshow';</script>
+	<ul class="product-list" itemscope itemtype="http://schema.org/ItemList">
+		<span itemprop="numberOfItems" style="display:none;">{count($products)}</span>
+
+		{$i = 0}
+		{$j = 0}
+		{foreach $products as $p}
+
+		{$video = shopDitto::getFeatureVideoProduct($p.id)}
+		{$promo3d = shopPromo3dPlugin::CheckPromo3d($p.id)}
+		{$badge_html = $wa->shop->badgeHtml($p.badge)}
+		{$features_selectable = shopDitto::getFeaturesProductAvailable($p.id)}
+        {$brand = shopDitto::getFeaturesProd($p.id)}
+        {if $smarty.get.page  && !$j}
+        	{$i = ($smarty.get.page - 1) * 18}
+        	{$j = 1}
+        {/if}
+        {$i = $i+1}
+
+		<li data-id="{$p.id}" data-name="{$p.name}" data-category="{$p.category_url}" data-brand="{$brand}" data-variant="size" data-list="{if $list}{$list}{else}{$p.category_url}{/if}" data-position="{if $i}{$i}{else}0{/if}" data-price="{shop_currency($p.price)}">
+			<div class="oneitem" itemprop="itemListElement" itemscope itemtype="http://schema.org/Product">
+				<div class="itemslider">
+					<script type="text/javascript">
+						{literal}
+						$(document).ready(function () {
+							$("#popup-product-review-{/literal}{$p.id}{literal}").colorbox({
+								href: "/callback/product_preview/?product_id={/literal}{$p.id}{literal}",
+								iframe: true,
+								width: "590px",
+								height: "590px",
+							});
+						});
+						{/literal}
+					</script>
+
+					{if $video}<div class="badge-small video {if !$promo3d}left-v{/if}"></div>{/if}
+					{if $promo3d}<div class="badge-small i3d"></div>{/if}
+					<div class="slideshow"
+							data-cycle-slides="> div"
+							data-cycle-fx=carousel
+							data-cycle-timeout="0"
+							data-cycle-carousel-visible="1"
+							data-cycle-next=".next-slide-{$p.id}"
+							data-cycle-prev=".prev-slide-{$p.id}"
+							data-allow-wrap=true
+							>
+						{$show_prev_next = false}
+						{$images = shopDitto::getImages($p.id,array('220x220'))}
+						{if count($images) == 1}
+						<div>
+							<a class="onProductClick" href="{$p.frontend_url}" title="{$p.name|escape}{if $p.summary} &mdash; {strip_tags($p.summary)}{/if}">
+								{$wa->shop->productImgHtml($p, '220x220', ['default' => "`$wa_theme_url`img/dummy200.png"])}
+							</a>
+						</div>
+						{else}
+						{$show_prev_next = true}
+						{$i=0}
+						{foreach $images as $j => $image}
+						<div>
+							<a class="onProductClick" href="{$p.frontend_url}" title="{$p.name|escape}{if $p.summary} &mdash; {strip_tags($p.summary)}{/if}" itemprop="url">
+								<img
+								{if $i == 0}
+									{$next = next($images)}
+									onmouseover="rollOverImage(this, '{$next.url_0}', event)"
+									onmouseout="rollOverImage(this, '{$image.url_0}', event)"
+								{/if}
+								src="{$image.url_0}" alt="{$p.name} – фото" title="{$p.name}" itemprop="image" />
+							</a>
+						</div>
+						{$i = $i+1}
+						{/foreach}
+						{/if}
+					</div>
+					{if $show_prev_next}
+						<div class="next-slide-{$p.id} next"></div>
+						<div class="prev-slide-{$p.id} prev"></div>
+					{/if}
+				</div>
+				{if $badge_html}{$badge_html}<div class="clr"></div>{else}<p class="prod-height"></p>{/if}
+				<p class="itemtitle" itemprop="name">{$p.name}</p>
+				<span itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+					<meta itemprop="priceCurrency" content="UAH" />
+					<p class="itemprice"><span>Цена:</span>
+						<em itemprop="price">{shop_currency($p.price)}</em> {if $p.compare_price > $p.price}<span class="katalog_oldprice">{shop_currency($p.compare_price)}</span>{/if}</p>
+					<p class="nalich">
+						<link itemprop="availability" href="http://schema.org/InStock" />
+						Есть в наличии
+					</p>
+				</span>
+				<a href="#" class="openitem" id="popup-product-review-{$p.id}" onClick="ga('send', 'event', 'knopka', 'click', 'kupit_v_klik');return true;">быстрый просмотр</a>
+				<div class="clr"></div>
+				<p class="razmp" itemprop="description">
+					{if $features_selectable.features_short}
+						Размеры в наличии<br />
+						<span>{foreach $features_selectable.features_short as $f} {$f}{/foreach}</span>
+					{/if}
+				</p>
+			</div>
+		</li>
+
+		{/foreach}
+	</ul>
+	<div class="clr"></div>
+</div>
+<div class="dottitem"></div>
+{if isset($pages_count) && $pages_count > 1}
+<div class="pagination">
+	{wa_pagination_ditto total=$pages_count attrs=['class' => "menu-h"]}
+	<div class="clr"></div>
+</div>
+{/if}
+
+
+

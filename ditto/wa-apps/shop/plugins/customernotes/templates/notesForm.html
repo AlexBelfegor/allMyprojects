@@ -1,0 +1,38 @@
+{$rating = shopCustomernotesPluginViewHelper::getCustomerRating($order_id)}
+<form id="customernotesAddNote" class="noprint">
+    <div class="block fields form">
+        <div class="field-group">
+            <div class="field">
+                <div class="name">[`Client rating:`]</div>
+                <div class="value">
+                    <div class="rateWrapper">
+                    <span onclick="$.Customernotes.rateObject.rate(this)" data-order="{$order_id}" class="rate rateUp {if $rating.order == 1}active{/if}">
+                        <span class="rateUpN">
+                            {$rating.up}
+                        </span>
+                    </span>
+                    <span onclick="$.Customernotes.rateObject.rate(this)" data-order="{$order_id}" class="rate rateDown {if $rating.order == -1}active{/if}">
+                        <span class="rateDownN">
+                            {$rating.down}
+                        </span>
+                    </span>
+                    </div>
+                </div>
+            </div>
+            <div class="field">
+                <div class="name">[`Note about customer:`]</div>
+                <div class="value">
+                    <textarea name="customernotesNote">{$rating.note|escape}</textarea>
+                    <input type="hidden" name="customernotesNoteOrderId" value="{$order_id}">
+                </div>
+            </div>
+        </div>
+        <div class="field-group">
+            <div class="field">
+                <div class="value">
+                    <input id="customernotesAddNoteButton" type="button" class="button" value="[`Save`]" />
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

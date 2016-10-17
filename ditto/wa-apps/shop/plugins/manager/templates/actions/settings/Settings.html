@@ -1,0 +1,168 @@
+<h1>Менеджер заказа</h1>
+<div class="fields form">
+    <form action="?module=plugins&id=manager&action=save" method="post" id="plugins-settings-form">
+        {$wa->csrf()}
+
+        <div class="field-group">
+            <div class="field">
+                <div class="name">
+                    Видимость настроек
+                </div>
+                <div class="value">
+                    <label>
+                        <input type="checkbox" name="shop_manager[admin_only]" value="1" {if !empty($settings.admin_only)}checked{/if}>
+                        Показывать настройки только администраторам магазина
+                    </label>
+                </div>
+            </div>
+
+            <div class="field">
+                <div class="name">
+                    Автоназначение менеджеров
+                </div>
+                <div class="value">
+                    <input type="checkbox" name="shop_manager[auto_assign]" value="1" {if !empty($settings.auto_assign)}checked{/if}>
+                    <br>
+                    <span class="hint">
+                        По умолчанию включено автоназначение: менеджером становится тот, кто первый совершил действие в админке с заказом.<br>
+                        Если выключить, то автоматически менеджер будет назначаться только на заказы, которые создаются в админку вручную,
+                        для остальных заказов администратор сможет указать менеджера вручную.<br>
+                        Премии при этом будут рассчитываться только по тем заказам, для которых указан менеджер.
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="field-group">
+            <div class="field">
+                <div class="name">
+                    Группа пользователей-менеджеров
+                </div>
+                <div class="value">
+                    <select id="shop-manager-group" name="shop_manager[group_id]">
+                        <option value="">Все пользователи магазина</option>
+                        {foreach $groups as $g}
+                        <option {if $g.id == ifset($settings.group_id)}selected{/if} value="{$g.id}">{$g.name|escape}</option>
+                        {/foreach}
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="field">
+            <div class="name">
+                Бюджет премий<br>
+                <span class="hint">Процент от оборота или прибыли</span>
+            </div>
+            <div class="value">
+
+                <label>
+                    <input class="bonus-model" type="radio" name="shop_manager[bonus_model]" value="common" {if $settings.bonus_model == 'common'}checked{/if}>
+                    Общий
+                    <span class="hint">(распределяется по менеджерам на основе показателей менеджера)</span>
+                </label>
+                <br>
+                <label>
+                    <input class="bonus-model" type="radio" name="shop_manager[bonus_model]" value="personal" {if $settings.bonus_model == 'personal'}checked{/if}>
+                    Индивидуальный
+                    <span class="hint">(для каждого менеджера указывается нужный % от показателей по его заказам)</span>
+                </label>
+
+                <div class="model model-common"{if $settings.bonus_model != 'common'} style="display: none"{/if}>
+                    <br>
+                    <input type="text" class="short" name="shop_manager[bonus_total]" value="{ifset($settings.bonus_total, '')}">%
+                    от
+                    <select name="shop_manager[bonus_type]">
+                        <option {if $settings.bonus_type=='sales'}selected{/if} value="sales">продаж</option>
+                        <option {if $settings.bonus_type=='sales_no_shipping'}selected{/if} value="sales_no_shipping">продаж без учёта доставки</option>
+                        <option {if $settings.bonus_type=='profit'}selected{/if} value="profit">прибыли</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="field model model-common" {if $settings.bonus_model != 'common'} style="display: none"{/if}>
+            <div class="name">
+                Распределение премий по менеджерам<br>
+                <span class="hint">Укажите эффективность менеджера (укажите 0, если не нужно начислять премию)</span>
+            </div>
+            <div class="value">
+                Укажите как распределять премию между менеджерами:<br>
+                <div style="padding: 10px 0">
+                    <select name="shop_manager[bonus_user_type]">
+                        <option {if $settings.bonus_user_type=='count'}selected{/if} value="count">по количеству выполненных заказов</option>
+                        <option {if $settings.bonus_user_type=='value'}selected{/if} value="value">по объёмам продаж/прибыли выполенных заказов</option>
+                    </select>
+                </div>
+            </div>
+            <div class="value">
+                <table class="zebra padded">
+                {foreach shopManagerPlugin::getUsers() as $id => $name}
+                    <tr>
+                        <td>{$name|escape}</td>
+                        <td><input placeholder="100" name="shop_manager[bonus][{$id}]" class="short" type="text" value="{ifset($settings.bonus[$id], '')}">%</td>
+                    </tr>
+                {/foreach}
+                </table>
+            </div>
+        </div>
+
+        <div class="field model model-personal" {if $settings.bonus_model != 'personal'} style="display: none"{/if}>
+            <div class="name">
+                Премии менеджеров<br>
+                <span class="hint">
+                    Персональные премии менеджеров
+                </span>
+            </div>
+            <div class="value">
+               % от
+                    <select name="shop_manager[bonus_type]">
+                        <option {if $settings.bonus_type=='sales'}selected{/if} value="sales">продаж</option>
+                        <option {if $settings.bonus_type=='sales_no_shipping'}selected{/if} value="sales_no_shipping">продаж без учёта доставки</option>
+                        <option {if $settings.bonus_type=='profit'}selected{/if} value="profit">прибыли</option>
+                    </select>
+                по заказам менеджера
+            </div>
+            <div class="value">
+                <table class="zebra padded">
+                    {foreach shopManagerPlugin::getUsers() as $id => $name}
+                        <tr>
+                            <td>{$name|escape}</td>
+                            <td><input placeholder="0" name="shop_manager[bonus][{$id}]" class="short" type="text" value="{ifset($settings.bonus[$id], '')}">%</td>
+                        </tr>
+                    {/foreach}
+                </table>
+            </div>
+        </div>
+
+
+        <div class="field">
+            <div class="value submit">
+                <input type="submit" class="button green" value="Сохранить">
+            <span id="plugins-settings-form-status" style="display:none">
+                <i style="vertical-align:middle" class="icon16 yes"></i> [`Saved`]
+            </span>
+            </div>
+        </div>
+
+    </form>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        $('#shop-manager-group').change(function () {
+            $($.plugins).one('success', function () {
+                $.plugins.dispatch('#/manager/', true);
+            });
+            $('#plugins-settings-form').submit();
+        });
+
+        $('div.model:hidden').find('input,select').attr('disabled', 'disabled');
+
+        $('.bonus-model').change(function () {
+            $('div.model').hide();
+            $('div.model-' + $(this).val()).show().find('input,select').removeAttr('disabled');
+            $('div.model:hidden').find('input,select').attr('disabled', 'disabled');
+        });
+    });
+</script>

@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /wp-admin/ 
+Disallow: /wp-includes/ 
+
+Host: s-lab.com.ua
+Sitemap: http://s-lab.com.ua/sitemap_index.xml

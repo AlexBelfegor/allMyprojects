@@ -1,0 +1,108 @@
+    <div class="forslider">
+        <div class="wrap">
+            <div class="slideshow"
+                data-cycle-slides="> div"
+                data-cycle-fx="scrollHorz"
+                data-cycle-timeout=0
+                data-cycle-carousel-visible=1
+                data-cycle-pager=".example-pager"
+                data-cycle-next=".next-slide"
+                data-cycle-prev=".prev-slide"
+                data-allow-wrap=true
+            >
+                {$wa->block("shop.block_center_big_slider")}
+            </div>
+            <div class="example-pager"></div>
+            <div class="next-slide"></div>
+			<div class="prev-slide"></div>
+        </div>
+    </div>
+
+    <div class="uzor">
+    	<div class="wrap">
+        	{$wa->block("shop.block_center_info")}
+			{*<div id="social-block">
+				<a class="nou online-chat" href="https://siteheart.com/webconsultation/556377?" target="siteheart_sitewindow_556377" onclick="o=window.open;o('https://siteheart.com/webconsultation/556377?', 'siteheart_sitewindow_556377', 'width=550,height=400,top=30,left=30,resizable=yes'); return false;" title="онлайн консультант"></a>
+			</div>*}
+
+            <div class="clr"></div>
+        </div>
+    </div>
+
+    <script>$.fn.cycle.defaults.autoSelector = '.slideshow';</script>
+    <div class="slidesprew">
+    	<div class="onetrig onetrig1">
+			{$liders = $wa->shop->productSet('liders')}
+			{if $liders && count($liders)}
+			    {include file="list-thumbs-promo.html" products=$liders type="1" name="Лидеры продаж"}
+			{/if}
+        </div>
+        <div class="onetrig">
+			{$new = $wa->shop->productSet('new')}
+			{if $new && count($new)}
+			    {include file="list-thumbs-promo.html" products=$new type="2" name="Новинки"}
+			{/if}
+        </div>
+        <div class="onetrig">
+			{$sale = $wa->shop->productSet('sale')}
+			{if $sale && count($sale)}
+			    {include file="list-thumbs-promo.html" products=$sale type="3" name="Распродажа"}
+			{/if}
+        </div>
+        <div class="clr"></div>
+
+		{if $articles = shopDitto::GetLastArtcles()}
+	        <div class="dotted"></div><div class="dottedico"><img src="{$wa_theme_url}images/ico5.png" /></div><div class="dotted"></div><div class="clr"></div>
+	        <h2>Лучшие статьи</h2>
+			{$i=0}
+			{foreach $articles as $val}
+		        <div class="onest{if $i==0} onest1{/if}">
+		        	{if $val.photo}<div class="img"><a href="/journal/{$val.blog_url}/{$val.url}/"><img src="/wa-data/public/blog/img/{$val.id}.jpg" alt="{$val.title}"></a></div>{/if}
+		        	<p class="date">{$val.datetime|wa_datetime:"humandate"}</p>
+		            <h4><a href="/journal/{$val.blog_url}/{$val.url}/">{$val.title|truncate:58}</a></h4>
+		            <p class="text">
+		            	{strip_tags($val.text|truncate:380)}
+		            </p>
+		            <a href="/journal/{$val.blog_url}/{$val.url}/" class="podr">подробнее</a>
+
+		            <div class="clr"></div>
+		        </div>
+				{$i = $i+1}
+			{/foreach}
+		{/if}
+
+        <div class="clr"></div>
+
+        <div class="dotted"></div><div class="dottedico"><img src="{$wa_theme_url}images/ico5.png" /></div><div class="dotted"></div><div class="clr"></div>
+
+        <h2>Присоединяйся к нам в социальных сетях</h2>
+
+        {$wa->block("shop.block_center_social")}
+
+        <div class="otzblock otzblock3">
+        	{if $review = shopReviews::GetLastComment()}
+	        	{foreach $review as $val}
+	        		<div class="foto">
+	        			{*
+	        				<img src="{$wa_theme_url}images/foto1.png" />
+	        				{$wa->shop->productImgHtml($val, '50x50', ['itemprop' => 'image', 'default' => "`$wa_theme_url`img/dummy200.png"])}
+	        			*}
+	        			<img src="{$wa_theme_url}img/dummy200.png" />
+	        		</div>
+	            	<p class="name">{$val.name}</p>
+	            	<p class="date">{$val.datetime|wa_datetime:"humandate"}</p>
+	            	<p class="textotz">
+	            		{$val.text|truncate:100}
+	            	</p>
+	            {/foreach}
+            {else}
+	            <p class="textotz">
+	            	Еще нет отзывов
+	            </p>
+            {/if}
+            <a href="/reviews/" class="smotz">Смотреть все отзывы</a><br/>
+            <a href="#" class="smotz click-ostotz">Оставить отзыв</a>
+        </div>
+
+        <div class="clr"></div>
+    </div>

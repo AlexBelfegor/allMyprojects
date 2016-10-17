@@ -1,0 +1,108 @@
+
+<script type="text/javascript">
+	$(document).ready(function(){
+	    $(".go-product a").click(function ()
+	    {
+	        var frontend_url = $("input[name='frontend_url']").val();
+            /*parent.$.fn.colorbox.close();*/
+	        parent.document.location.href=""+frontend_url+"";
+	        return false;
+	    });
+
+	    $(".colorlist a").click(function ()
+	    {
+	        var d = $(this).closest('.colorlist');
+	        d.find('a.active').removeClass('active');
+	        $(this).addClass('active');
+	        d.find('.sku-feature').val($(this).data('value')).change();
+
+	        return false;
+	    });
+	});
+</script>
+
+<div id="product_preview">
+	<input name="frontend_url" type="hidden" value="{$product.frontend_url}">
+	<div class="block-left">
+    	<div class="big-photo go-product">
+    		<a href="{$product.frontend_url}" title="{$product.name|escape}{if $product.summary} &mdash; {strip_tags($product.summary)}{/if}">
+				{$wa->shop->productImgHtml($product, '220x220', ['itemprop' => 'image', 'default' => "/wa-apps/shop/themes/ditto/img/dummy200.png"])}
+			</a>
+    	</div>
+		{$images = shopDitto::getImages($product.id,array('61x60'))}
+    	<div class="small-photos">
+			{$i=0}
+			{foreach $images as $image}
+				{if $i==9}{break}{/if}
+				<div class="item go-product">
+					<a href="{$product.frontend_url}" title="{$product.name|escape}{if $product.summary} &mdash; {strip_tags($product.summary)}{/if}">
+						<img src="{$image.url_0}" alt="{$product.name}" title="{$product.name}">
+					</a>
+				</div>
+				{$i=$i+1}
+			{/foreach}
+    	</div>
+    	<div class="clr"></div>
+    	<div class="go-to-page go-product"><a href="{$product.frontend_url}">Перейти на страницу товара</a></div>
+	</div>
+	<div class="block-right">
+		{$product_code = ""}
+		{if count($product.skus) > 1}
+			{$product_available = false}
+			{foreach $product.skus as $sku}
+				{$sku_available = ($sku.available && ($sku.count === null || $sku.count > 0))}
+				{if $sku.id == $product.sku_id}{$product_code = $sku.sku}{/if}
+				{$product_available = $product_available or $sku_available}
+			{/foreach}
+		{else}
+			{$sku = $product.skus[$product.sku_id]}
+			{$product_code = $sku.sku}
+			{$product_available = ($sku.available and $sku.count !== 0)}
+		{/if}
+
+		<form action="/sendQuickorder/" class="quickorder-form" onsubmit="return false;">
+			{$wa->shop->badgeHtml($product.badge)}
+			<h1>{$product.name|escape}</h1>
+			{if $product.features.brand}<div class="vendor">{$product.features.brand}</div>{/if}
+            {if $product_code}<div class="code" style="color:#cc0000;">код товара: <span>{shopEarnberryHelper::getTrackingPlaceholder($product)}</span></div>{/if}
+	        <div class="price">{shop_currency($product.price)} {if $product.compare_price_selectable > 0}<span class="through">{shop_currency($product.compare_price_selectable)}</span>{/if}</div>
+
+	        {$isset_in_stock = 0}
+		    {if $product.sku_type}
+		        {$default_sku_features = $product.sku_features}
+		        {$product_available = $product.status}
+		        <div class="title-size">выберите размер</div>
+		        <ul class="colorlist">
+		            {foreach $features_selectable as $f}
+		                {foreach $f.values as $v_id => $v}
+		                	{if !isset($default_sku_features[$f.id])}{$default_sku_features[$f.id]=$v_id}{/if}
+
+							{*BW show size*}
+							{$show_size = true}
+							{assign var=arr_ids value="`$f.id`:`$v_id`;"}
+							{assign var=count_skus value=$product.skus[$sku_features_selectable[$arr_ids].id].count}
+		                    {if isset($count_skus) && $count_skus == 0}
+		                    	{$show_size = false}
+		                    {/if}
+
+		                    {if $show_size}
+		                    {$isset_in_stock = 1}
+		                    <li>
+		                        <a data-value="{$v_id}" href="#"{if $v_id == ifset($default_sku_features[$f.id])} class="active"{/if}{if $f.type == 'color'} style="{$v->style};"{/if}>
+		                            {if $f.type == 'color'}&nbsp;<span class="color_name">{strip_tags($v)}</span>{else}{$v}{/if}
+		                        </a>
+		                    </li>
+		                    {/if}
+		                {/foreach}
+		                <input type="hidden" data-feature-id="{$f.id}" class="sku-feature" name="features[{$f.id}]" value="{ifset($default_sku_features[$f.id])}">
+		            {/foreach}
+		        </ul>
+		    {/if}
+
+		    <div class="clr"></div>
+
+		    {shopQuickorderPlugin::frontendPopup($product)}
+
+		</form>
+	</div>
+</div>

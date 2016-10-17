@@ -1,0 +1,30 @@
+<span class="shd_3"><a href="{if $href}{$href}{else}#{/if}" title="{$name}">{$name}</a></span>
+<div class="slideshow"
+    data-cycle-slides="> div"
+    data-cycle-fx=carousel
+    data-cycle-timeout="0"
+    data-cycle-carousel-visible="1"
+    data-cycle-next=".next-slide{$type}"
+    data-cycle-prev=".prev-slide{$type}"
+    data-allow-wrap=true
+>
+	{$i = 0}
+	{foreach $products as $p}
+		{$brand = shopDitto::getFeaturesProd($p.id)}
+		{$i = $i+1}
+		<div class="slide-product" data-id="{$p.id}" data-name="{$p.name}" data-category="{$p.category_url}" data-brand="{$brand}" data-variant="size" data-list="{$name}" data-position="{if $i}{$i}{else}0{/if}">
+			<a href="{$p.frontend_url}">{$wa->shop->productImgHtml($p, '220x220', ['itemprop' => 'image', 'alt' => $p.name|escape|cat:' – фото товара', 'title' => $p.name, 'default' => "`$wa_theme_url`img/dummy200.png"])}</a>
+			<div class="titlblock">
+				{$badge_html = $wa->shop->badgeHtml($p.badge)}
+            	{if $badge_html}
+            		{$badge_html}
+				{/if}
+				<a href="{$p.frontend_url}" class="naz">{$p.name|truncate:25}</a>
+				<p class="price"><span>Цена:</span> {shop_currency($p.price)} {if $p.compare_price}<span class="old_titlprice">{shop_currency($p.compare_price)}</span>{/if}</p>
+		    </div>
+		</div>
+    {/foreach}
+</div>
+
+<div class="next-slide{$type} next"></div>
+<div class="prev-slide{$type} prev"></div>

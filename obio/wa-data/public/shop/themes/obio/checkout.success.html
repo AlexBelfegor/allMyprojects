@@ -1,0 +1,81 @@
+<div class="checkout-result">
+	<h1 class="text-center">Ваш заказ успешно оформлен!</h1>
+    <div class="checkout-success text-center">
+		<p class="text">Номер вашего заказа <strong>{$order.id}</strong></p>
+		<br>
+		{$wa->block("shop.block_check_result")}
+    </div>
+
+    <div class="basketlist simple">
+        <div class="linebasket firstlinebasket">
+            <div class="onecell">Товар</div>
+            <div class="onecell pricet">Цена</div>
+            <div class="onecell kolt">Количество</div>
+            <div class="onecell sumt">Сумма</div>
+        </div>
+        {foreach $order.items as $item}
+	        <div class="linebasket ">
+	            <div class="onecell">
+	                <h4>{$item.name|escape}</h4>
+	            </div>
+	            <div class="onecell sizet">
+	            	{if $item.sku_name && $item.sku_name != $item.name}{$item.sku_name|escape}{/if}
+	            </div>
+	            <div class="onecell pricet">
+       				{shop_currency_html($item.price, true)}
+	            </div>
+	            <div class="onecell kolt">
+	                {$item.quantity}
+	            </div>
+	            <div class="onecell sumt">{shop_currency_html($item.price * $item.quantity, true)}</div>
+	        </div>
+        {/foreach}
+        <div class="linebasket with-border-top">
+            <div class="onecell"></div>
+            <div class="onecell pricet"></div>
+            <div class="onecell kolt">Сумма заказа:</div>
+            <div class="onecell sumt">{shop_currency_html($order.total - $order.shipping, true)}</div>
+        </div>
+        <div class="linebasket firstlinebasket">
+            <div class="onecell kolt"></div>
+            <div class="onecell pricet"></div>
+            <div class="onecell deliv">Доставка {$order.params.shipping_name}:</div>
+            <div class="onecell sumt">{shop_currency_html($order.shipping, true)}</div>
+        </div>
+        <div class="linebasket">
+            <div class="onecell"></div>
+            <div class="onecell pricet"></div>
+            <div class="onecell kolt">Сумма к оплате:</div>
+            <div class="onecell sumt">{shop_currency_html($order.total, true)}</div>
+        </div>
+
+
+
+		<ul class="checkout-user">
+			<li>
+				<div><span class="fs">Получатель:</span> <span class="info">{shopCustom::GetUserName($order.contact_id)}</span></div>
+				<div><span class="fs">Доставка:</span> <span class="info">{$order.params.shipping_name}</span></div>
+				<div><span class="fs">Оплата:</span> <span class="info">{$order.params.payment_name}</span></div>
+			</li>
+			<li>
+				<div>&nbsp;</div>
+
+			</li>
+		</ul>
+    </div>
+
+    {if !empty($payment)}
+        <div class="plugin">
+            {$payment}
+        </div>
+    {/if}
+
+    {if !empty($payment_success)}
+        <span class="highlighted">[`Your payment has been successfully accepted. We will process your order and contact you shortly.`]</span>
+    {/if}
+
+    <!-- plugin hook: 'frontend_checkout' -->
+    {* @event frontend_checkout.%plugin_id% *}
+    {foreach $frontend_checkout as $_}{$_}{/foreach}
+
+</div>

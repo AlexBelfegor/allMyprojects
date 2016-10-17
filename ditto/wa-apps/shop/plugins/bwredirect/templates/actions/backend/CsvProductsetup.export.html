@@ -1,0 +1,71 @@
+<h1>Импорт списка ссылок для редиректа</h1>
+<div class="fields form">
+	<p>
+		Скачать пример файл <a href="/sync/example/redirect.csv" target="_blank">redirect.csv</a>
+	</p>
+</div>
+
+
+{if $file_exists}
+<div class="field-group" style="border-bottom: 1px solid #ccc;">
+    <div class="field">
+        <div class="name bold">
+            Скачать файл который загружен сейчас и используется кроном
+        </div>
+        {foreach $info as $f}
+        <div class="value" style="min-width: 300px;">
+            <p>
+                <a href="?plugin=bwredirect&action=download" class="bold nowrap inline"><i class="icon16 download" style="margin-top: 0.3em;"></i>Скачать</a>
+                <span class="hint inline">{$f.size|wa_format_file_size}</span>
+                <br>
+                <span class="hint inline" style="color: #aaa;">Обновлено: {$f.mtime|wa_datetime:"humandatetime"}</span>
+            </p>
+        </div>
+        {/foreach}
+    </div>
+</div>
+{/if}
+
+<div class="field-group">
+
+    <div class="field">
+        <div class="name">
+           Загрузить Файл для импорта
+        </div>
+        <div class="value">
+            <input name="file" type="file" value="">
+        </div>
+    </div>
+
+</div>
+
+<div class="clear-left"></div>
+
+<div class="field-group" id="s-bwredirect-submit">
+    <div class="field">
+        <div class="value submit">
+            <input type="submit" class="button green" value="Импортировать">
+            <span id="s-plugin-bwredirect-status" style="display:none">
+                <i style="vertical-align:middle" class="icon16 yes"></i> Сохранено
+            </span>
+        </div>
+        <br>
+        <br>
+        <em class="errormsg"></em>
+    </div>
+</div>
+
+
+<div class="field-group" id="s-bwredirect-report" style="display:none;">
+	<div class="field">
+		<div class="value">
+			<div class="s-csv-importexport-stats done">
+				<h2>Импорт завершен!</h2>
+			</div>
+		</div>
+		<div class="value">
+			<br>
+			<a href="?plugin=bwredirect&action=download" class="bold nowrap inline"><i class="icon16 download" style="margin-top: 0.3em;"></i>Скачать</a>
+		</div>
+	</div>
+</div>

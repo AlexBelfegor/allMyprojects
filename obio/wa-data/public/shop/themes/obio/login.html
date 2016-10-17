@@ -1,0 +1,29 @@
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <p class="breadcrumb">
+            	<a href="/">Главная</a>&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;
+            	<span>[`Login`]</span>
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="katalogbl">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="content">
+				    <div class="center">
+				        <h1 class=text-center>[`Login`]</h1>
+				        <br>
+				        {$wa->authAdapters()}
+				        <br>
+				        {$wa->loginForm($error)}
+				    </div>
+				</div>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,63 @@
+<h1>Экспорт товаров</h1>
+<p>
+	Экспорт каталога товаров в формате CSV
+	<i class="icon10 new-window"></i>
+</p>
+
+{*
+<div class="field-group">
+    <div class="field">
+        <div class="name">
+           Кодировка
+        </div>
+        <div class="value">
+            <select name="encoding">
+            	<option selected="selected" value="utf-8">UTF-8</option>
+            </select>
+        </div>
+
+    </div>
+
+    <div class="field">
+        <div class="name">
+           Разделитель
+        </div>
+        <div class="value">
+            <select name="delimiter">
+                <option value=";"{if $profile.config.delimiter eq ';'} selected="selected"{/if}>Точка с запятой (;)</option>
+            </select>
+        </div>
+    </div>
+
+</div>
+<div class="clear-left"></div>
+*}
+
+<div class="field-group" id="s-bwexport-submit" style="padding-top:-20px;">
+    <div class="field1">
+        <div class="value submit">
+            <input type="submit" class="button green" value="Экспортировать">
+            <span id="s-plugin-bwexport-status" style="display:none">
+                <i style="vertical-align:middle" class="icon16 yes"></i> Сохранено
+            </span>
+        </div>
+        <br>
+        <br>
+        <em class="errormsg"></em>
+    </div>
+</div>
+
+
+<div class="field-group" id="s-bwexport-report" style="display:none;">
+	<div class="field">
+		<div class="value">
+			<div class="s-csv-importexport-stats done">
+				<h2>Экспорт завершен!</h2>
+			</div>
+		</div>
+		<div class="value">
+			<br>
+			<a href="?plugin=bwexport&action=download" class="bold nowrap inline"><i class="icon16 download" style="margin-top: 0.3em;"></i>Скачать</a>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,344 @@
+{shopDitto::AddViewProduct($product.id)}
+<link rel="stylesheet" href="{$wa_theme_url}js/zoom/zoom.css" />
+<script type="text/javascript" src="{$wa_theme_url}js/zoom/jquery.zoom.min.js"></script>
+
+<script type="text/javascript" src="{$wa_url}wa-content/js/jquery-plugins/jquery.cookie.js"></script>
+<script type="text/javascript" src="{$wa_theme_url}js/product.js"></script>
+<script>$.fn.cycle.defaults.autoSelector = '.slideshow';</script>
+
+<p class="breadcrumb">
+	<a href="/">главная</a>&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;
+	{if $breadcrumbs = shopDitto::breadcrumbs($product)}
+	    {foreach $breadcrumbs as $breadcrumb}
+	         <a href="{$breadcrumb.url}">{$breadcrumb.name|escape}</a>&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;
+	    {/foreach}
+	{/if}
+
+    <span>{$product.name|escape}</span>
+</p>
+
+<div class="tovarleft">
+	<div id="zoom-window"></div>
+	<div class="forimgtab">
+        {if $product.images}
+            {$wa->shop->badgeHtml($product.badge)}
+	    	{*<div class="fordopdan"><p class="new">Новинка</p></div><div class="fordopdan"><p class="hit">Хит продаж</p></div><div class="fordopdan"><p class="akc">Акция</p></div>*}
+        {/if}
+
+    	<div class="forimg" id='zoom-picture'>
+    		<div class="zoom"></div>
+	        {*'width' => '340',*}
+	        {$wa->shop->productImgHtml($product, '1400', ['itemprop' => 'image', 'id' => 'product-image', 'alt' => $product.name|escape|cat:' ':strip_tags($product.summary)|escape, 'title' => $product.name|escape|cat:' ':strip_tags($product.summary)|escape, 'default' => "/wa-apps/shop/themes/ditto/img/dummy340.png"])}
+    	</div>
+    </div>
+
+    {$count_images = count($product.images)}
+    {if $count_images > 1}
+    <div class="minikarusel">
+		<div class="slideshow"
+	        data-cycle-slides="> div"
+	        data-cycle-fx=carousel
+	        data-cycle-timeout="0"
+	        data-cycle-carousel-visible="{if $count_images < 6}{$count_images}{else}6{/if}"
+	        data-cycle-next=".next-slide"
+	        data-cycle-prev=".prev-slide"
+	        data-allow-wrap=true
+	    >
+			{foreach $product.images as $image}
+				<div>
+					{$src = shopDitto::productImgHtmlPath(['id'=> $product.id, 'image_id' => $image.id, 'ext' => $image.ext],'1400')}
+					<a class="popup-product-photos show-picture" id="product-image-{$image.id}" href="{if $src}{$src}{else}#{/if}">{$wa->shop->productImgHtml(['id'=> $product.id, 'image_id' => $image.id, 'ext' => $image.ext], '60x60', ['itemprop' => 'image', 'alt' => $product.name|escape|cat:' ':strip_tags($product.summary)|escape, 'title' => $product.name|escape|cat:' ':strip_tags($product.summary)|escape])}</a>
+				</div>
+			{/foreach}
+        </div>
+
+        {if $count_images > 6}
+        <div class="next-slide next"></div>
+        <div class="prev-slide prev"></div>
+        {/if}
+    </div>
+	{/if}
+
+    <div class="vibprew">
+	    <!-- plugin hook: 'frontend_product.cart' -->
+	    {* @event frontend_product.%plugin_id%.cart *}
+	    {foreach $frontend_product as $_}{$_.cart}{/foreach}
+
+        {$src = shopDitto::productImgHtmlPath($product,'1400')}
+        <div class="onevibprew onevibprew2"><a class="popup-product-photos" href="{if $src}{$src}{else}#{/if}">большое фото</a></div>
+
+		{if $product.features.youtube}
+        <div class="onevibprew onevibprew3"><a class="popup-block-youtube" href="#popup-youtube-open">видеообзор</a></div>
+		<div class="block-youtube">
+		    <div id="popup-youtube-open">
+		        {$product.features.youtube}
+		    </div>
+		    <div class="clr"></div>
+		</div>
+		{/if}
+
+        <div class="clr"></div>
+    </div>
+</div>
+<div class="tovarright ">
+	<h1 itemprop="name">{$product.name|escape}</h1>
+    <div class="clr"></div>
+
+    <form id="cart-form" method="post" action="{$wa->getUrl('/frontendCart/add')}" class="cart">
+        <input type="hidden" name="product_id" value="{$product.id}">
+
+        <!-- sku -->
+        {$product_code = ""}
+
+        {if count($product.skus) > 1}
+            <ul class="skus" id="product-skus">
+                {$product_available = false}
+                {foreach $product.skus as $sku}
+                    {$sku_available = ($sku.available && ($sku.count === null || $sku.count > 0))}
+                    {if $sku.id == $product.sku_id}{$product_code = $sku.sku}{/if}
+                    {*
+                    <li itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+                        <label{if !$sku.available} class="disabled"{/if}>
+                            <input name="sku_id" type="radio" value="{$sku.id}"{if !$sku.available} disabled="true"{/if}{if !$sku_available && !$wa->shop->settings('ignore_stock_count')}data-disabled="1"{/if}{if $sku.id == $product.sku_id} checked="checked"{/if} data-price="{shop_currency($sku.price, $product.currency, null, 0)}"{if $sku.image_id} data-image-id="{$sku.image_id}"{/if}> {$sku.name|escape}
+                            <meta itemprop="price" content="{shop_currency($sku.price, $product.currency)}">
+                            <span class="price tiny nowrap">{shop_currency($sku.price, $product.currency)}</span>
+                            {if (!($sku.count === null) && $sku.count <= 0)}
+                                <link itemprop="availability" href="http://schema.org/OutOfStock" />
+                            {else}
+                                <link itemprop="availability" href="http://schema.org/InStock" />
+                            {/if}
+                        </label>
+                    </li>
+                    *}
+                    {$product_available = $product_available or $sku_available}
+                {/foreach}
+            </ul>
+        {else}
+            <div itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+                {$sku = $product.skus[$product.sku_id]}
+                {$product_code = $sku.sku}
+                <meta itemprop="price" content="{shop_currency($sku.price, $product.currency)}">
+                {$product_available = ($sku.available and $sku.count !== 0)}
+                {if !$product_available}
+                     <link itemprop="availability" href="http://schema.org/OutOfStock" />
+                     <p><em class="bold out-of-stock nowrap">[`Out of stock`]</em></p>
+                {else}
+                     <link itemprop="availability" href="http://schema.org/InStock" />
+                     <input name="sku_id" type="hidden" value="{$product.sku_id}">
+                {/if}
+            </div>
+        {/if}
+
+        {if $services}
+        <div class="services">
+            {foreach $services as $s}
+            <div id="service-{$s.id}">
+                <label>
+                    <input data-price="{shop_currency($s.price, $s.currency, null, 0)}" {if !$product_available}disabled="disabled"{/if} type="checkbox" name="services[]" value="{$s.id}"> {$s.name|escape} {if $s.price && !isset($s.variants)}(+<span class="service-price">{shop_currency($s.price, $s.currency)}</span>){/if}
+                </label>
+                {if isset($s.variants)}
+                <select class="service-variants" name="service_variant[{$s.id}]" disabled="disabled">
+                    {foreach $s.variants as $v}
+                    <option data-price="{shop_currency($v.price, $s.currency, null, 0)}" id="service-variant-{$v.id}" value="{$v.id}">{$v.name|escape} (+{shop_currency($v.price, $s.currency)})</option>
+                    {/foreach}
+                </select>
+                {else}
+                <input type="hidden" name="service_variant[{$s.id}]" value="{$s.variant_id}">
+                {/if}
+            </div>
+            {/foreach}
+        </div>
+        {/if}
+
+        <input type="hidden" name="quantity" value="1">
+
+	    {if $product.features.brand}<p class="proizv">{$product.features.brand}</p>{/if}
+	    {if $product_code}<p class="kodtov">код товара {$product_code}</p>{/if}
+
+	    <p class="tovarprice">
+	    	{shop_currency($product.price)}
+	    	{if $product.compare_price > 0}<br/><span>{shop_currency($product.compare_price)} </span>{/if}
+	    </p>
+
+	    {if $product_available}<div class="buy_btn"><input type="submit" {if !$product_available}disabled="disabled"{/if} value="Купить"></div>{/if}
+
+        {* old
+        {function name=in_stock n=0 low=5 critical=2}
+            {if $n > $low or $n === null}
+                <p class="nalichtov">Есть в наличии</p>
+            {elseif $n > $critical}
+                <p class="nalichtov">{sprintf("[`Only %d left in stock`]", $n)}</p>
+            {elseif $n > 0}
+                <p class="nalichtov">{sprintf("[`Only %d left in stock`]", $n)}</p>
+            {else}
+                <p class="nalichtov">[`Out of stock`]</p>
+            {/if}
+        {/function}
+
+        {foreach $product.skus as $sku}
+            {if $sku.stock}
+                {foreach $stocks as $stock_id => $stock}
+                    {if isset($sku.stock[$stock_id])}
+                        {$stock_count = $sku.stock[$stock_id]}
+                    {else}
+                        {$stock_count = null}
+                    {/if}
+                    {in_stock n=$stock_count low=$stock.low_count critical=$stock.critical_count}
+                {/foreach}
+            {else}
+	            {in_stock n=$sku.count}
+            {/if}
+        {/foreach}
+        *}
+
+	    <div class="clr"></div>
+
+	    <a href="/dostavka-i-oplata/" class="uslov">Условия доставки и возврата товара</a><div class="clr"></div>
+	    <p class="vibrazm">выберите размер</p>
+	    <a href="#" class="uznrazm popup-product-size">как узнать размер?</a>
+
+	    <div class="clr"></div>
+        {$isset_in_stock = 0}
+	    {if $product.sku_type}
+	        {$default_sku_features = $product.sku_features}
+	        {$product_available = $product.status}
+	        <ul class="razmerlist">
+	            {foreach $features_selectable as $f}
+	                {foreach $f.values as $v_id => $v}
+	                	{if !isset($default_sku_features[$f.id])}{$default_sku_features[$f.id]=$v_id}{/if}
+
+						{*BW show size*}
+						{$show_size = true}
+						{assign var=arr_ids value="`$f.id`:`$v_id`;"}
+						{assign var=count_skus value=$product.skus[$sku_features_selectable[$arr_ids].id].count}
+	                    {if isset($count_skus) && $count_skus == 0}
+	                    	{$show_size = false}
+	                    {/if}
+
+	                    {if $show_size}
+	                    {$isset_in_stock = 1}
+	                    <li>
+	                        <a data-value="{$v_id}" href="#"{if $v_id == ifset($default_sku_features[$f.id])} class="active"{/if}{if $f.type == 'color'} style="{$v->style};"{/if}>
+	                            {if $f.type == 'color'}&nbsp;<span class="color_name">{strip_tags($v)}</span>{else}{$v}{/if}
+	                        </a>
+	                    </li>
+	                    {/if}
+	                {/foreach}
+	                <input type="hidden" data-feature-id="{$f.id}" class="sku-feature" name="features[{$f.id}]" value="{ifset($default_sku_features[$f.id])}">
+	            {/foreach}
+	        </ul>
+	    {/if}
+
+        {if $isset_in_stock}
+        	<p class="nalichtov">Есть в наличии</p>
+        {else}
+        	<p class="nalichtov">Нет в наличии</p>
+        {/if}
+
+	</form>
+
+	{$crossselling = $product->crossSelling()}
+	{if $crossselling}
+
+	    <div class="clr"></div>
+	    <p class="vibrazm">другие варианты</p><div class="clr"></div>
+		<ul class="colorlist">
+        {foreach $crossselling as $id => $p }
+            {$color = shopDitto::getFeatureColorProduct($id)}
+            {if $color}
+            	<li><a href="{$p.frontend_url}" class="color {if $color == '#FFFFFF'}colorwhite{/if}" {if $color} style="background-color:{$color};"{/if}></a></li>
+            {/if}
+        {/foreach}
+	    </ul>
+
+	{/if}
+    <div class="clr"></div>
+
+    <table width="380" border="0" cellspacing="0" cellpadding="0" class="tovdata">
+	{if $product.features}
+		{$foo = 0}
+		{foreach $product.features as $f_code => $f_value}
+		{if $f_code != "youtube"}
+			{$foo = $foo + 1}
+			<tr>
+				<td>{$features[$f_code].name|escape}</td>
+				<td>
+					{if is_array($f_value)}
+						{implode(', ', $f_value)}
+					{else}
+						{$f_value}
+					{/if}
+				</td>
+			</tr>
+		{/if}
+		{/foreach}
+	{/if}
+    </table>
+
+    {if $product.description}
+        <p class="texttov" itemprop="description">{$product.description}</p>
+    {/if}
+
+</div>
+
+<div class="clr"></div>
+{$upselling = $product->upSelling()}
+{if $upselling}
+	{$cnt = count($upselling)}
+
+	<div class="dottedtov"></div><div class="fordottitl"><p>Вам также может понравится</p></div>
+	<div class="clr"></div>
+	<div class="forsliderpoh">
+		<div class="slideshow"
+	        data-cycle-slides="> div"
+	        data-cycle-fx=carousel
+	        data-cycle-timeout="0"
+	        data-cycle-carousel-visible="{if $cnt <= 4}{$cnt}{else}4{/if}"
+	        data-cycle-next=".next-slide1"
+	        data-cycle-prev=".prev-slide1"
+	        data-allow-wrap=true
+	    >
+        	{include file="list-thumbs-product.html" products=$upselling}
+	    </div>
+
+	    {if $cnt >= 4}
+	    <div class="next-slide1 next"></div>
+	    <div class="prev-slide1 prev"></div>
+	    {/if}
+	</div>
+{/if}
+
+{$mostpopular = shopDitto::MostPopularViewProducts()}
+{if $mostpopular}
+	{$cnt = count($mostpopular)}
+	<div class="dottedtov"></div><div class="fordottitl"><p>Недавно просмотренные товары</p></div>
+	<div class="forsliderpoh">
+		<div class="slideshow"
+	        data-cycle-slides="> div"
+	        data-cycle-fx=carousel
+	        data-cycle-timeout="0"
+	        data-cycle-carousel-visible="{if $cnt <= 4}{$cnt}{else}4{/if}"
+	        data-cycle-next=".next-slide2"
+	        data-cycle-prev=".prev-slide2"
+	        data-allow-wrap=true
+	    >
+	        {include file="list-thumbs-product.html" products=$mostpopular}
+	    </div>
+
+	    {if $cnt >= 4}
+	    <div class="next-slide2 next"></div>
+	    <div class="prev-slide2 prev"></div>
+	    {/if}
+	</div>
+{/if}
+
+<!-- plugin hook: 'frontend_product.block' -->
+{* @event frontend_product.%plugin_id%.block *}
+{foreach $frontend_product as $_}{$_.block}{/foreach}
+
+<script type="text/javascript">
+    var currency = {json_encode($currency_info)};
+    {if count($product.skus) > 1}
+    var sku_services = {json_encode($sku_services)};
+    {/if}
+</script>

@@ -1,0 +1,29 @@
+<p class="breadcrumb"><a href="/">главная</a>&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;<a href="/my/">Мой кабинет</a>&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;<span>[`My profile`]</span></p>
+
+<div class="page">
+	<h1>[`My profile`]</h1>
+
+	<div class="text">
+
+		{if $saved}
+		    <strong><i class="icon16 saved"></i><span style="color:green">[`Contact information successfully updated!`]</span></strong>
+		{/if}
+
+		<form action="" method="post">
+		<div class="wa-form">
+
+		    {$form->html()}
+
+		    <div class="wa-field">
+		        <div class="wa-value">
+		            <input type="submit" value="[`Save`]">
+		        </div>
+		    </div>
+		</div>
+		</form>
+
+		<div class="clr"></div>
+	</div>
+
+	<div class="clr"></div>
+</div>

@@ -1,0 +1,44 @@
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <p class="breadcrumb">
+            	<a href="/">Главная</a>&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;
+            	<span>Поиск</span>
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="katalogbl">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                <h1 class="text-center">{$title}</h1>
+
+			    <div class="row">
+				    <div class="search-simple">
+					    <form method="get" action="{$wa->getUrl('shop/frontend/search')}">
+					        <div class="search-wrapper center-block">
+					            <input id="search" type="text" name="query" {if !empty($title)}value="{$title}"{/if} placeholder="[s`Find products`]"><input type="submit" value="Искать">
+					        </div>
+					    </form>
+	                </div>
+                </div>
+                <br><br>
+                <div class="clr"></div>
+
+			    {if !$products}
+			        [`No products were found.`]
+			    {else}
+			        {include file='list-thumbs.html'}
+			    {/if}
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- plugin hook: 'frontend_search' -->
+{* @event frontend_search.%plugin_id% *}
+{foreach $frontend_search as $_}{$_}{/foreach}

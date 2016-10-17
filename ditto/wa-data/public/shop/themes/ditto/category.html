@@ -1,0 +1,101 @@
+{if waRequest::isXMLHttpRequest()}
+                <div class="html-title" style="display: none;">{if $category.meta_title}{$category.meta_title|escape}{else}{$category.name|escape}{/if}</div>
+{/if}
+	{if (count($smarty.get) && !$smarty.get.page)}{$name_list = "filtr"}{/if}
+
+	{$filtr_array = ['novinki', 'nzhenskaya', 'nmuzhskaya', 'rasprodazha', 'rzhenskaya', 'rmuzhskaya', 'poslednyaya-para', 'skidki']}
+
+	{if in_array($category.url,$filtr_array)}
+		{if $data = shopDitto::products($category)}
+			{$products = $data.products}
+			{$pages_count = $data.pages_count}
+			{$filters = $data.filters}
+			{$collection_sql = $data.collection_sql}
+		{/if}
+	{/if}
+
+	<div class="breadcrumb" itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+		<a href="/" itemprop="url"><span itemprop="title">Магазин обуви Ditto</span></a>&nbsp;&nbsp;&nbsp;&gt;&nbsp;&nbsp;&nbsp;
+		{if $breadcrumbs = shopDitto::breadcrumbscategory($category)}
+	    {foreach $breadcrumbs as $breadcrumb name=breads}
+			<div itemprop="child" itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+			<a href="{$breadcrumb.url}" itemprop="url"><span itemprop="title">{$breadcrumb.name|escape}</span></a>&nbsp;&nbsp;&nbsp;&gt;&nbsp;&nbsp;&nbsp;
+			{if $smarty.foreach.breads.last}
+				<div itemprop="child" itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+					<a href="http://ditto.ua/{$category.full_url}/" itemprop="url"><span class="last_span" itemprop="title">{$category.name|escape}</span></a>
+				</div>
+			{/if}
+			</div>
+	    {/foreach}
+		{else}
+			<div itemprop="child" itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+				<a href="http://ditto.ua/{$category.full_url}/" itemprop="url"><span class="last_span" itemprop="title">{$category.name|escape}</span></a>
+			</div>
+		{/if}
+	</div>
+
+    <div class="forfilter">
+    	{*<h6>{$category.name|escape} &ndash; каталог</h6>*}
+
+        {include file="sidebar.html" filters=$filters collection_sql=$collection_sql}
+
+        <div class="clr"></div>
+    </div>
+
+    <div class="filtrkontent">
+		{if isset($category.params.h1)}
+			<h1>{$category.params.h1|escape}{if $smarty.get.page} - страница {$smarty.get.page}{/if}</h1>
+		{/if}
+
+    	<div class="baner">
+    		{if $category.params.baner}
+    			{if $category.params.baner_url}<a href="{$category.params.baner_url}">{/if}
+    				<img src="{$category.params.baner}"/>
+    			{if $category.params.baner_url}</a>{/if}
+    		{/if}
+    	</div>
+
+        <div id="product-list">
+		    {if !$products && ($category.url != 'novinki' && $category.url != 'rasprodazha')}
+		        [`This category does not contain any products.`]
+		    {else}
+		        {include file='list-thumbs.html' sorting=!empty($category.params.enable_sorting) products=$products pages_count=$pages_count list="{if isset($name_list)}{$name_list}{/if}"}
+
+		        {if ($products != 0) && !isset($smarty.get.page)}
+			        <div class="tooltips-center">
+			        	{$wa->block("shop.block_tooltips")}
+			        </div>
+		        {/if}
+		    {/if}
+
+        </div>
+
+        <div class="clr"></div>
+
+	    {if !$smarty.get.page && ($smarty.get.sort == false)}
+	    <div class="home-text">
+	        <div class="seotext">
+	        	{$category.description}
+	        </div>
+	        <div class="seotext" style="text-align: justify">
+	        	{shopDitto::SeoShieldCategoryBlock()}
+	        </div>
+	        <div class="seotext" style="text-align: center; font-size: 16px; padding: .35em 0; text-indent: 2em; line-height: 20px">
+        		{shopDitto::SeoShieldDeliveryBlock()}
+        	</div>
+        </div>	
+        <div class="slideToggle home-text-category"><span>Подробнее...</span></div>
+        {/if}
+
+        <div class="clr"></div>
+
+		{if ($link_category = shopCallbackPlugin::GetLinkCategory($category.id))}
+			<div class="link_category">
+				<span class="shd_6">Также ищут в категориях:</span>
+				<div>
+					{$link_category}
+				</div>
+			</div>
+		{/if}
+
+    </div>

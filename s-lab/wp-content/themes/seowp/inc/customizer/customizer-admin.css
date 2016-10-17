@@ -1,0 +1,482 @@
+/**
+ * Special styles for theme customizer
+ *
+ * -------------------------------------------------------------------
+ *
+ * DESCRIPTION:
+ *
+ * These styles used to extend Theme Customizer UI
+ *
+ * @package    SEOWP WordPress Theme
+ * @author     Vlad Mitkovsky <info@lumbermandesigns.com>
+ * @copyright  2014 Lumberman Designs
+ * @license    http://themeforest.net/licenses
+ * @link       http://themeforest.net/user/lumbermandesigns
+ *
+ * -------------------------------------------------------------------
+ *
+ * Send your ideas on code improvement or new hook requests using
+ * contact form on http://themeforest.net/user/lumbermandesigns
+ */
+
+.wp-full-overlay {
+	/* Make sure media manager frame is on the very top */
+	z-index: 150000 !important;
+}
+
+body .customize-control-subheader {
+	position: relative;
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+
+.customize-control-subheader:before {
+	position: absolute;
+	content: "";
+
+	border-top: 1px solid  #F0F0F0;
+	border-top: 1px solid rgba(0, 0, 0, 0.05);
+
+	left: -30px;
+	right: -30px;
+}
+
+.customizer-subheader {
+	margin: 14px 0 0 0;
+	padding: 5px 5px 5px 0;
+
+	text-transform: uppercase;
+	letter-spacing: 1px;
+
+	font-weight: normal;
+	/*font-size: 12px;*/
+	opacity: .5;
+}
+
+/**
+ * Pseudo customizer super-sections
+ */
+
+#accordion-section-lbmn_more:before,
+#accordion-section-lbmn_calltoaction:before,
+#accordion-section-lbmn_headertop:before,
+#accordion-section-lbmn_notificationpanel:before,
+#accordion-section-page_layout:before {
+	text-transform: uppercase;
+	padding: 6px 20px;
+	margin-top: -1px;
+	background: #EEE;
+	border-bottom: 1px solid #DDD;
+	/*width: 100%;*/
+	display: block;
+	font-size: 11px;
+	color: #919191;
+	letter-spacing: 1px;
+}
+
+
+#accordion-section-lbmn_notificationpanel:before {
+	content: "Before Header";
+}
+
+#accordion-section-lbmn_headertop:before {
+	content: "Header";
+}
+
+#accordion-section-page_layout:before {
+	content: "Content";
+}
+
+#accordion-section-lbmn_calltoaction:before {
+	content: "Footer";
+}
+
+#accordion-section-lbmn_more:before {
+	content: "Other";
+}
+
+/* Header design switch warning */
+
+#customize-control-lbmn_header_design:after {
+	display: block;
+	width: 82%;
+	padding: 10px;
+	line-height: 1.3;
+	font-size: 14px;
+	margin-top: 15px;
+	background: rgb(250, 238, 231);
+	border: 2px solid rgb(255, 61, 0);
+	border-radius: 5px;
+	color: #2C2421;
+	content: "Important: if you change this setting it will overwrite your custom header settings with predesigned ones!";
+}
+
+
+/* Important notices */
+
+.lbmn-notice {
+	display: block;
+	padding: 10px;
+	line-height: 1.3;
+	font-size: 13px;
+	font-style: normal;
+	margin-top: 15px;
+	background: rgb(250, 238, 231);
+	/*border: 2px solid rgb(255, 61, 0);*/
+	border-radius: 3px;
+	color: #2C2421;
+}
+
+
+/* Welcome message design */
+
+.customizer-welcome-message {
+	position: absolute;
+	left: 0;
+	top: 0;
+	height: 100%;
+	width: 100%;
+	z-index: 1;
+	background: rgba(0, 0, 0, 0.8);
+	background: -moz-linear-gradient(-45deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0.4) 100%);
+	background: -webkit-gradient(linear, left top, right bottom, color-stop(0%,rgba(0,0,0,1)), color-stop(100%,rgba(0,0,0,0.4)));
+	background: -webkit-linear-gradient(-45deg, rgba(0,0,0,1) 0%,rgba(0,0,0,0.4) 100%);
+	background: -o-linear-gradient(-45deg, rgba(0,0,0,1) 0%,rgba(0,0,0,0.4) 100%);
+	background: -ms-linear-gradient(-45deg, rgba(0,0,0,1) 0%,rgba(0,0,0,0.4) 100%);
+	background: linear-gradient(135deg, rgba(0,0,0,1) 0%,rgba(0,0,0,0.4) 100%);
+	content: "";
+}
+
+.customizer-welcome-message .content {
+	color: #CBC9C9;
+	font-size: 16px;
+	line-height: 1.5;
+	margin: 10%;
+	width: 280px;
+}
+
+.customizer-welcome-message .content h1,
+.customizer-welcome-message .content h2 {
+	font-family: HelveticaNeue-Light,"Helvetica Neue Light","Helvetica Neue",sans-serif;
+	font-size: 50px;
+	line-height: 1.2;
+	margin-bottom: 0;
+	font-weight: 300;
+	color: #fff;
+}
+
+.customizer-welcome-message .content h2 {
+	font-size: 24px;
+	font-weight: 400;
+	margin-bottom: 40px;
+	margin-top: 0;
+}
+
+.customizer-welcome-message .close-message {
+	margin-top: 20px;
+}
+
+/**
+* ----------------------------------------------------------------------
+*/
+
+#customize-control-lbmn_notificationpanel_icon input {
+	width: 133px;
+	margin-right: 10px;
+}
+
+/**
+* ----------------------------------------------------------------------
+*/
+
+body #customize-controls .dropdown-open,
+body #customize-controls .dropdown-close {
+	margin-top: 5px;
+	margin-right: 15px;
+	margin-bottom: 20px;
+}
+
+/**
+* ----------------------------------------------------------------------
+*/
+
+#customize-theme-controls .accordion-section-content {
+	/*background: #F1F1F1;
+	box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2) inset;*/
+	background: #F5F5F5;
+	box-shadow: 0 1px 0px 0 rgba(155,155,155, 0.3) inset;
+}
+
+.accordion-section-content {
+	padding-left: 30px;
+	padding-right: 30px;
+}
+
+
+.grouped-controls {
+	float: left;
+	margin: 0 0 3% -7% !important;
+	/*padding: 20px 20px 14px;*/
+	width: 114%;
+	min-width: 0;
+}
+
+/*.grouped-controls + .grouped-controls {
+	margin-bottom: 1% !important;
+}*/
+
+.grouped-controls:after {
+	content:'';
+	clear: both;
+	display: table;
+}
+
+.grouped-controls > h3 {
+	padding: 10px 20px;
+	margin-bottom: 0;
+	cursor: default!important;
+}
+
+.grouped-controls .inside {
+	float: left;
+	padding: 0 7%;
+   width: 86%;
+}
+
+.grouped-controls__helptext .helptext-toggle {
+	position: absolute;
+	right: 5%;
+	top: -55px;
+}
+
+.grouped-controls__helptext .helptext-inner {
+	display: none;
+   font-size: 90%;
+   margin-bottom: 20px;
+   margin-top: -10px;
+}
+
+.grouped-controls__helptext .helptext-inner.active {
+	display: block;
+}
+
+.grouped-controls__helptext p {
+	font-size: 90%;
+	margin-top: 0;
+	opacity: 0.5;
+}
+
+
+body .customize-control {
+	margin-bottom: 16px;
+}
+
+body .customize-control select,
+body .customize-control input[type="text"],
+body .customize-control textarea,
+.dropdown.preview-thumbnail,
+.customize-control-image .library,
+.customize-control-image .actions {
+	width: 100%;
+}
+
+body .chosen-container {
+	/*width: 90%!important;*/
+}
+
+.preview-thumbnail .dropdown-content {
+	max-height: 90px;
+   width: 95%;
+}
+
+body .accordion-section .customize-control-image .preview-thumbnail img {
+	max-width: none;
+   max-height: none;
+}
+
+.customize-control-title {
+	font-weight: normal;
+}
+
+/* Custom Color Slider */
+
+.color-picker-slider-wrap,
+.cp-container .cp-transparency, .cp-container .cp-swatches li {
+	/*background: #fff;*/
+	/* checker board pattern */
+	background: url('data:image/gif;base64,R0lGODlhEAAPAIAAAP////Hx8SH5BAAAAAAALAAAAAAQAA8AAAIdjG+gq4jM3IFLJgpswNlyzX0eBpIjVaInlLJrZBUAOw==') repeat scroll 0 0 rgba(0, 0, 0, 0);
+}
+
+.customize-control input[type="text"].custom-color-picker-slider {
+	/*width: 175px;*/
+	/*border-radius: 4px 0 0 4px;*/
+	border-width: 0;
+	box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08) inset, 0 0 0 1px rgba(255, 255, 255, 0.3);
+	font-size: 11px;
+	font-weight: bold;
+	letter-spacing: 1px;
+	padding: 7px 5px;
+	text-transform: uppercase;
+}
+
+body .cp-container.cp-popup {
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+	border-color: rgba(148, 148, 148, 0.09);
+	border-top-color: transparent;
+	left: 0 !important;
+	margin-bottom: 10px;
+	margin-top: 0;
+	padding: 4% !important;
+	position: relative;
+	top: 0 !important;
+	width: 100% !important;
+	/*width: 92% !important;*/
+}
+
+body .cp-container .cp-slider,
+body .cp-container .cp-preview {
+	margin-left: 0;
+	margin-right: 0;
+	margin-bottom: 5%;
+}
+
+body .cp-container .cp-slider:last-child {
+	margin-bottom: 0;
+}
+
+/**
+* ----------------------------------------------------------------------
+* Customizer Slider Control
+*/
+
+body .customize-control input.customizer-slider__text {
+	width: 20%;
+	margin-right: 5%;
+	float: left;
+	text-align: center;
+}
+
+.customizer-slider__slider {
+	width: 70%;
+	float: right;
+}
+
+.customizer-slider__slider.ui-widget-overlay {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}
+.customizer-slider__slider.ui-slider {
+	position: relative;
+	text-align: left;
+	margin-top: 12px !important;
+	height: 4px !important;
+	background: rgba(119, 119, 119, 0.1) !important;
+	box-shadow: 1px 1px 2px 0 rgba(0, 0, 0, 0.2) inset !important;
+	border: none !important;
+	border-radius: 6px;
+}
+.customizer-slider__slider.ui-slider .ui-slider-handle {
+	position: absolute;
+	z-index: 2;
+	width: 1.2em;
+	height: 1.2em;
+	cursor: col-resize;
+	border: solid 1px #CCCCCC;
+
+	outline: none;
+
+	background: #F7F7F7;
+/*	background: #e9e9e9 -webkit-gradient( linear, left top, left bottom, from(rgba(255,255,255,.1)), to(rgba(0,0,0,.1)));
+	background: #e9e9e9 -moz-linear-gradient(top,  rgba(255,255,255,.1),  rgba(0,0,0,.1));
+	background: #e9e9e9 -ms-linear-gradient(top,  rgba(255,255,255,.1),  rgba(0,0,0,.1));
+*/
+   box-shadow: 0 1px 0 #FFFFFF inset, 0 1px 0 rgba(0, 0, 0, 0.08);
+
+	-webkit-border-radius: 100px !important;
+	 -khtml-border-radius: 100px !important;
+	   -moz-border-radius: 100px !important;
+	    -ms-border-radius: 100px !important;
+	     -o-border-radius: 100px !important;
+	        border-radius: 100px !important;
+}
+.customizer-slider__slider.ui-slider .ui-slider-range {
+	position: absolute;
+	z-index: 1;
+	font-size: .7em;
+	display: block;
+	border: 0;
+}
+.customizer-slider__slider.ui-slider-horizontal {
+	height: .8em;
+
+	border: solid 1px #dfdfdf;
+	background: #f5f5f5;
+	background: #f5f5f5 -webkit-gradient( linear, left bottom, left top, from(rgba(255,255,255,.1)), to(rgba(0,0,0,.05)));
+	background: #f5f5f5 -moz-linear-gradient(bottom,  rgba(255,255,255,.1),  rgba(0,0,0,.05));
+	background: #f5f5f5 -ms-linear-gradient(bottom,  rgba(255,255,255,.1),  rgba(0,0,0,.05));
+
+	box-shadow: inset 0 0 4px rgba(0,0,0,.05);
+}
+.customizer-slider__slider.ui-slider-horizontal .ui-slider-handle {
+	top: -8px;
+	margin-left: -.6em;
+}
+.customizer-slider__slider.ui-slider-horizontal .ui-slider-range {
+	top: 0;
+	height: 100%;
+}
+.customizer-slider__slider.ui-slider-horizontal .ui-slider-range-min {
+	left: 0;
+}
+.customizer-slider__slider.ui-slider-horizontal .ui-slider-range-max {
+	right: 0;
+}
+.customizer-slider__slider.ui-widget {
+	font-family: Verdana, Arial, sans-serif;
+	font-size: 1.1em;
+}
+.customizer-slider__slider.ui-widget .ui-widget {
+	font-size: 1em;
+}
+.customizer-slider__slider.ui-widget input,
+.customizer-slider__slider.ui-widget select,
+.customizer-slider__slider.ui-widget textarea,
+.customizer-slider__slider.ui-widget button {
+	font-family: Verdana, Arial, sans-serif;
+	font-size: 1em;
+}
+.customizer-slider__slider.ui-widget-content {}
+.customizer-slider__slider.ui-corner-all, .customizer-slider__slider .ui-corner-all {
+
+}
+
+/**
+* ----------------------------------------------------------------------
+* Full-screen messages
+*/
+
+.themecustomizer-fullscreen-message {
+	position: absolute;
+	z-index: 10;
+	background: rgba(0, 0, 0, 0.75);
+	width: 100%;
+	height: 100%;
+	text-align: center;
+}
+
+.themecustomizer-fullscreen-message .message-content {
+	width: 660px;
+	margin: 120px auto;
+	padding: 50px 40px;
+}
+
+.themecustomizer-fullscreen-message .welcome-panel h3 {
+	margin-bottom: 20px;
+}
+
+.themecustomizer-fullscreen-message .welcome-panel .button.button-hero {
+	margin-top: 30px;
+}

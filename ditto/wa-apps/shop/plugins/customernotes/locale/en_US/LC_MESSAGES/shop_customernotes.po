@@ -1,0 +1,53 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: shop/plugins/customernotes\n"
+"POT-Creation-Date: 2015-05-28 00:18+0300\n"
+"PO-Revision-Date: \n"
+"Last-Translator: snark.pro <covoxx@gmail.com>\n"
+"Language-Team: shop/plugins/customernotes <covoxx@gmail.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-Basepath: .\n"
+"Language: en_US\n"
+"X-Generator: Poedit 1.5.4\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPath-1: .\n"
+
+#: /wa-apps/shop/plugins/customernotes/templates/orderInfoSection.html:9
+msgid "Client rating:"
+msgstr ""
+
+#: /wa-apps/shop/plugins/customernotes/templates/orderInfoSection.html:26
+msgid "Note about customer:"
+msgstr ""
+
+#: /wa-apps/shop/plugins/customernotes/lib/config/plugin.php:3
+msgid "Customer`s notes"
+msgstr ""
+
+#: /wa-apps/shop/plugins/customernotes/lib/config/plugin.php:4
+msgid "Allows you to create and view notes about the customer in the order."
+msgstr ""
+
+#: /wa-apps/shop/plugins/customernotes/templates/orderInfoSection.html:36
+msgid "Save"
+msgstr ""
+
+#: /wa-apps/shop/plugins/customernotes/templates/orderInfoSection.html:7
+#: /wa-apps/shop/plugins/customernotes/templates/orderInfoSection.html:9
+msgid "Hide notes"
+msgstr ""
+
+#: /wa-apps/shop/plugins/customernotes/lib/actions/shopCustomernotesPluginBackendDeletenote.controller.php:45
+msgid "Note can not be deleted"
+msgstr ""
+
+#: /wa-apps/shop/plugins/customernotes/lib/config/settings.php:5
+msgid "Hide notes in the order"
+msgstr ""
+
+#: /wa-apps/shop/plugins/customernotes/lib/config/settings.php:6
+msgid "Hides the note in order by default"
+msgstr ""

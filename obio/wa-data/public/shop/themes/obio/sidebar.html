@@ -1,0 +1,150 @@
+{if $sidebarcategories = shopCustom::sidebarcategories($category)}
+<div class="onefiltr">
+    <div class="katlist">
+        <ul>
+			{foreach $sidebarcategories as $c}
+				<li class="pm{if $c.show} active{/if}">
+					<a href="{$c.url}" class="{if $category.id == $c.id}active{/if}">{$c.name|escape}</a>
+					{if count($c.subcategories) && $c.show}
+						<ul>
+							{foreach $c.subcategories as $s}
+								<li class="pm{if $s.show} active{/if}">
+									<a href="{$s.url}" class="{if $category.id == $s.id}active{/if}">{$s.name|escape}</a>
+									{if count($s.subcategories) && $s.show}
+									<ul>
+										{foreach $s.subcategories as $z}
+											<li>
+												<a href="{$z.url}" class="{if $category.id == $z.id}active{/if}">{$z.name|escape}</a>
+											</li>
+										{/foreach}
+									</ul>
+									{/if}
+								</li>
+							{/foreach}
+						</ul>
+					{/if}
+				</li>
+			{/foreach}
+		</ul>
+    </div>
+</div>
+{/if}
+
+{$sort_fields = [
+    'name' => '[`Name`]',
+    'price' => '[`Price`]',
+    'total_sales' => '[`Bestsellers`]',
+    'rating' => '[`Customer rating`]',
+    'create_datetime'=>'[`Date added`]',
+    'stock' => '[`In stock`]']}
+
+{if !isset($active_sort)}
+    {$active_sort = $wa->get('sort', 'create_datetime')}
+{/if}
+
+<div class="onefiltr">
+	<div class="title-s">Сортировать</div>
+	<ul class="sort">
+	    {if !empty($category) && !$category.sort_products}
+	        <li{if !$active_sort} class="selected"{/if}><a href="{$wa->currentUrl(0, 1)}">[`New & Popular`]</a></li>
+	    {/if}
+	    {foreach $sort_fields as $sort => $name}
+	        <li{if $active_sort == $sort} class="selected"{/if}>{$wa->shop->sortUrl($sort, $name, $active_sort)}</li>
+	        {if $wa->get('sort') == $sort}{$wa->title( $wa->title()|cat:' — '|cat:$name)}{/if}
+	    {/foreach}
+	</ul>
+</div>
+
+{if $category.full_url == 'muzhskie'}
+
+	{include file="sidebar-muzhskie.html"}
+
+{elseif $category.full_url == 'zhenskie'}
+
+	{include file="sidebar-zhenskie.html"}
+
+{/if}
+
+<!-- plugin hook: 'frontend_nav' -->
+{* @event frontend_nav.%plugin_id% *}
+{foreach $frontend_nav as $_}{$_}{/foreach}
+
+{if !empty($filters)}
+	{if 1}
+		<link href="{$wa_active_theme_url}css/slider.css" rel="stylesheet" type="text/css">
+		<link href="{$wa_static_url}wa-content/css/jquery-ui/base/jquery.ui.slider.css" rel="stylesheet" type="text/css">
+		<script type="text/javascript" src="{$wa_active_theme_url}js/slider.js"></script>
+		<script type="text/javascript" src="{$wa_static_url}wa-content/js/jquery-ui/jquery.ui.core.min.js?v{$wa->version(true)}"></script>
+		<script type="text/javascript" src="{$wa_static_url}wa-content/js/jquery-ui/jquery.ui.widget.min.js?v{$wa->version(true)}"></script>
+		<script type="text/javascript" src="{$wa_static_url}wa-content/js/jquery-ui/jquery.ui.mouse.min.js?v{$wa->version(true)}"></script>
+		<script type="text/javascript" src="{$wa_static_url}wa-content/js/jquery-ui/jquery.ui.slider.min.js?v{$wa->version(true)}"></script>
+	{/if}
+
+	<div class="filters leadbox{if !empty($theme_settings.ajax_filters)} ajax{/if}">
+	    <div class="filters-toggle-wrapper">
+	        <a class="filters-toggle-link" id="filters-toggle-link" href="javascript:void(0);" data-show-text="[`Show Filters`]" data-hide-text="[`Hide Filters`]">[`Show Filters`]</a>
+	    </div>
+	    <form class="filters-form-wrapper" method="get" action="{$wa->currentUrl(0,1)}" data-loading="{$wa_active_theme_url}img/loading16.gif">
+	        {foreach $filters as $fid => $filter}
+	            <div class="filter-param">
+					<div class="onefiltr{if !empty($filter.collapsed) and !empty($filter.code) and !$wa->get($filter.code)} collapsed{/if}">
+		                {if $fid == 'price'}
+		                    {$c = $wa->shop->currency(true)}
+		                    <div class="title-s">[`Price`]</div>
+		                    <div class="slider">
+			                    [`from`] <input type="text" class="min" name="price_min" {if $wa->get('price_min')}value="{(int)$wa->get('price_min')}"{/if} placeholder="{floor($filter.min)}">
+			                    [`to`] <input type="text" class="max" name="price_max" {if $wa->get('price_max')}value="{(int)$wa->get('price_max')}"{/if} placeholder="{ceil($filter.max)}"> {$c.sign}
+		                    </div>
+		                {else}
+							{*<div class="title-s">{$filter.name|escape}</div>*}
+							<span><b class="title-s"><i></i>{$filter.name|escape}</b>{if !empty($filter.description)} <span title="{$filter.name|escape}" data-feature-id="{$fid}" class="q"></span>{/if}</span>
+							{if $filter.type == 'boolean'}
+							    <label><input type="radio" name="{$filter.code}"{if $wa->get($filter.code)} checked{/if} value="1"> [`Yes`]</label>
+							    <label><input type="radio" name="{$filter.code}"{if $wa->get($filter.code) === '0'} checked{/if} value="0"> [`No`]</label>
+							    <label><input type="radio" name="{$filter.code}"{if $wa->get($filter.code, '') === ''} checked{/if} value=""> [`Any`]</label>
+							{elseif isset($filter.min)}
+								{$_v = $wa->get($filter.code)}
+								<div class="slider">
+									[`from`] <input type="text" class="min" name="{$filter.code}[min]" placeholder="{$filter.min}" {if !empty($_v.min)}value="{$_v.min}"{/if}>
+									[`to`] <input type="text" class="max" name="{$filter.code}[max]" placeholder="{$filter.max}" {if !empty($_v.max)}value="{$_v.max}"{/if}>
+									{if !empty($filter.unit)}
+									    {$filter.unit.title}
+									    {if $filter.unit.value != $filter.base_unit.value}<input type="hidden" name="{$filter.code}[unit]" value="{$filter.unit.value}">{/if}
+									{/if}
+								</div>
+							{else}
+								{if $filter.type == 'color'}
+									<div class="forcolor filter-content">
+								{elseif $filter.multiple == 1}
+                                    <div class="forrazm filter-content">
+								{else}
+									<div class="forradio filter-content">
+								{/if}
+									{foreach $filter.values as $v_id => $v}
+										{$filter_url = shopSeofilterViewHelper::getFilterUrl($fid, $v_id)}
+
+										<input id="r-{$v_id}" type="checkbox" name="{$filter.code}[]" {if in_array($v_id, (array)$wa->get($filter.code, array()))}checked{/if} value="{$v_id}">
+									    {if $filter.type=='color' && $v->code >= 0}
+									    	<label class="color" for="r-{$v_id}">
+									    		<span style="background-color:#{if $v->code == 0}000{else}{dechex($v->code)}{/if};"></span>
+									    		<div class="box-color">{$v->value}</div>
+									    	</label>
+									    {else}
+									    	<label for="r-{$v_id}">{if $filter_url}<a class="seofilter-link" href="{$filter_url}">{$v}</a>{else}{$v}{/if}</label>
+									    {/if}
+									{/foreach}
+								</div>
+							{/if}
+						{/if}
+					</div>
+	            </div>
+	        {/foreach}
+	        {if $wa->get('sort')}<input type="hidden" name="sort" value="{$wa->get('sort')|escape}">{/if}
+	        {if $wa->get('order')}<input type="hidden" name="order" value="{$wa->get('order')|escape}">{/if}
+
+	        {if empty($theme_settings.ajax_filters)}<input type="submit" class="gray reset pad" value="[`Filter products`]">{/if}
+	        <a href="/{$category.full_url}/" class="reset">сбросить</a>
+	    </form>
+	</div>
+{/if}
+

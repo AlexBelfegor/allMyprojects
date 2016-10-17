@@ -1,0 +1,61 @@
+<div class="block fields">
+    <div class="field-group">
+        <div class="field">
+
+            <div class="name">Сумма заказа</div>
+            <div class="value">{$order_data.total} <strong>{$order_data.currency}</strong></div>
+        </div>
+        <div class="field">
+            <div class="name">Прибыль</div>
+            <div class="value">
+                {if $earnberry_conversion.notified_total}
+                    {$earnberry_conversion.notified_total.total} <strong>{$earnberry_conversion.notified_total.currency}</strong>
+                {else}
+                     -
+                {/if}
+            </div>
+        </div>
+        <div class="field">
+            <div class="name">Оборот</div>
+            <div class="value">
+                {if $earnberry_conversion.notified_grossprofit}
+                {$earnberry_conversion.notified_grossprofit.total} <strong>{$earnberry_conversion.notified_grossprofit.currency}</strong>
+                {else}
+                -
+                {/if}
+            </div>
+        </div>
+        <div class="field">
+            <div class="name">Время нотификации</div>
+            <div class="value">
+            {if $earnberry_conversion.notified_total}
+                {$earnberry_conversion.notified_total.created_at|date_format:"%c"}
+            {else}
+                -
+            {/if}
+            </div>
+        </div>
+        <div class="field">
+            <input type="hidden" name="earnberry[notified_currency]" value="{$order_data.currency}">
+            <input type="hidden" name="earnberry[transaction_id]" value="{$earnberry_conversion.order_id}">
+            {$wa->csrf()}
+            <div class="name">Новая сумма прибыли</div>
+            <div class="value">
+                <input type="text" class="bold notified-total-input" value="{$order_income}" name="earnberry[notified_total]" style="width: 80px; min-width: 80px;"/>
+                {$order_data.currency}
+                <a href="javascript:void(0)" onclick="$('.notified-total-input').val('0');" class="inline-link"><b><i>Обнулить</i></b></a>
+            </div>
+        </div>
+
+        <div class="field">
+
+            <div class="name">Новая сумма оборота</div>
+            <div class="value">
+                <input type="text" class="bold notified-gp-input" value="{$order_gp}" name="earnberry[notified_grossprofit]" style="width: 80px; min-width: 80px;"/>
+                {$order_data.currency}
+                <a href="javascript:void(0)" onclick="$('.notified-gp-input').val('0');" class="inline-link"><b><i>Обнулить</i></b></a>
+            </div>
+        </div>
+
+    </div>
+</div>

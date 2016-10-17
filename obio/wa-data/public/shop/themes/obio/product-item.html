@@ -1,0 +1,66 @@
+{$available = $p.count === null || $p.count > 0}
+{$features_selectable = shopCustom::getFeaturesProductAvailable($p.id)}
+
+<div class="owl-carousel1">
+	{$show_prev_next = false}
+	{$images = shopCustom::getImages($p.id,array('200x200'))}
+	{if count($images) == 1}
+		<div class="img">
+			<a href="{$p.frontend_url}" title="{$p.name}" itemprop="name">
+				{$wa->shop->productImgHtml($p, '200x200', ['default' => "`$wa_theme_url`img/dummy200.png"])}
+			</a>
+		</div>
+	{else}
+		{$show_prev_next = true}
+		{$i=0}
+		{foreach $images as $j => $image}
+		<div>
+			<a href="{$p.frontend_url}" title="{$p.name}" itemprop="name">
+				<img class="owl-lazy"
+				{if $i == 0}
+					{$next = next($images)}
+					onmouseover="rollOverImage(this, '{$next.url_0}', event)"
+					onmouseout="rollOverImage(this, '{$image.url_0}', event)"
+				{/if}
+				src="{$wa_theme_url}images/space.png"
+				data-src="{$image.url_0}"
+				data-src-retina="{$image.url_0}"
+				alt="{$p.name} – фото" title="{$p.name}" itemprop="image" />
+			</a>
+		</div>
+		{$i = $i+1}
+		{/foreach}
+	{/if}
+</div>
+
+<div class="title-small"><a href="{$p.frontend_url}" title="{$p.name}" itemprop="name">{$p.name}</a></div>
+
+<p class="price">{shop_currency_html($p.price)} {if $p.original_compare_price > $p.original_price}<span class="price_old">{shop_currency($p.original_compare_price)}</span>{/if}</p>
+
+{if $available}
+	<div itemprop="offers" class="offers" itemscope itemtype="http://schema.org/Offer">
+	    <form class="purchase addtocart" {if $p.sku_count > 1}data-url="{$p.frontend_url}{if strpos($p.frontend_url, '?')}&{else}?{/if}cart=1"{/if} method="post" action="{$wa->getUrl('/frontendCart/add')}">
+	        <input type="hidden" name="product_id" value="{$p.id}">
+	        <input class="buy-button"  type="submit" value="[`Buy`]">
+	        <span class="added2cart" style="display: none;">{sprintf('[`%s is now <a href="%s"><strong>in your shopping cart</strong></a>`]', $p.name, $wa->getUrl('shop/frontend/cart'))}</span>
+	    </form>
+	    <link itemprop="availability" href="http://schema.org/InStock" />
+	</div>
+{else}
+	<div itemprop="offers" class="offers" itemscope itemtype="http://schema.org/Offer">
+	    <meta itemprop="price" content="{$p.price}">
+	    <meta itemprop="priceCurrency" content="{$wa->shop->primaryCurrency()}">
+	    <link itemprop="availability" href="http://schema.org/OutOfStock" />
+	</div>
+{/if}
+
+{if $features_selectable.features_short}
+	<div class="sizes">
+		<p itemprop="description">Размеры в наличии</p>
+		<p>{foreach $features_selectable.features_short as $f}<span>{$f}</span> {/foreach}</p>
+	</div>
+{/if}
+
+{if count($images)}
+	{shopCustom::badgeHtml(['compare_price' => $p.compare_price,'price' => $p.price,'id' => $p.id])}
+{/if}

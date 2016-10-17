@@ -1,0 +1,27 @@
+<div class="dropdown-basket{if !$cart_data} cart-hidden{/if}">
+	{$i = 1}
+	{$count_cart = count($cart_data)}
+	{foreach $cart_data as $item}
+		<div class="onetov{if $i == $count_cart} onetov1{/if}">
+			<div class="img">
+				<a href="{$wa->getUrl('/frontend/product', ['product_url' => $item.product.url, 'category_url' => $item.category.full_url])}" title="{$item.product.name|escape}">
+					{$wa->shop->productImgHtml($item.product, '48x48')}
+				</a>
+			</div>
+			<div class="text">
+				<h4>
+					<a href="{$wa->getUrl('/frontend/product', ['product_url' => $item.product.url, 'category_url' => $item.category.full_url])}" title="{$item.product.name|escape}">
+						{$item.product.name}
+					</a>
+				</h4>
+				<p class="price"><span>{$item.quantity} шт</span> {shop_currency($item.price * $item.quantity, $item.currency)}</p>
+				<a rel="{$item.id}" class="del RemoveFromCartProduct" href="javascript:void(0);"></a>
+				<div class="clr"></div>
+			</div>
+			<div class="clr"></div>
+		</div>
+		{$i = $i + 1}
+	{/foreach}
+
+	<a class="click-basket lookbask" href="{if !$cart_data}javascript:void(0);{else}/cart/{/if}">Перейти в корзину</a>
+</div>

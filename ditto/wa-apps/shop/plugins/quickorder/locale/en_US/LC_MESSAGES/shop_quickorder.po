@@ -1,0 +1,209 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: shop/plugins/quickorder\n"
+"POT-Creation-Date: 2013-12-13 11:30+0300\n"
+"PO-Revision-Date: \n"
+"Last-Translator: shop/plugins/quickorder\n"
+"Language-Team: shop/plugins/quickorder\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-Basepath: .\n"
+"X-Generator: Poedit 1.5.7\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPath-1: .\n"
+
+#: /wa-apps/shop/plugins/quickorder/templates/actions/settings/Settings.html:19
+#: /wa-apps/shop/plugins/quickorder/templates/actions/settings/Settings.html:43
+#: /wa-apps/shop/plugins/quickorder/templates/actions/settings/Settings.html:61
+msgid "Field name"
+msgstr ""
+
+#: /wa-apps/shop/plugins/quickorder/templates/actions/settings/Settings.html:24
+#: /wa-apps/shop/plugins/quickorder/templates/actions/settings/Settings.html:48
+#: /wa-apps/shop/plugins/quickorder/templates/actions/settings/Settings.html:66
+msgid "Address"
+msgstr ""
+
+#: /wa-apps/shop/plugins/quickorder/templates/actions/settings/Settings.html:31
+#: /wa-apps/shop/plugins/quickorder/templates/actions/settings/Settings.html:55
+#: /wa-apps/shop/plugins/quickorder/templates/actions/settings/Settings.html:73
+msgid "Required"
+msgstr ""
+
+#: /wa-apps/shop/plugins/quickorder/templates/actions/settings/Settings.html:35
+#: /wa-apps/shop/plugins/quickorder/lib/config/config.php:12
+#: /wa-apps/shop/plugins/quickorder/lib/config/plugin.php:7
+msgid "1-Click Ordering"
+msgstr ""
+
+#: /wa-apps/shop/plugins/quickorder/templates/actions/settings/Settings.html:36
+msgid "Select the fields that will be filled by customers while ordering"
+msgstr ""
+
+#: /wa-apps/shop/plugins/quickorder/templates/actions/settings/Settings.html:78
+msgid "Add field"
+msgstr ""
+
+#: /wa-apps/shop/plugins/quickorder/templates/actions/settings/Settings.html:82
+msgid "1-Click button name"
+msgstr ""
+
+#: /wa-apps/shop/plugins/quickorder/templates/actions/settings/Settings.html:88
+msgid "1-Click button name to order the shopping cart"
+msgstr ""
+
+#: /wa-apps/shop/plugins/quickorder/templates/actions/settings/Settings.html:94
+#: /wa-apps/shop/plugins/quickorder/lib/shopQuickorder.plugin.php:140
+msgid "Comment to the order"
+msgstr ""
+
+#: /wa-apps/shop/plugins/quickorder/templates/actions/settings/Settings.html:104
+msgid "Style"
+msgstr ""
+
+#: /wa-apps/shop/plugins/quickorder/templates/actions/settings/Settings.html:114
+msgid "Allow customers to leave order comment"
+msgstr ""
+
+#: /wa-apps/shop/plugins/quickorder/templates/actions/settings/Settings.html:119
+#: /wa-apps/shop/plugins/quickorder/templates/actions/settings/Settings.html:160
+#: /wa-apps/shop/plugins/quickorder/templates/actions/settings/Settings.html:179
+msgid "No"
+msgstr ""
+
+#: /wa-apps/shop/plugins/quickorder/templates/actions/settings/Settings.html:125
+#: /wa-apps/shop/plugins/quickorder/templates/actions/settings/Settings.html:164
+#: /wa-apps/shop/plugins/quickorder/templates/actions/settings/Settings.html:185
+msgid "Yes"
+msgstr ""
+
+#: /wa-apps/shop/plugins/quickorder/templates/actions/settings/Settings.html:129
+msgid "You will see the comment in Orders"
+msgstr ""
+
+#: /wa-apps/shop/plugins/quickorder/templates/actions/settings/Settings.html:133
+msgid "Text inside the popup purchase window"
+msgstr ""
+
+#: /wa-apps/shop/plugins/quickorder/templates/actions/settings/Settings.html:136
+msgid ""
+"Customers will see the text before the button 'Place order'. You can use "
+"html."
+msgstr ""
+
+#: /wa-apps/shop/plugins/quickorder/templates/actions/settings/Settings.html:140
+msgid "Text after successfully accepted order"
+msgstr ""
+
+#: /wa-apps/shop/plugins/quickorder/templates/actions/settings/Settings.html:143
+msgid "Use $order_id to indicate the order number"
+msgstr ""
+
+#: /wa-apps/shop/plugins/quickorder/templates/actions/settings/Settings.html:144
+msgid ""
+"Customers will see the text only if they use 1-Click Ordering for item, not "
+"the shopping cart"
+msgstr ""
+
+#: /wa-apps/shop/plugins/quickorder/templates/actions/settings/Settings.html:148
+msgid "Additional js-code after successfully accepted order"
+msgstr ""
+
+#: /wa-apps/shop/plugins/quickorder/templates/actions/settings/Settings.html:151
+msgid ""
+"Use variable 'params' to get info about order. The structure of variable you "
+"can find on the plugins's page of Webasyst Store"
+msgstr ""
+
+#: /wa-apps/shop/plugins/quickorder/templates/actions/settings/Settings.html:155
+#: /wa-apps/shop/plugins/quickorder/templates/actions/settings/Settings.html:174
+msgid "Enable hook"
+msgstr ""
+
+#: /wa-apps/shop/plugins/quickorder/templates/actions/settings/Settings.html:170
+msgid ""
+"Check 'No', if you want to disable default button output on the product page"
+msgstr ""
+
+#: /wa-apps/shop/plugins/quickorder/templates/actions/settings/Settings.html:189
+msgid ""
+"Check 'No', if you want to disable default button output on the cart page"
+msgstr ""
+
+#: /wa-apps/shop/plugins/quickorder/templates/actions/settings/Settings.html:194
+msgid "Save"
+msgstr ""
+
+#: /wa-apps/shop/plugins/quickorder/templates/actions/settings/Settings.html:244
+msgid "Something wrong"
+msgstr ""
+
+#: /wa-apps/shop/plugins/quickorder/lib/actions/shopQuickorderPluginFrontendSendQuickorder.controller.php:52
+#: /wa-apps/shop/plugins/quickorder/lib/actions/shopQuickorderPluginFrontendSendQuickorder.controller.php:58
+msgid "Incorrect email"
+msgstr ""
+
+#: /wa-apps/shop/plugins/quickorder/lib/actions/shopQuickorderPluginFrontendSendQuickorder.controller.php:116
+msgid "Your shopping cart is empty"
+msgstr ""
+
+#: /wa-apps/shop/plugins/quickorder/lib/actions/shopQuickorderPluginFrontendSendQuickorder.controller.php:132
+msgid "For product %s only %d left in stock. Sorry. "
+msgstr ""
+
+#: /wa-apps/shop/plugins/quickorder/lib/actions/shopQuickorderPluginFrontendSendQuickorder.controller.php:134
+msgid ""
+"Oops! %s is not available for purchase at the moment. Please remove this "
+"product from your shopping cart to proceed. "
+msgstr ""
+
+#: /wa-apps/shop/plugins/quickorder/lib/actions/shopQuickorderPluginFrontendSendQuickorder.controller.php:185
+msgid "Cannot create order"
+msgstr ""
+
+#: /wa-apps/shop/plugins/quickorder/lib/actions/shopQuickorderPluginFrontendSendQuickorder.controller.php:266
+#: /wa-apps/shop/plugins/quickorder/lib/actions/shopQuickorderPluginFrontendSendQuickorder.controller.php:268
+msgid "Only %d left in stock. Sorry."
+msgstr ""
+
+#: /wa-apps/shop/plugins/quickorder/lib/actions/shopQuickorderPluginFrontendSendQuickorder.controller.php:370
+msgid "Product not found"
+msgstr ""
+
+#: /wa-apps/shop/plugins/quickorder/lib/actions/shopQuickorderPluginSettingsSave.controller.php:50
+msgid "Cannot save the fields"
+msgstr ""
+
+#: /wa-apps/shop/plugins/quickorder/lib/actions/shopQuickorderPluginSettingsSave.controller.php:57
+msgid "Cannot save settings fields"
+msgstr ""
+
+#: /wa-apps/shop/plugins/quickorder/lib/config/config.php:7
+msgid "Buy now with 1-Click"
+msgstr ""
+
+#: /wa-apps/shop/plugins/quickorder/lib/config/config.php:8
+msgid "1-Click Cart Ordering"
+msgstr ""
+
+#: /wa-apps/shop/plugins/quickorder/lib/config/config.php:14
+msgid "We successfully accepted your order"
+msgstr ""
+
+#: /wa-apps/shop/plugins/quickorder/lib/config/config.php:14
+msgid "Your order number is"
+msgstr ""
+
+#: /wa-apps/shop/plugins/quickorder/lib/config/plugin.php:8
+msgid "1-Click ordering lets you skip the shopping cart"
+msgstr ""
+
+#: /wa-apps/shop/plugins/quickorder/lib/shopQuickorder.plugin.php:126
+msgid "Item"
+msgstr ""
+
+#: /wa-apps/shop/plugins/quickorder/lib/shopQuickorder.plugin.php:153
+msgid "Buy it"
+msgstr ""

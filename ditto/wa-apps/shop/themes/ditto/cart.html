@@ -1,0 +1,123 @@
+<script type="text/javascript" src="{$wa_theme_url}js/cart.js"></script>
+
+<div class="content basket">
+	<p class="breadcrumb"><a href="/">главная</a>&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;<span>корзина</span></p>
+	<h1>корзина</h1>
+
+{if !$cart.count}
+    <p>[`Your shopping cart is empty.`]</p>
+{else}
+
+	<form method="post">
+		<table width="780" border="0" cellspacing="0" cellpadding="0" class="basketlist cart">
+	    {foreach $cart.items as $item}
+			<tr data-id="{$item.id}">
+				<td>
+					<a href="{$wa->getUrl('/frontend/product', ['product_url' => $item.product.url])}" title="{$item.product.name|escape}">{$wa->shop->productImgHtml($item.product, '60x60')}</a>
+				</td>
+				<td>
+					<span>{$item.product.name|escape}</span>
+	                {if !empty($item.services)}
+	                <div class="services">
+	                    {foreach $item.services as $service_id => $s}
+	                    <!-- one option -->
+	                    <div {if !empty($s.id)}data-id="{$s.id}"{/if}>
+	                    <label>
+	                        <input {if !empty($s.id)}checked{/if} type="checkbox" name="services[{$item.id}][]" value="{$service_id}"> {$s.name|escape} {if $s.price && !isset($s.variants)}(+{shop_currency($s.price, $s.currency)}){/if}
+	                    </label>
+	                    {if isset($s.variants)}
+	                    <select name="service_variant[{$item.id}][{$service_id}]" {if empty($s.id)}disabled{/if}>
+	                        {foreach $s.variants as $variant_id => $v}
+	                        <option {if $s.variant_id == $variant_id}selected{/if} value="{$variant_id}">{$v.name|escape} (+{shop_currency($v.price, $s.currency)})</option>
+	                        {/foreach}
+	                    </select>
+	                    {/if}
+	                    </div>
+	                    {/foreach}
+	                </div>
+	                {/if}
+				</td>
+				<td>
+					<div>
+				    	<p class="price">{shop_currency($item.price, $item.currency)}</p>
+				        <div class="umn"></div>
+				        <div class="number">
+				        	<span class="minus" data-type="minus">-</span>
+				            <input type="text" name="quantity[{$item.id}]" value="{$item.quantity}" class="kol qty">
+				            <span class="plus" data-type="plus">+</span>
+				        </div>
+				        <div class="clr"></div>
+				    </div>
+				</td>
+				<td class="item-total">
+					{shop_currency($item.price * $item.quantity, $item.currency)}
+				</td>
+				<td>
+					<a class="delete delbask" href="#" title="[`Remove from cart`]"></a>
+				</td>
+			</tr>
+	    {/foreach}
+
+        {if 1}
+        <tr>
+            <td colspan="5" align="left" class="discount">
+                <span>[`Discount coupon (if you have one)`]:</span>
+                <div class="discount-block">
+                	<input type="text" name="coupon_code" value="{$coupon_code|escape}">
+                	<div class="discount-submit"><input type="submit" value="[`Apply`]"></div>
+                </div>
+            </td>
+        </tr>
+        {/if}
+
+        {if shopAffiliate::isEnabled() && $affiliate_bonus}
+        <!-- affiliate bonus -->
+        <tr>
+            <td colspan="3">
+                {sprintf('[`Your current affiliate bonus of %s points allows you to get an additonal discount of up to %s`]', $affiliate_bonus, shop_currency(shopAffiliate::convertBonus($affiliate_bonus)))}
+                {if $use_affiliate}
+                <a id="cancel-affiliate" href="#">[`Cancel`]</a>
+                {else}
+                <input type="submit" name="use_affiliate" value="[`Use bonus`]">
+                {/if}
+            </td>
+            <td class="align-center">&minus; {if $use_affiliate}{shop_currency(shopAffiliate::convertBonus($used_affiliate_bonus))}{else}0{/if}</td>
+            <td>&nbsp;</td>
+        </tr>
+        {/if}
+	</table>
+
+    <div class="foritog">
+        <p class="itogp">Скидка:</p>
+        <p class="itogprice cart-discount">&minus; {shop_currency($discount, true)}</p>
+        <div class="clr"></div>
+    </div>
+    <div class="itogdot"></div>
+
+    <div class="foritog">
+        <p class="itogp">ИТОГО:</p>
+        <p class="itogprice cart-total">{shop_currency($cart.total, true)}</p>
+        <div class="clr"></div>
+    </div>
+    <div class="itogdot"></div>
+    <div class="foroformzak">
+    	<input name="checkout" type="submit" value="Оформить заказ" class="button large">
+    	<div class="clr"></div>
+    </div>
+
+    {if !empty($add_affiliate_bonus)}
+    <div class="clr"></div>
+    <div class="foritog">
+    	<br /><em class="float-right">{sprintf("[`This order will add +%s points to your affiliate bonus.`]", $add_affiliate_bonus)}</em>
+    </div>
+    {/if}
+
+    <!-- plugin hook: 'frontend_cart' -->
+    {* @event frontend_cart.%plugin_id% *}
+    {foreach $frontend_cart as $_}{$_}{/foreach}
+
+	</form>
+
+{/if}
+
+</div>

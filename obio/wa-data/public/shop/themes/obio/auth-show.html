@@ -1,0 +1,29 @@
+<div class="forenter">
+    <div class="btn-group">
+		{if !$wa->user()->isAuth()}
+			<button type="button" class="btn-enter dropdown-toggle" data-toggle="dropdown"><span>ВХОД</span></button>
+			<div class="dropdown-menu">
+			    <form action="/login/" method="post">
+			        <label class="label1">ЭЛЕКТРОННАЯ ПОЧТА</label>
+			        <input type="text" name="login" id="mailvh" value="">
+			        <label class="label1">ПАРОЛЬ</label>
+			        <input type="password" id="passwvh" name="password">
+			        <input type="hidden" name="wa_auth_login" value="1">
+			        <input type="submit" class="submit" value="ВОЙТИ" />
+			    </form>
+			    <p class="vost"><a href="/forgotpassword/">ВОССТАНОВИТЬ ПАРОЛЬ</a></p>
+			    <div class="zareg">
+			        <p class="vost"><a href="/signup/">ЗАРЕГИСТРИРОВАТЬСЯ</a></p>
+			        <p class="vost vost1"><a href="/zachem/">Зачем?</a></p>
+			    </div>
+			    <p class="titp">Войти как пользователь</p>
+			    {$wa->authAdapters()}
+			</div>
+		{else}
+			{$mail = shopCustom::GetUserMail($wa->user('id'))}
+			{if $mail}<span id="ScMail" style="display:none;">{$mail}</span>{/if}
+			<div><a href="?logout">[s`Log out`]</a></div>
+			<div><a href="{$wa->getUrl('/frontend/my')}" class="bold">{$wa->user('firstname')|escape|truncate:15}</a></div>
+		{/if}
+    </div>
+</div>

@@ -1,0 +1,20 @@
+<span></span>
+<div class="dropdown dropdown1 search-bl">
+    <div class="container">
+        <div class="row">
+            <div class="searchform">
+                <form action="{$wa->getUrl('/frontend/search')}">
+                    <input type="text" name="query" {if !empty($query)}value="{$query}" {/if} placeholder="Найти товары" id="search"/>
+                    <input type="submit" name="submit" class="submit" value="" />
+                    <div class="clr"></div>
+                </form>
+            </div>
+
+            <div class="show-items"></div>
+
+            <div class="owl-carousel" style="display:none;"></div>
+            <div class="owl-carousel1" style="display:none;"></div>
+
+        </div>
+    </div>
+</div>

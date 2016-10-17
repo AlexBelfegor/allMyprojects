@@ -1,0 +1,68 @@
+User-agent: *
+Disallow: /*sort*
+Disallow: /*price*
+Disallow: /*?utm_
+Disallow: /*?gclid=*
+Disallow: /search*
+Disallow: /cart*
+Disallow: /login*
+Disallow: /checkout*
+Disallow: /forgotpassword*
+Disallow: /my*
+Disallow: /signup*
+Disallow: /webasyst*
+Disallow: /napisat-rukovoditelyu*
+Disallow: /*images*
+Disallow: /features3000/*
+
+
+User-Agent: Googlebot
+Disallow: /*sort*
+Disallow: /*price*
+Disallow: /*?utm_
+Disallow: /*?gclid=*
+Disallow: /search*
+Disallow: /cart*
+Disallow: /login*
+Disallow: /checkout*
+Disallow: /forgotpassword*
+Disallow: /my*
+Disallow: /signup*
+Disallow: /webasyst*
+Disallow: /napisat-rukovoditelyu*
+Disallow: /*images*
+Disallow: /features3000/*
+
+
+
+User-Agent: Yandex
+Disallow: /*sort*
+Disallow: /*price*
+Disallow: /*?utm_
+Disallow: /*?gclid=*
+Disallow: /search*
+Disallow: /cart*
+Disallow: /login*
+Disallow: /checkout*
+Disallow: /forgotpassword*
+Disallow: /my*
+Disallow: /signup*
+Disallow: /webasyst*
+Disallow: /napisat-rukovoditelyu*
+Disallow: /*images*
+Disallow: /features3000/*
+
+
+Host: http://ditto.ua
+
+User-agent: Googlebot-Image
+Disallow: /
+Allow: /*images*
+
+
+User-agent: YandexImages
+Disallow: /
+Allow: /*images*
+
+
+Sitemap: http://ditto.ua/map.xml

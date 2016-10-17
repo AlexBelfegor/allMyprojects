@@ -1,0 +1,31 @@
+<p class="breadcrumb"><a href="/">главная</a>&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;<span>Мой кабинет</span></p>
+
+<div class="page">
+	<h1>{sprintf('[`Hi %s`]', {$wa->user('firstname')})}</h1>
+
+	<div class="text">
+
+		<p><a href="{$wa->getUrl('/frontend/myOrders')}"><strong>[`My orders`]</strong></a><br>
+		[`View and manage your orders.`]
+		</p>
+
+		<p><a href="{$wa->getUrl('/frontend/myProfile')}"><strong>[`My profile`]</strong></a><br>
+		[`Update your contact information.`]
+		</p>
+
+		{if shopAffiliate::isEnabled()}
+		    <p><a href="{$wa->getUrl('/frontend/myAffiliate')}"><strong>[`Affiliate program`]</strong></a><br>
+		    [`View and manage your affiliate bonus activity.`]
+		    </p>
+		{/if}
+
+		<!-- plugin hook: 'frontend_my' -->
+		{* @event frontend_my.%plugin_id% *}
+		{foreach $frontend_my as $_}{$_}{/foreach}
+
+		<div class="clr"></div>
+	</div>
+
+	<div class="clr"></div>
+</div>
+

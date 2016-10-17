@@ -1,0 +1,82 @@
+
+ <link rel="stylesheet" href="{$wa_url}wa-apps/shop/plugins/backtop/css/farbtastic.css" type="text/css" />
+ <link rel="stylesheet" href="{$wa_url}wa-apps/shop/plugins/backtop/css/BackendBackTop.css" type="text/css" />
+ <script type="text/javascript" src="{$wa_url}wa-apps/shop/plugins/backtop/js/farbtastic.js"></script> 
+ <script type="text/javascript" src="{$wa_url}wa-apps/shop/plugins/backtop/js/BackendBackTop.js"></script> 
+
+<h1>Настройки</h1>
+<div     class="fields form">
+
+    <form action="?plugin=backtop&module=settings&action=save" method="post"  id="plugins-settings-form">
+
+    <div class="field" style="">
+        <div class="name">
+            Статус
+        </div>
+        <div class="value" style="margin-left: 100px!important;">
+            <select name="settings[status]">
+                <option {if $settings.status == 1} selected="selected"{/if} value="1">Включен</option>
+                <option {if $settings.status == 0} selected="selected"{/if} value="0">Выключен</option>
+            </select>
+        </div>
+    </div>
+  <div style="clear: both;"></div>
+  
+  
+<div style="" class="backtop-color">
+  
+  <p>Настройка кнопки: </p>
+  
+  <div class="form-item"><label for="color1" class="name">Цвет фона верх:</label><input  required="required" type="text" id="color1" name="settings[bg]" class="colorwell" value="{$settings.bg}" /></div>
+  <div class="form-item"><label for="color2">Цвет фона низ:</label><input type="text" required="required"id="color2" name="settings[bg2]" class="colorwell" value="{$settings.bg2}" /></div>
+  <div class="form-item"><label for="color3">Цвет рамки:</label><input type="text" required="required"id="color3" name="settings[border_color]" class="colorwell" value="{$settings.border_color}" /></div>
+  <div class="form-item"><label >Толшина рамки :</label><input type="text"required="required" id="b_size" name="settings[border_size]"  value="{$settings.border_size}" /> px.</div>
+  <div class="form-item"><label >Округление рамки :</label><input type="text"required="required" id="b_radius"  name="settings[border_radius]"  value="{$settings.border_radius}" /> px.</div>
+  <div class="form-item"><label >Ширина кнопки:</label><input type="text"required="required" id="b_width" name="settings[button_width]"  value="{$settings.button_width}" /> px.</div>
+  <div class="form-item"><label >Высота кнопки :</label><input type="text"required="required" id="b_height"  name="settings[button_height]"  value="{$settings.button_height}" /> px.</div>
+  <div class="form-item"><label >Прозрачность:</label><input type="text"required="required" id="b_opacity"  name="settings[opacity]"  value="{$settings.opacity}" /> 0.1-1</div>
+  
+  <p>Настройка текста: </p>
+  
+  <div class="form-item"><label for="color4">Цвет ссылки:</label><input type="text" required="required"id="color4" name="settings[link_color]" class="colorwell" value="{$settings.link_color}" /></div>
+  <div class="form-item"><label for="color5">Цвет ссылки при наведении:</label><input required="required" type="text" id="color5" name="settings[link_hover]" class="colorwell" value="{$settings.link_hover}" /></div>
+  <div class="form-item"><label >Текст:</label><input type="text" id="b_text"  name="settings[text]"  value="{$settings.text}" /></div> (по умолчанию &#9650;)
+  <div class="form-item"><label >Размер шрифта:</label><input required="required" type="text"  id="b_fontsize"  name="settings[text_size]"  value="{$settings.text_size}" /></div>
+  
+  <p>Расположение кнопки (отступы): </p>
+  
+  <div class="position"><select style="" name="settings[position_ver]"><option {if $settings.position_ver == b} selected="selected"{/if} value="b">с низу</option><option {if $settings.position_ver == t} selected="selected"{/if} value="t">c вверху</option></select>&nbsp;&nbsp;:&nbsp;&nbsp;<input name="settings[pos_ver]" required="required" value="{$settings.pos_ver}" type="text" /> px.</div>
+  <div class="position" ><select  name="settings[position_hor]"><option {if $settings.position_hor == r} selected="selected"{/if} value="r">с права</option><option {if $settings.position_hor == l} selected="selected"{/if} value="l">c лева</option></select>&nbsp;&nbsp;:&nbsp;&nbsp;<input name="settings[pos_hor]" required="required" value="{$settings.pos_hor}" type="text" /> px.</div>
+  
+</div>
+
+
+<div style="display: inline-block; vertical-align: top; margin-top: 20px; text-align: center;">
+  <div id="picker" ></div>
+  <br /><br />
+  <p>Быстрый просмотр</p>
+  <div style="padding: 10px; margin: 0 auto;">
+    <div id="BackTop"  >
+    <a href="#"><span class="BackTopText" style="display: block;">&#9650;</span></a>
+    </div>
+    
+  </div>
+</div>
+  
+  
+  <div style="clear: both;"></div>
+  <br />
+  
+  <div style="clear: both;"></div>
+  
+    <div class="field">
+        <div class="value submit">
+            <input type="submit" class="button green" value="Сохранить">
+            <span id="plugins-settings-form-status" style="display:none">
+                <i style="vertical-align:middle" class="icon16 yes"></i> [`Saved`]
+            </span>
+        </div>
+    </div>
+    </form>
+    
+</div>

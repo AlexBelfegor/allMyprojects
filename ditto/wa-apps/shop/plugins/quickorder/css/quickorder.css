@@ -1,0 +1,12 @@
+/*
+ * @author Gaponov Igor <gapon2401@gmail.com>
+ */
+.field input[type='text'] { height: 25px; padding: 0; width: 200px; }
+.field select { height: 27px; }
+.field input[type='text'], .field select { vertical-align: middle; }
+.field { margin-bottom: 10px; }
+.remove-field { position: relative; top: 7px; }
+/* CodeMirror */
+.CodeMirror { border: 1px solid #eee; }
+.CodeMirror-scroll { height: auto; overflow-y: hidden; overflow-x: auto; min-height: 70px; }
+.CodeMirror-gutter { min-height: 70px; }

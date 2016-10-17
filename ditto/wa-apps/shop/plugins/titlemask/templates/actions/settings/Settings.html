@@ -1,0 +1,227 @@
+<style>
+    .field .name { width: 145px }
+    .field .value.float { float: left; margin-left: 20px; width: 35%}
+    .field .value2 { float: left; margin-left: 20px; width: 35%}
+    .clear { clear: both }
+    .field .value input[type="text"] { width: 100%; color: #333; min-width: 100px}
+    .field .value textarea { width: 100%; color: #333; min-width: 100px; height: 30px}
+    .code { color: #808080; background-color: #F7F7F9; border: 1px solid #E1E1E8; padding: 5px 10px; line-height: 1.3em }
+    .code B { color: #333}
+    .greencode { color: #339900 }
+    OL.titlemask { margin-top: 0 }
+    .titlemask LI { padding-top: 5px }
+</style>
+
+<h1>Title Mask</h1>
+<p>
+    Правила, заданные в настройках плагина, работают только в том случае, если title и description не заданы для товара, категории, страницы.<br>
+    Таким образом, к примеру, вы можете сделать, чтобы у всех товаров заголовок формировался по правилу, а у отдельных товаров был персональный заголовок.<br>
+    Чтобы "выключить" правило, просто удалите его (оставьте пустую строку) и нажмите сохранить.
+</p>
+<br />
+
+
+<form action="?module=plugins&id=titlemask&action=save" method="post" id="plugins-settings-form">
+
+    <div class="field">
+        <div class="name">&nbsp;</div>
+        <div class="value float large">
+            <b>Главная страница</b>
+        </div>
+        <div class="clear"></div>
+
+        <div class="name">
+            Заголовок (Title)<br /><br /><br />
+            Описание (Description)<br /><br /><br /><br />
+            Ключевые слова (Keywords)
+        </div>
+        <div class="value float">
+            <input type="text" name="shop_titlemask[index]" value="{$settings.index|escape}" /><br /><br />
+            <textarea name="shop_titlemask[index_description]">{$settings.index_description|escape}</textarea><br /><br />
+            <textarea name="shop_titlemask[index_keywords]">{ifset($settings.index_keywords)|escape}</textarea><br /><br />
+        </div>
+
+        <div class="value2 code">
+            <b>Доступные переменные:</b><br />
+            <span class="greencode">%store_name%</span>	— название магазина (из настроек)<br />
+            <span class="greencode">%store_phone%</span> — телефон магазина (из настроек)
+            <br />
+        </div>
+        <div class="clear"><br /></div>
+
+
+        <div class="name">&nbsp;</div>
+        <div class="value float large">
+            <b>Страницы товаров</b>
+        </div>
+        <div class="clear"></div>
+
+        <div class="name">
+            Заголовок (Title)<br /><br /><br />
+            Описание (Description)<br /><br /><br /><br />
+            Ключевые слова (Keywords)<br /><br /><br />
+            Название товара маленькими буквами<br /><br />
+            Включить возможность задавать отдельные правила для каждой категории<br />
+        </div>
+        <div class="value float">
+            <input type="text" name="shop_titlemask[product]" value="{$settings.product|escape}" /><br /><br />
+            <textarea name="shop_titlemask[product_description]">{$settings.product_description|escape}</textarea><br><br>
+            <textarea name="shop_titlemask[product_keywords]">{ifset($settings.product_keywords)|escape}</textarea><br><br>
+            <span class="greencode">%product|lower%</span> — название товара маленькими буквами<br>
+            <span class="greencode">%category|lower%</span> — название категории маленькими буквами<br><br>
+            <input {if !empty($settings.category_mask)}checked{/if} type="checkbox" name="shop_titlemask[category_mask]" value="1"><br>
+            <span class="hint">Если галочка включена, то в настройках категорий появится два поля, где вы сможете задать маску title и description для товаров в этой категории</span>
+        </div>
+
+        <div class="value2 code">
+            <b>Доступные переменные:</b><br />
+            <span class="greencode">%product%</span>	— название товара<br />
+            <span class="greencode">%price%</span>	— цена<br />
+            <span class="greencode">%sku%</span>	— артикул товара<br />
+            <span class="greencode">%summary%</span>	— краткое описание товара<br />
+            <span class="greencode">%category%</span>	— название категории<br />
+            <span class="greencode">%category_full%</span>	— полное название категории вместе с родительскими категориями <br />
+            <span class="greencode">%parent_category%</span> — название родительской категории<br />
+            <span class="greencode">%root_category%</span> — название главной родительской категории<br />
+            <span class="greencode">%feature.CODE%</span> — значение характеристики товара с кодом CODE, например %feature.brand%<br />
+            <span class="greencode">%store_name%</span>	— название магазина (из настроек)<br />
+            <span class="greencode">%store_phone%</span> — телефон магазина (из настроек)
+        </div>
+        <div class="clear"></div>
+
+
+        <div class="name">&nbsp;</div>
+        <div class="value float large">
+            <b>Страницы категорий</b>
+        </div>
+        <div class="clear"></div>
+
+        <div class="name">
+            Заголовок (Title)<br /><br /><br />
+            Описание (Description)<br /><br /><br /><br />
+            Ключевые слова (Keywords)<br /><br />
+            Название категории маленькими буквами<br /><br />
+            Заменять переменные в заданных явно мета-тегах
+        </div>
+        <div class="value float">
+            <input type="text" name="shop_titlemask[category]" value="{$settings.category|escape}" /><br /><br />
+            <textarea name="shop_titlemask[category_description]">{$settings.category_description|escape}</textarea><br /><br />
+            <textarea name="shop_titlemask[category_keywords]">{ifset($settings.category_keywords)|escape}</textarea><br /><br />
+            <span class="greencode">%category|lower%</span> — название категории маленькими буквами<br><br>
+            <input {if !empty($settings.category_vars)}checked{/if} type="checkbox" name="shop_titlemask[category_vars]" value="1"><br>
+            <span class="hint">Если галочка включена, то заданные для категорий мета-теги воспринимаются как правила и там можно применять переменные плагина.</span>
+        </div>
+
+        <div class="value2 code">
+            <b>Доступные переменные:</b><br />
+            <span class="greencode">%category%</span> — название категории<br />
+            <span class="greencode">%category_full%</span>	— полное название категории вместе с родительскими категориями <br />
+            <span class="greencode">%parent_category%</span> — название родительской категории <br />
+            <span class="greencode">%count%</span> — количество товаров в категории<br />
+            <span class="greencode">%store_name%</span>	— название магазина (из настроек)<br />
+            <span class="greencode">%store_phone%</span> — телефон магазина (из настроек)<br />
+            <span class="greencode">%page_num%</span> — номер страницы<br>
+            <span class="hint">чтобы часть правила добавлялась только для страниц,
+            начиная со второй, используйте квадратные скобки, например, так: <b>[ - Страница %page_num%]</b></span>
+        </div>
+        <div class="clear"></div>
+
+
+        <div class="name">&nbsp;</div>
+        <div class="value float large">
+            <b>Страницы тегов</b>
+        </div>
+        <div class="clear"></div>
+
+        <div class="name">
+            Заголовок (Title)<br /><br /><br />
+            Описание (Description)<br /><br /><br /><br />
+            Ключевые слова (Keywords)
+        </div>
+        <div class="value float">
+            <input type="text" name="shop_titlemask[tag]" value="{$settings.tag|escape}" /><br /><br />
+            <textarea name="shop_titlemask[tag_description]">{$settings.tag_description|escape}</textarea><br /><br />
+            <textarea name="shop_titlemask[tag_keywords]">{ifset($settings.tag_keywords)|escape}</textarea>
+        </div>
+
+        <div class="value2 code">
+            <b>Доступные переменные:</b><br />
+            <span class="greencode">%tag%</span> — название тега<br />
+            <span class="greencode">%store_name%</span>	— название магазина (из настроек)<br />
+            <span class="greencode">%store_phone%</span> — телефон магазина (из настроек)<br>
+            <span class="greencode">%page_num%</span> — номер страницы<br>
+            <span class="hint">чтобы часть правила добавлялась только для страниц,
+            начиная со второй, используйте квадратные скобки, например, так: <b>[ - Страница %page_num%]</b></span>
+        </div>
+        <div class="clear"></div>
+
+
+        <div class="name">&nbsp;</div>
+        <div class="value float large">
+            <b>Статические страницы</b>
+        </div>
+        <div class="clear"></div>
+
+        <div class="name">
+            Заголовок (Title)<br /><br /><br />
+            Описание (Description)<br /><br /><br /><br />
+            Ключевые слова (Keywords)
+        </div>
+        <div class="value float">
+            <input type="text" name="shop_titlemask[page]" value="{$settings.page|escape}" /><br /><br />
+            <textarea name="shop_titlemask[page_description]">{$settings.page_description|escape}</textarea><br /><br />
+            <textarea name="shop_titlemask[page_keywords]">{ifset($settings.page_keywords)|escape}</textarea>
+        </div>
+
+        <div class="value2 code">
+            <b>Доступные переменные:</b><br />
+            <span class="greencode">%page%</span> — название страницы<br />
+            <span class="greencode">%store_name%</span>	— название магазина (из настроек)<br />
+            <span class="greencode">%store_phone%</span> — телефон магазина (из настроек)
+        </div>
+        <div class="clear"></div>
+
+        <div class="name">&nbsp;</div>
+        <div class="value float large">
+            <b>Страницы брендов</b>
+        </div>
+        <div class="clear"></div>
+
+        <div class="name">
+            Заголовок (Title)<br /><br /><br />
+            Описание (Description)<br /><br /><br /><br />
+            Ключевые слова (Keywords)
+        </div>
+        <div class="value float">
+            <input type="text" name="shop_titlemask[brand]" value="{$settings.brand|escape}" /><br /><br />
+            <textarea name="shop_titlemask[brand_description]">{$settings.brand_description|escape}</textarea><br /><br />
+            <textarea name="shop_titlemask[brand_keywords]">{ifset($settings.brand_keywords)|escape}</textarea>
+        </div>
+
+        <div class="value2 code">
+            <b>Доступные переменные:</b><br />
+            <span class="greencode">%brand%</span> — название бренда<br />
+            <span class="greencode">%store_name%</span>	— название магазина (из настроек)<br />
+            <span class="greencode">%store_phone%</span> — телефон магазина (из настроек)<br>
+            <span class="greencode">%page_num%</span> — номер страницы<br>
+            <span class="hint">чтобы часть правила добавлялась только для страниц,
+            начиная со второй, используйте квадратные скобки, например, так: <b>[ - Страница %page_num%]</b></span>
+
+        </div>
+        <div class="clear"></div>
+
+
+
+    </div>
+
+
+
+    <div class="field">
+        <div class="value submit">
+            <input type="submit" class="button green" value="Сохранить">
+        <span id="plugins-settings-form-status" style="display:none">
+            <i style="vertical-align:middle" class="icon16 yes"></i> [`Saved`]
+        </span>
+        </div>
+    </div>
+</form>

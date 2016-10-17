@@ -1,0 +1,9 @@
+{foreach $products as $p}
+	<div class="onepohogtov">
+		<div class="img"><a href="{$p.frontend_url}">{$wa->shop->productImgHtml($p, '220x220', ['itemprop' => 'image', 'alt' => $p.name,'title' => $p.name, 'default' => "`$wa_theme_url`img/dummy200.png"])}</a></div>
+	    <div class="gatatov">
+	    	<p class="titlepoh"><a href="{$p.frontend_url}">{$p.name|truncate:20}</a></p>
+	        <p class="pricepohtov">{shop_currency($p.price)} {if $p.compare_price}<span>{shop_currency($p.compare_price)}</span>{/if}</p>
+	    </div>
+	</div>
+{/foreach}

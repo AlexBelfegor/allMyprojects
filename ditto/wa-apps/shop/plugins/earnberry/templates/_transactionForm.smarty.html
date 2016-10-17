@@ -1,0 +1,59 @@
+<tr class="white large" id="earnberry_order_form">
+
+    <td colspan="6" class="align-right">
+
+            {if $transactionData}
+                <div class="block fields" style="float: right">
+                <div class="field-group">
+                    <div class="field">
+
+                        <div class="name">Код пользователя</div>
+                        <div class="value">{$transactionData.tracking_id}</div>
+                    </div>
+                    <div class="field">
+                        <div class="name">Маркер</div>
+                        <div class="value">{$transactionData.marker}</div>
+                    </div>
+                    <div class="field">
+                        <div class="name">ID</div>
+                        <div class="value">{$transactionData.order_id}</div>
+                        <input type="hidden" name="earnberry[order_id]" value="{$transactionData.order_id}">
+                    </div>
+                </div>
+                </div>
+            {else}
+                {$wa->csrf()}
+                <div class="block fields form" style="float: right">
+                <div class="field">
+                    <div class="name">Код пользователя</div>
+                    <div class="value"><input type="text" class="bold earnberry_tracking_id" value="" name="earnberry[trackingId]"  /></div>
+                </div>
+                <div class="field">
+                    <div class="name">Маркер</div>
+                    <div class="value">
+                        <select name="earnberry[marker]">
+                            {foreach $markers as $marker}
+                                <option value="{$marker}" {if $marker == 'tel'}selected="selected"{/if}>{$marker}</option>
+                            {/foreach}
+                        </select>
+                    </div>
+                </div>
+                <div class="field-group">
+                    {if $earnberry_settings.universal_analytics == '0'}
+                    <div class="field">
+                        <div class="value">
+                            <input type="button" class="button blue large" value="Транзакция" id="earnberry_do_transaction_button">
+                        </div>
+                    </div>
+                    {else}
+                        <br>
+                        <div class="hint">Вы используете Universal Analytics, потому не переживайте об отправке транзакции как можно раньше, просто нажимайте <b>Сохранить заказ</b>, когда закончите заполнение заказа.</div>
+                    {/if}
+                </div>
+                </div>
+            {/if}
+
+
+    </td>
+
+</tr>

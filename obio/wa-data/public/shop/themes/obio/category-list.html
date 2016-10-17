@@ -1,0 +1,117 @@
+<nav>
+	<!-- Toggle get grouped for better mobile display -->
+	<div class="navbar-header">
+		<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-1">
+			<span class="sr-only">Toggle navigation</span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+		</button>
+
+	</div>
+
+	<div class="collapse navbar-collapse" id="navbar-collapse-1">
+        <ul>
+            {$filtr_array = ['/novinki/', '/skidki/']}
+            {$device = $wa->userAgent('device')}
+            {foreach $categories as $c}
+            {if !in_array($c.url,$filtr_array)}
+            <li>
+            	<a href="{if $device == ''}{$c.url}{else}javascript:void(0){/if}">{$c.name|escape}</a>
+                {if count($c.subcategories)}
+	                <div class="ddm open">
+	                    <div class="container container-simply">
+	                        <div class="row">
+	                            <div class="close-menu"><a href="javascript:void(0)"><i class="icon16 remove"></i></a></div>
+	                            {$i = 0}
+	                            {$count = count($c.subcategories)}
+	                            {foreach $c.subcategories as $s}
+	                            <div class="col-lg-{if $i == 0}8{else}4{/if} col-md-4 col-sm-12 col-xs-12{if $i == 0} long{/if}">
+	                                <div class="dropmenu">
+	                                    <div class="title">{$s.name|escape}</div>
+	                                    {if count($s.subcategories)}
+	                                    <ul>
+	                                        {foreach $s.subcategories as $z}
+	                                        	<li><a href="{$z.url}">{$z.name|escape}</a><li>
+	                                        {/foreach}
+	                                    </ul>
+	                                    {/if}
+	                                </div>
+	                            </div>
+	                            {$i = $i + 1}
+	                            {/foreach}
+	                            {*if isset($c.params.banner)}
+		                            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+		                                <div class="bannermenu"><a href="{$c.params.banner_url}"><img src="{$c.params.banner}" alt="{$c.name|escape}" title="{$c.name|escape}" /></a></div>
+		                            </div>
+	                            {/if*}
+	                        </div>
+	                    </div>
+	                </div>
+                {/if}
+            </li>
+            {/if}
+            {/foreach}
+            <li><a href="{if $device == ''}/novinki/{else}javascript:void(0){/if}">Новинки</a>
+                <div class="ddm">
+                    <div class="newtov container-simply">
+                        <div class="container">
+                            <div class="row">
+                                <div class="close-menu none{if $device == ''} closed{/if}"><a href="javascript:void(0)"><i class="icon16 remove"></i></a></div>
+                                {$wa->block("shop.block_cat_nobinki")}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li><a href="{if $device == ''}/skidki/{else}javascript:void(0){/if}">Скидки</a>
+                <div class="ddm">
+                    <div class="newtov container-simply">
+                        <div class="container">
+                            <div class="row">
+                                <div class="close-menu none{if $device == ''} closed{/if}"><a href="javascript:void(0)"><i class="icon16 remove"></i></a></div>
+                                {$wa->block("shop.block_cat_skidki")}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            {if $articles = shopCustom::GetLastArtcles("",4)}
+            <li>
+            	<a href="{if $device == ''}/journal/{else}javascript:void(0){/if}">Блог</a>
+                <div class="ddm">
+                    <div class="blog container-simply">
+                        <div class="container">
+                            <div class="row">
+                                <div class="close-menu none{if $device == ''} closed{/if}"><a href="javascript:void(0)"><i class="icon16 remove"></i></a></div>
+                                {foreach $articles as $val}
+                                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                    <div class="onenewitem">
+                                        <div class="img">
+                                        	<a href="/journal/{$val.blog_url}/{$val.url}/" title="{$val.title}">
+				                                {if $val.photo}
+				                                	<img src="/wa-data/public/blog/img/{$val.id}.jpg" alt="{$val.title}">
+				                                {else}
+	                                        		<img src="{$wa_theme_url}images/img-18.jpg" alt="" title="" />
+				                                {/if}
+                                        	</a>
+                                        </div>
+                                        <div class="title-post">
+                                        	<a href="/journal/{$val.blog_url}/{$val.url}/">{$val.title|truncate:58}</a>
+                                        </div>
+                                        <p>{$val.text|truncate:200}</p>
+                                        <p class="reedmore"><a href="/journal/{$val.blog_url}/{$val.url}/">Читать далее...</a></p>
+                                    </div>
+                                </div>
+                                {/foreach}
+                            </div>
+                        </div>
+
+                        <a href="/journal/" class="morenews">Еще статьи</a>
+                    </div>
+                </div>
+            </li>
+            {/if}
+        </ul>
+    </div>
+</nav>

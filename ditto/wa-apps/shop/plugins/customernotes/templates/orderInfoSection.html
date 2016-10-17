@@ -1,0 +1,32 @@
+<link href="{$wa_url}wa-apps/shop/plugins/customernotes/css/customernotes.css" rel="stylesheet" type="text/css">
+<script src="{$wa_url}wa-apps/shop/plugins/customernotes/js/customernotes.js" type="text/javascript"></script>
+<form>
+    <div class="block fields form">
+        <div class="field">
+            <div class="name">[`Hide notes`]</div>
+            <div class="value">
+                <input type="checkbox" title="[`Hide notes`]" class="checkbox s-toggle-status" value="1" {if $settings.hide_notes == 1} checked{/if}>
+            </div>
+        </div>
+    </div>
+</form>
+
+<div id="customernotesContent" class="noprint" {if $settings.hide_notes == 1} style="display: none;" {else} style="display: block;" {/if}>
+    <div id="customernotesForm">
+        {include file="./notesForm.html" inline}
+    </div>
+    <div class="block noprint">
+        <ul class="zebra">
+            {foreach $notes as $note}
+                <li class="customernotesNoteLi" data-noteid="{$note.id}">
+                    {include file="./oneNote.html" inline}
+                </li>
+            {/foreach}
+        </ul>
+    </div>
+</div>
+
+
+<script>
+    $.Customernotes.init();
+</script>

@@ -1,0 +1,9 @@
+<ul class="katalog row">
+	{foreach $products as $p}
+		<li class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+			<div class="oneitem">
+				{include file="product-item.html" p=$p}
+			</div>
+		</li>
+	{/foreach}
+</ul>

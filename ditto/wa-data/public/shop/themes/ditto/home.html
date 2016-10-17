@@ -1,0 +1,140 @@
+    <div class="forslider">
+        <div class="wrap">
+            <div class="slideshow" style=""
+                data-cycle-slides="> div"
+                data-cycle-fx="scrollHorz"
+                data-cycle-timeout="5000"
+                data-cycle-carousel-visible="1"
+                data-cycle-pager=".example-pager"
+                data-cycle-next=".next-slide"
+                data-cycle-prev=".prev-slide"
+                data-allow-wrap=true
+            >
+                {$wa->block("shop.block_center_big_slider")}
+            </div>
+            <div class="example-pager"></div>
+            <div class="next-slide"></div>
+			<div class="prev-slide"></div>
+        </div>
+    </div>
+
+    <div class="uzor">
+    	<div class="wrap">
+        	{$wa->block("shop.block_center_info")}
+            <div class="clr"></div>
+        </div>
+    </div>
+	{$mostpopular = shopDitto::MostPopularViewProducts()}
+	{if $mostpopular}
+		{$cnt = count($mostpopular)}
+		{if $cnt >= 3}
+		<div class="slidesprew">
+			<div class="dottedtov"></div>
+			<div class="fordottitl"><p>Недавно просмотренные товары</p></div>
+			<div class="forsliderpoh">
+				<div class="slideshow"
+						data-cycle-slides="> div"
+						data-cycle-fx=carousel
+						data-cycle-timeout="0"
+						data-cycle-carousel-visible="{if $cnt <= 4}{$cnt}{else}4{/if}"
+						data-cycle-next=".next-slide-most"
+						data-cycle-prev=".prev-slide-most"
+						data-allow-wrap=true
+						>
+					{include file="list-thumbs-product.html" products=$mostpopular name="Недавно просмотренные товары"}
+				</div>
+				{if $cnt >= 4}
+				<div class="next-slide-most next"></div>
+				<div class="prev-slide-most prev"></div>
+				{/if}
+			</div>
+		</div>
+		{/if}
+	{/if}
+
+    <script>$.fn.cycle.defaults.autoSelector = '.slideshow';</script>
+    <div class="slidesprew">
+    	<div class="onetrig onetrig1">
+			{$liders = $wa->shop->productSet('liders')}
+			{if $liders && count($liders)}
+			    {include file="list-thumbs-promo.html" products=$liders type="1" name="Лидеры продаж" href="#"}
+			{/if}
+        </div>
+        <div class="onetrig">
+			{$new = $wa->shop->productSet('new')}
+			{if $new && count($new)}
+			    {include file="list-thumbs-promo.html" products=$new type="2" name="Новинки" href="/novinki/"}
+			{/if}
+        </div>
+        <div class="onetrig">
+            {$sale = $wa->shop->productSet('sale')}
+            {if $sale && count($sale)}
+                {include file="list-thumbs-promo.html" products=$sale type="3" name="Распродажа" href="/rasprodazha/"}
+            {/if}
+        </div>
+        <div class="clr"></div>
+
+		{if $articles = shopDitto::GetLastArtcles()}
+	        <div class="dotted"></div><div class="dottedico"><img src="{$wa_theme_url}images/ico5.png" /></div><div class="dotted"></div><div class="clr"></div>
+	        <span class="shd_2">Лучшие статьи</span>
+			{$i=0}
+			{foreach $articles as $val}
+		        <div class="onest{if $i==0} onest1{/if}">
+		        	{if $val.photo}<div class="img"><a href="/journal/{$val.blog_url}/{$val.url}/"><img src="/wa-data/public/blog/img/{$val.id}.jpg" alt="{$val.title}"></a></div>{/if}
+		        	<p class="date">{$val.datetime|wa_datetime:"humandate"}</p>
+		            <span class="shd_4"><a href="/journal/{$val.blog_url}/{$val.url}/">{$val.title|truncate:58}</a></span>
+		            <p class="text">
+		            	{strip_tags($val.text|truncate:380)}
+		            </p>
+		            <a href="/journal/{$val.blog_url}/{$val.url}/" class="podr">подробнее</a>
+
+		            <div class="clr"></div>
+		        </div>
+				{$i = $i+1}
+			{/foreach}
+		{/if}
+
+        <div class="clr"></div>
+
+        {* social plagins and reviews
+        <div class="dotted"></div><div class="dottedico"><img src="{$wa_theme_url}images/ico6.png" /></div><div class="dotted"></div><div class="clr"></div>
+	    <span class="shd_2">Присоединяйся к нам в социальных сетях</span>
+
+        {$wa->block("shop.block_center_social")}
+
+        <div class="otzblock otzblock3">
+        	{if $review = shopReviews::GetLastComment()}
+	        	{foreach $review as $val}
+	        		<div class="foto"><img src="{$wa_theme_url}img/dummy200.png" /></div>
+	            	<p class="name">{$val.name}</p>
+	            	<p class="date">{$val.datetime|wa_datetime:"humandate"}</p>
+	            	<p class="textotz">{$val.text|truncate:100}</p>
+	            {/foreach}
+            {else}
+	            <p class="textotz">Еще нет отзывов</p>
+            {/if}
+            <a href="/reviews/" class="smotz">Смотреть все отзывы</a><br/>
+            <a href="#" class="smotz click-ostotz">Оставить отзыв</a>
+        </div>
+
+        <div class="clr"></div>
+        *}
+
+        <div class="tooltips-block">
+        	<div class="dotted"></div><div class="dottedico"><img src="{$wa_theme_url}images/ico12.png" /></div><div class="dotted"></div><div class="clr"></div>
+
+        	<span class="tooltips-h1 shd_2">наши преимущества</span>
+
+	        <div class="tooltips-center">
+	        	{$wa->block("shop.block_tooltips")}
+	        </div>
+
+	        <div class="clr"></div>
+        </div>
+
+		<div class="home-text">
+			<div class="seotext">{$wa->block("shop.block_main_toogle_text")}</div>
+		</div>
+		<div class="slideToggle"><span>Подробнее...</span></div>
+    </div>
+

@@ -1,0 +1,311 @@
+{shopCustom::AddViewProduct($product.id)}
+<script src="{$wa_theme_url}js/zoom.js"></script>
+<script src="{$wa_theme_url}js/jquery.bxslider.js"></script>
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <p class="breadcrumb">
+            	<a href="">Главная</a>&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;
+				{if $breadcrumbs = shopCustom::breadcrumbs($product)}
+					{foreach $breadcrumbs as $breadcrumb}
+						<a href="{$breadcrumb.url}" itemprop="url">{$breadcrumb.name|escape}</a>&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;
+					{/foreach}
+            	{/if}
+            	<span itemprop="title">{$product.name|escape}</span>
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="tovar">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+
+                <div class="galfoto">
+                    <div class="tovargal">
+                        <ul class="bxslider">
+                            {foreach $product.images as $image}
+                            <li>
+                                <div class="zoom">
+                                	{$src = shopCustom::productImgHtmlPath(['id'=> $product.id, 'image_id' => $image.id, 'ext' => $image.ext],'970')}
+                                	<a class="popup-product-photos" href="{$src}">
+                                		<img itemprop="image" class="lazy img-responsive" alt="{$product.name}" src="{$src}">
+                                	</a>
+
+                                	{*$wa->shop->imgHtml($image, '970', [ 'itemprop' => 'image', 'class' => 'img-responsive', 'alt' => $product.name|escape ])*}
+
+                                	{*old $wa->shop->productImgHtml($image, '970', [ 'itemprop' => 'image', 'class' => 'img-responsive', 'alt' => $product.name|escape ])*}
+                                </div>
+                            </li>
+                            {/foreach}
+                        </ul>
+
+						{if $product.images}
+							{shopCustom::badgeHtml(['compare_price' => $product.compare_price,'price' => $product.price,'type' => $product.features.osobennost_tovara])}
+						{/if}
+                    </div>
+                    <div id="bx-pager" >
+                        <ul class="bxslider">
+	                        {$i = 0}
+	                        {foreach $product.images as $image}
+	                            <li>
+	                            	<a data-slide-index="{$i}" href="">
+	                            		{$wa->shop->imgHtml($image, '96x96')}
+	                            	</a>
+	                            </li>
+	                            {$i = $i + 1}
+	                        {/foreach}
+                        </ul>
+                    </div>
+
+                    {$video = $product->video}
+                    {if $video}
+                    	<div class="icon-video"><a class="popup-block-youtube" href="#popup-youtube-open" title="Видеообзор"></a></div>
+						<div class="block-youtube">
+							<div id="popup-youtube-open">
+							    <div id="video-container" class="video-container" itemprop="video" itemscope itemtype="http://schema.org/VideoObject">
+							        <div itemprop="embedHTML">
+							            <iframe src="{$video.url}" width="{$video.width}" height="{$video.height}" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+							        </div>
+							        <meta itemprop="width" content="{$video.width}">
+							        <meta itemprop="height" content="{$video.height}">
+							    </div>
+							</div>
+							<div class="clr"></div>
+						</div>
+                    {/if}
+                </div>
+
+            </div>
+
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                <div class="tovdata">
+                    <h1>{$product.name|escape}</h1>
+
+                    {include file="product.cart.html" inline}
+
+					{$crossselling = $product->crossSelling()}
+
+					{if $crossselling}
+	                    <div class="likeselekt">
+	                        <div class="oneit">
+	                            <div class="img">
+	                            	{$wa->shop->productImgHtml($product, '96x96', ['alt' => $product.name|escape ])}
+	                            </div>
+	                            <div class="text">Другие варианты</div>
+	                            <div class="clr"></div>
+	                        </div>
+	                        <div class="arrd"></div>
+	                        <div class="vspl">
+								{foreach $crossselling as $id => $p }
+	                            <div class="oneit">
+	                                <div class="img">
+	                                	{$wa->shop->productImgHtml($p, '96x96', ['alt' => $p.name|escape ])}
+	                                </div>
+	                                <div class="text">
+	                                	<a href="{$p.frontend_url}" title="{$p.name}">{$p.name}</a>
+	                                </div>
+	                                <div class="clr"></div>
+	                            </div>
+								{/foreach}
+	                        </div>
+	                    </div>
+					{/if}
+
+					<div class="block-inform">
+						<div class="item">
+							<div>
+								<a href="#popup-block-delivery" class="popup-block delivery1" title="Доставка">
+									<div class="delivery"></div>
+									Доставка
+								</a>
+							</div>
+							<div class="block-delivery">
+								<div id="popup-block-delivery">
+							        {$wa->block("shop.product_delivery")}
+								</div>
+								<div class="clr"></div>
+							</div>
+						</div>
+						<div class="item">
+							<div>
+								<a href="#popup-block-pay" class="popup-block pay1" title="Оплата">
+									<div class="pay"></div>
+									Оплата
+								</a>
+							</div>
+							<div class="block-pay">
+								<div id="popup-block-pay">
+							        {$wa->block("shop.product_pay")}
+								</div>
+								<div class="clr"></div>
+							</div>
+						</div>
+						<div class="item">
+							<div>
+								<a href="#popup-block-check" class="popup-block check1" title="Проверка">
+									<div class="check"></div>
+									Проверка
+								</a>
+							</div>
+							<div class="block-check">
+								<div id="popup-block-check">
+							        {$wa->block("shop.product_check")}
+								</div>
+								<div class="clr"></div>
+							</div>
+						</div>
+					</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="gap115"></div>
+
+        <div class="hartov">
+            <div class="row">
+                <ul class="nav nav-tabs tabshar">
+					<li class="active">
+						<a href="#features" data-toggle="tab">Характеристики товара</a>
+					</li>
+					<li>
+						<a href="#description" data-toggle="tab">Описание товара</a>
+					</li>
+                </ul>
+
+                <div class="tab-content">
+                    <div class="tab-pane active harbl" id="features">
+                        <div class="row">
+					        {if $product.features}
+                               	{$count = count($product.features)}
+                                {$count_half = round($count/2)}
+
+				                {$i = 1}
+				                {foreach $product.features as $f_code => $f_value}
+		                            {if $i == 1}
+		                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+		                                <table>
+		                          	{/if}
+		                                    <tr>
+		                                        <td>{$features[$f_code].name|escape}</td>
+		                                        <td itemprop="{$f_code|escape}">
+						                            {if is_array($f_value)}
+						                                {if $features[$f_code].type == 'color'}
+						                                    {implode('<br /> ', $f_value)}
+						                                {else}
+						                                    {implode(', ', $f_value)}
+						                                {/if}
+						                            {else}
+						                                {$f_value}
+						                            {/if}
+		                                        </td>
+		                                    </tr>
+		                            {if $i == $count_half}
+		                               </table>
+		                            </div>
+		                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+		                                <table>
+		                            {/if}
+
+		                            {if $i == $count}
+		                               </table>
+		                            </div>
+		                            {/if}
+					                {$i = $i + 1}
+				                {/foreach}
+			                {else}
+				                <p style="text-align:center;">Еще нет Характеристик</p>
+					        {/if}
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="description">
+                        <div class="textblhar">
+		                    {if $product.description}
+	                            {$product.description}
+	                  		{else}
+	                  			<p style="text-align:center;">Еще нет описания</p>
+		                    {/if}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="hartov">
+            <div class="row">
+                <ul class="nav nav-tabs tabshar">
+					<li class="active">
+						<a href="#products-recently" data-toggle="tab">Недавно промотренные товары</a>
+					</li>
+					<li>
+						<a href="#products-similar" data-toggle="tab">Похожие товары</a>
+					</li>
+                </ul>
+
+                <div class="tab-content">
+                    <div class="tab-pane active harbl" id="products-recently">
+						{$mostpopular = shopCustom::MostPopularViewProducts()}
+
+						{if $mostpopular}
+							{include file="list-thumbs-product.html" products=$mostpopular name="Недавно просмотренные товары"}
+						{else}
+							<p style="text-align:center;">Еще нет товаров</p>
+						{/if}
+                    </div>
+
+                    <div class="tab-pane" id="products-similar">
+						{$similar = shopCustom::SimilarProductsFromCurrentCategory($product)}
+
+						{if $similar}
+							{include file="list-thumbs-product.html" products=$similar name="Похожие товары"}
+						{else}
+							<p style="text-align:center;">Еще нет товаров</p>
+						{/if}
+                    </div>
+                </div>
+            </div>
+        </div>
+	</div>
+
+	<div class="block-phone">
+		<div class="container">
+			<div class="item-block one">
+				<div class="sun"></div>
+			</div>
+			<div class="item-block two">
+				{$wa->block("shop.product_questions")}
+			</div>
+			<div class="item-block three">
+				<div class="title">Перезвоните мне</div>
+				<div>Укажите ваш номер телефона</div>
+				<form name="form-send-phone-callback" method="post" class="form-send-phone-callback">
+					<input type="text" name="phone" class="phone" placeholder="+38" />
+					<input type="submit" value="Я жду звонка">
+				</form>
+			</div>
+		</div>
+	</div>
+
+	<div class="container">
+        <div class="hartov">
+            <div class="row">
+				<div class="title bord">Также мы рекомендуем</div>
+
+				{$upselling = $product->upSelling()}
+
+				{if $upselling}
+					{include file="list-thumbs-product.html" products=$upselling name="Также мы рекомендуем"}
+				{else}
+					<p style="text-align:center;">Еще нет товаров</p>
+				{/if}
+			</div>
+		</div>
+
+		<!-- plugin hook: 'frontend_product.block' -->
+		{* @event frontend_product.%plugin_id%.block *}
+		{foreach $frontend_product as $_}{$_.block}{/foreach}
+
+    </div>
+</div>

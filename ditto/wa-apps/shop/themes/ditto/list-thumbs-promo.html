@@ -1,0 +1,28 @@
+<h3>{$name}</h3>
+
+<div class="slideshow"
+    data-cycle-slides="> div"
+    data-cycle-fx=carousel
+    data-cycle-timeout="0"
+    data-cycle-carousel-visible="1"
+    data-cycle-next=".next-slide{$type}"
+    data-cycle-prev=".prev-slide{$type}"
+    data-allow-wrap=true
+>
+	{foreach $products as $p}
+		<div>
+			<a href="{$p.frontend_url}">{$wa->shop->productImgHtml($p, '220x220', ['itemprop' => 'image', 'alt' => $p.name,'title' => $p.name, 'default' => "`$wa_theme_url`img/dummy200.png"])}</a>
+			<div class="titlblock">
+				{$badge_html = $wa->shop->badgeHtml($p.badge)}
+            	{if $badge_html}
+            		{$badge_html}
+				{/if}
+				<a href="{$p.frontend_url}" class="naz">{$p.name|truncate:20}</a>
+				<p class="price">{shop_currency($p.price)} {if $p.compare_price}<span>{shop_currency($p.compare_price)}</span>{/if}</p>
+		    </div>
+		</div>
+    {/foreach}
+</div>
+
+<div class="next-slide{$type} next"></div>
+<div class="prev-slide{$type} prev"></div>

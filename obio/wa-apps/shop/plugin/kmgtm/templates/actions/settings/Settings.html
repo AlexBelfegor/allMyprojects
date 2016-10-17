@@ -1,0 +1,239 @@
+<style>
+    #wa .CodeMirror{
+        border: 1px solid #ccc;
+        padding: 2px;
+    }
+    .CodeMirror-scroll {
+        height: auto;
+        overflow-y: hidden;
+        overflow-x: auto;
+    }
+</style>
+
+<h1>Google Tag Manager и Enhanced Ecommerce</h1>
+
+<form action="?module=plugins&id=kmgtm&action=save" method="post" id="plugins-settings-form" data-kmgtm-settings>
+    {$wa->csrf()}
+    <div class="field">
+        <div class="name"><label for="kmgtm_shop_kmgtm_enable">Включить плагин</label></div>
+        <div class="value">
+            <select name="shop_kmgtm[enable]" id="kmgtm_shop_kmgtm_enable" title="Включить плагин">
+                <option value="1" {if !empty($settings['enable'])}selected{/if}>включить</option>
+                <option value="0" {if empty($settings['enable'])}selected{/if}>выключить</option>
+            </select>
+            <div class="clear"></div>
+        </div>
+    </div>
+
+    <div class="field">
+        <div class="name"><label>Настройки для домена</label></div>
+        <div class="value">
+            <select name="" id="kmgtm_domains">
+                {foreach $domains as $d}
+                <option value="{$d.domain}">{$d.domain}</option>
+                {/foreach}
+            </select>
+        </div>
+    </div>
+
+    {foreach $domains as $d}
+    <div data-kmgtm-domain="{$d.domain}" style="display: none;" class="block double-padded shadowed">
+        <h2>{$d.domain}</h2>
+
+        <div class="field">
+            <div class="name"><label for="kmgtm_shop_kmgtm_use_gtm-{$d.domain}">Добавить контейнер GTM</label>
+            </div><div class="value"><input type="checkbox" name="shop_kmgtm[{$d.domain}][use_gtm]" value="1" class="checkbox" {if !empty($settings[$d.domain]['use_gtm'])}checked="checked"{/if} id="kmgtm_shop_kmgtm_use_gtm-{$d.domain}" title="Добавить контейнер GTM"> </div>
+            <div class="clear"></div>
+        </div>
+
+        <div class="block padded" data-kmgtm-setting="gtm" {if empty($settings[$d.domain]['use_gtm'])}style="display:none"{/if}>
+            <div class="field">
+                <div class="name"><label for="kmgtm_shop_kmgtm_gtm_id-{$d.domain}">Идентификатор Google Tag Manager</label>
+                </div><div class="value"><input id="kmgtm_shop_kmgtm_gtm_id-{$d.domain}" type="text" name="shop_kmgtm[{$d.domain}][gtm_id]" class="input" value="{$settings[$d.domain]['gtm_id']|default:''|escape}"> <br><span class="hint">Идентификатор Google Tag Manager: GTM-XXXX. Получить можно на странице <a href="https://tagmanager.google.com/" target="_blank">Google Tag Manager</a>. Если вы укажите неверный идентификатор или этот контейнер ещё не опубликован, то в консоли браузера будет сообщение об ошибке "GET http://www.googletagmanager.com/gtm.js?id=GTM-****** 404 (Not Found)".</span></div>
+            </div>
+
+            <div class="field">
+                <div class="name"><label for="kmgtm_shop_kmgtm_datalayer_name-{$d.domain}">Название переменной, где содержаться данные для GTM</label>
+                </div><div class="value"><input id="kmgtm_shop_kmgtm_datalayer_name-{$d.domain}" type="text" name="shop_kmgtm[{$d.domain}][datalayer_name]" class="input" value="{$settings[$d.domain]['datalayer_name']|default:'dataLayer'|escape}"> <br><span class="hint">Иногда необходимо изменить название переменной, <a href="https://developers.google.com/tag-manager/devguide#renaming" target="_blank">подробнее</a>. Эта настройка позволяет сделать это.</span></div>
+            </div>
+
+            <div class="field">
+                <div class="name">Данные в {$settings[$d.domain]['datalayer_name']|default:'dataLayer'|escape}</div>
+                <div class="value hint">
+                    Какие данные добаваить в код dataLayer. Эти данные потом можно использовать в GTM или Яндекс Метрике.
+                </div>
+            </div>
+
+            <div class="block padded">
+                <div class="field">
+                    <div class="name"><label for="kmgtm_shop_kmgtm_gtm_ee-{$d.domain}">Enhanced Ecommerce</label>
+                    </div>
+                    <div class="value">
+                        <input type="checkbox" name="shop_kmgtm[{$d.domain}][gtm_ee]" value="1" class="checkbox" {if !empty($settings[$d.domain]['gtm_ee'])}checked="checked"{/if} id="kmgtm_shop_kmgtm_gtm_ee-{$d.domain}" title="GTM Enhanced Ecommerce">
+                        <br><span class="hint">Добавить в код данные для Enhanced Ecommerce. Часть будет автоматически отправляться в Google Analytics. Для некоторых будет необходимо настроить треггеры в GTM.</span>
+                        <br><span class="hint">Для отслеживания какие данные уходя в GTM рекомендуется использвать <a href="https://chrome.google.com/webstore/detail/kejbdjndbnbjgmefkgdddjlbokphdefk" target="_blank">это расширение для Google Chrome</a>.</span>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="name"><label for="kmgtm_shop_kmgtm_gtm_type-{$d.domain}">Тип страницы</label>
+                    </div>
+                    <div class="value">
+                        <input type="checkbox" name="shop_kmgtm[{$d.domain}][gtm_type]" value="1" class="checkbox" {if !empty($settings[$d.domain]['gtm_type'])}checked="checked"{/if} id="kmgtm_shop_kmgtm_gtm_type-{$d.domain}" title="GTM page type">
+                        <br><span class="hint">Добавить в код данные о типе текущей страницы (index, category, product, checkout).</span>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="name"><label for="kmgtm_shop_kmgtm_gtm_logged-{$d.domain}">Статус посетителя</label>
+                    </div>
+                    <div class="value">
+                        <input type="checkbox" name="shop_kmgtm[{$d.domain}][gtm_logged]" value="1" class="checkbox" {if !empty($settings[$d.domain]['gtm_logged'])}checked="checked"{/if} id="kmgtm_shop_kmgtm_gtm_logged-{$d.domain}" title="GTM Enhanced Ecommerce"> <br><span class="hint">Добавить в код данные статус залогинен текущий посетитель или нет.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field">
+            <div class="name">Universal Analytics</div>
+            <div class="value">
+                {if $d.ua_exist}
+                {$d.ua_exist}
+                {else}
+                Чтобы добавить поддержку Enhanced Ecommerce для Google Analytics добавьте Google Analytics Property ID и галочку Universal Analytics в приложение "Сайт" в настройках домена.
+                {/if}
+            </div>
+        </div>
+
+        {if $d.ua_exist}
+        <div class="block padded" data-kmgtm-setting="ua">
+            <div  class="field">
+                <div class="name"><label for="kmgtm_shop_kmgtm_ua_additional_code-{$d.domain}">Дополнительный код</label></div>
+                <div class="value">
+                    <textarea name="shop_kmgtm[{$d.domain}][ua_additional_code]" id="kmgtm_shop_kmgtm_ua_additional_code-{$d.domain}">{$settings[$d.domain]['ua_additional_code']|default:''|escape}</textarea>
+                    <span class="hint">Этот код добавляется после отправки pageview, так что не забудьте добавить "событие", чтобы данные отправились в Google Analytics.</span>
+                </div>
+            </div>
+
+            <div class="field">
+                <div class="name"><label for="kmgtm_shop_kmgtm_ua_ee-{$d.domain}">Enhanced Ecommerce</label></div>
+                <div class="value">
+                    <input type="checkbox" name="shop_kmgtm[{$d.domain}][ua_ee]" value="1" class="checkbox" {if !empty($settings[$d.domain]['ua_ee'])}checked="checked"{/if} id="kmgtm_shop_kmgtm_ua_ee-{$d.domain}" title="Добавить в UA Enhanced Ecommerce">
+                    <br><span class="hint">Добавить в код отправку данный Enhanced Ecommerce.</span>
+                    <br><span class="hint">Для отслеживания какие данные уходя в GTM рекомендуется использвать <a href="https://chrome.google.com/webstore/detail/kejbdjndbnbjgmefkgdddjlbokphdefk" target="_blank">это расширение для Google Chrome</a>.</span>
+                </div>
+            </div>
+        </div>
+        {/if}
+
+
+        <div data-kmgtm-setting="ee" {if (empty($settings[$d.domain]['use_gtm']) || empty($settings[$d.domain]['gtm_ee'])) && empty($settings[$d.domain]['gtm_ee'])}style="display:none;"{/if}>
+            <div class="field">
+                <div class="name">Настройка Enhanced Ecommerce</div>
+                <div class="value"><div class="clear"></div></div>
+            </div>
+            <div class="block padded">
+                <div class="field">
+                    <div class="name"><label for="kmgtm_shop_kmgtm_crossselling_count-{$d.domain}">Количество перекрестных товаров</label></div>
+                    <div class="value">
+                        <input type="text" name="shop_kmgtm[{$d.domain}][crossselling_count]" id="kmgtm_shop_kmgtm_crossselling_count-{$d.domain}" value="{$settings[$d.domain]['crossselling_count']|default:12|escape}">
+                        <div class="hint">Количество перекрестных товаров на странице товара. Можно найти на в шаблоне product.htm в строке {literal}{$upselling = $product->crossSelling()}{/literal}. Если включен Enhanced Ecommerce, то используется для отслеживания показов товаров со страницы товара.</div>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <div class="name"><label for="kmgtm_shop_kmgtm_upselling_count-{$d.domain}">Количество схожих и альтернативных товаров</label></div>
+                    <div class="value">
+                        <input type="text" name="shop_kmgtm[{$d.domain}][upselling_count]" id="kmgtm_shop_kmgtm_upselling_count-{$d.domain}" value="{$settings[$d.domain]['upselling_count']|default:12|escape}">
+                        <div class="hint">Количество схожих и альтернативных товаров на странице товара. Можно найти на в шаблоне product.htm в строке {literal}{$upselling = $product->upSelling()}{/literal}. Если включен Enhanced Ecommerce, то используется для отслеживания показов товаров со страницы товара.</div>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <div class="name"><label for="kmgtm_shop_kmgtm_refund_button_ids-{$d.domain}">Идентификаторы кнопок, которые отменяют заказ</label></div>
+                    <div class="value">
+                        <input type="text" name="shop_kmgtm[{$d.domain}][refund_button_ids]" id="kmgtm_shop_kmgtm_refund_button_ids-{$d.domain}" value="{$settings[$d.domain]['refund_button_ids']|default:'delete, refund'|escape}">
+                        <br><span class="hint">Идентификаторы кнопок в интерфейсе работы с заказом администрантивной части сайта, которые отменяют заказ. Их можно найти на <a href="?action=settings#/orderStates/" target="_blank">странице настроек статустов заказов</a>. Перечислите необходимые через запятую.</span>
+                    </div>
+                </div>
+            </div>
+            <div class="field">
+                <div class="hint">Данные о заказах в отчетах Enhanced Ecommerce никогда не будут полностью совпадать с данными в административной части. Причин может быть несколько: блокировка счетчика Google Analytics, заказы оформленные менеджером вручную, изменение состава заказа. Основная цель отчетов Enhanced Ecommerce - показать какие каналы рекламы приносят большую прибыль, какие товары больше всего интересуют покупателя, как он с ними взаимодействует, как покупатель проходит этапы оформления заказа. Очеты по реальным продажам лучше смотреть через <a href="?action=reports" target="_blank">Отчет Shop Script</a>.</div>
+                <div class="clear"></div></div>
+            </div>
+        </div>
+    </div>
+    {/foreach}
+
+    {*<div class="field">
+        <div class="name"><label for="kmgtm_shop_kmgtm_default_domain">Домен по умолчанию</label></div>
+        <div class="value">
+            <select name="shop_kmgtm[default_domain]" id="kmgtm_shop_kmgtm_default_domain">
+                {foreach $domains as $d}
+                {if $d.ua_exist}
+                <option value="{$d.domain}" {if isset($settings['default_domain']) && $settings['default_domain'] == $d.domain}selected{/if}>{$d.domain} ({$d.ua_exist})</option>
+                {/if}
+                {/foreach}
+            </select>
+            <br><span class="hint">Когда заказ создается вручную и не выбрана витрина, укажите в счетчик какого домена надо слать данные.</span>
+        </div>
+    </div>*}
+
+
+    <div class="field">
+        <div class="value submit">
+            <input type="submit" class="button green" value="Сохранить">
+            <span id="plugins-settings-form-status" style="display:none">
+                <i style="vertical-align:middle" class="icon16 yes"></i> [`Saved`]
+            </span>
+        </div>
+    </div>
+</form>
+
+<script>
+    'use strict';
+    (function () {
+        var $form = $('form[data-kmgtm-settings]'),
+            $domains = $form.find('#kmgtm_domains');
+
+        $domains.on('change', function(){
+            var domain = $(this).find(':selected').val(),
+                $tab = $form.find('[data-kmgtm-domain="' + domain + '"]');
+
+            if ($tab.length) {
+                $tab.show().siblings('[data-kmgtm-domain]').hide();
+            }
+
+        });
+
+        $domains.trigger('change');
+        $form.find("textarea").each(function () {
+            CodeMirror.fromTextArea(this, {
+                mode: "text/javascript",
+                tabMode: "indent",
+                height: "dynamic",
+                lineWrapping: true
+            });
+        });
+
+        $('input[id^="kmgtm_shop_kmgtm_use_gtm"]').on('change', function(e) {
+            var $domian_wrapper = $(this).closest('[data-kmgtm-domain]');
+
+            $domian_wrapper.find('[data-kmgtm-setting="gtm"]').slideToggle();
+            if (!$(this).is(':checked') && !$domian_wrapper.find('input[id^="kmgtm_shop_kmgtm_ua_ee-"]').is(':checked')) {
+                $domian_wrapper.find('[data-kmgtm-setting="ee"]').slideUp();
+            }
+            if ($(this).is(':checked') && $domian_wrapper.find('input[id^="kmgtm_shop_kmgtm_gtm_ee-"]').is(':checked')) {
+                $domian_wrapper.find('[data-kmgtm-setting="ee"]').slideDown();
+            }
+        });
+
+        $('input[id^="kmgtm_shop_kmgtm_gtm_ee-"], input[id^="kmgtm_shop_kmgtm_ua_ee-"]').on('click', function (e) {
+            var $domian_wrapper = $(this).closest('[data-kmgtm-domain]');
+            if (($domian_wrapper.find('input[id^="kmgtm_shop_kmgtm_use_gtm-"]').is(':checked') && $domian_wrapper.find('input[id^="kmgtm_shop_kmgtm_gtm_ee-"]').is(':checked')) || $domian_wrapper.find('input[id^="kmgtm_shop_kmgtm_ua_ee-"]').is(':checked')) {
+                $domian_wrapper.find('[data-kmgtm-setting="ee"]').slideDown();
+            } else {
+                $domian_wrapper.find('[data-kmgtm-setting="ee"]').slideUp();
+            }
+        });
+
+    }());
+</script>

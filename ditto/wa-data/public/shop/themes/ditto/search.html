@@ -1,0 +1,34 @@
+	<p class="breadcrumb">
+		<a href="/">главная</a>&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;<span>поиск</span>&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;<span>{$title}</span>
+	</p>
+
+    <div class="forfilter">
+    	<h4>{$category.name|escape}</h4>
+
+        {include file="sidebar.html" filters=$filters}
+
+        <div class="clr"></div>
+    </div>
+
+
+    <div class="filtrkontent">
+    	<div class="baner">
+    		{if $category.params.baner}
+    			{if $category.params.baner_url}<a href="{$category.params.baner_url}">{/if}
+    				<img src="{$category.params.baner}"/>
+    			{if $category.params.baner_url}</a>{/if}
+    		{/if}
+    	</div>
+
+        <div id="product-list">
+	    {if !$products && ($category.url != 'novinki' && $category.url != 'rasprodazha')}
+	        [`This category does not contain any products.`]
+	    {else}
+	        {include file='list-thumbs.html' sorting=!empty($category.params.enable_sorting) products=$products pages_count=$pages_count list="search"}
+	    {/if}
+        </div>
+
+        <div class="clr"></div>
+
+    </div>
+

@@ -1,0 +1,50 @@
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <p class="breadcrumb">
+            	<a href="/">Главная</a>&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;
+            	<a href="/my/">Мой кабинет</a>&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;
+            	<span>[`My profile`]</span>
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="katalogbl">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 account">
+				<div class="account">
+					<h1>[`My profile`]</h1>
+
+                    {include file="my.nav.html"}
+
+					<div class="text">
+
+
+						{if $saved}
+						    <strong class="text-center center-block"><i class="icon16 saved"></i><span style="color:green">[`Contact information successfully updated!`]</span></strong>
+						    <br><br>
+						{/if}
+
+						<form action="" method="post">
+						<div class="wa-form center-block">
+
+						    {$form->html()}
+
+						    <div class="wa-field">
+						        <div class="wa-value">
+						            <input type="submit" value="[`Save`]">
+						        </div>
+						    </div>
+						</div>
+						</form>
+
+						<div class="clr"></div>
+					</div>
+
+				</div>
+            </div>
+        </div>
+    </div>
+</div>

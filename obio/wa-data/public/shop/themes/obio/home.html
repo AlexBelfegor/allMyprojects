@@ -1,0 +1,125 @@
+{$wa->block("shop.block_main_banners")}
+
+<div class="novelty">
+    <div class="container">
+        <div class="title bord">Новинки</div>
+        <div class="row">
+
+			<ul class="nav nav-tabs tabskat">
+				<li class="active"><a href="#kateg1" data-toggle="tab">Женская сумки</a></li>
+				<li><a href="#kateg2" data-toggle="tab">Женские обувь</a></li>
+				<li><a href="#kateg3" data-toggle="tab">Аксессуары</a></li>
+				<li><a href="#kateg4" data-toggle="tab">Мужская обувь</a></li>
+				<li><a href="#kateg5" data-toggle="tab">Мужские сумки</a></li>
+			</ul>
+
+            <div class="tab-content">
+                <div class="tab-pane active" id="kateg1">
+					{$woman_shoes = $wa->shop->productSet("woman_bags")}
+					{if $woman_shoes}
+					   	{include file="list-thumbs-product-home.html" products=$woman_shoes name="Женская обувь"}
+					{/if}
+                </div>
+                <div class="tab-pane" id="kateg2">
+					{$woman_shoes = $wa->shop->productSet("woman_shoes")}
+					{if $woman_shoes}
+					   	{include file="list-thumbs-product-home.html" products=$woman_shoes name="Женские сумки"}
+					{/if}
+                </div>
+                <div class="tab-pane" id="kateg3">
+					{$woman_shoes = $wa->shop->productSet("accessories")}
+					{if $woman_shoes}
+					   	{include file="list-thumbs-product-home.html" products=$woman_shoes name="Аксессуары"}
+					{/if}
+                </div>
+                <div class="tab-pane" id="kateg4">
+					{$woman_shoes = $wa->shop->productSet("man_shoes")}
+					{if $woman_shoes}
+					   	{include file="list-thumbs-product-home.html" products=$woman_shoes name="Мужская обувь"}
+					{/if}
+                </div>
+                <div class="tab-pane" id="kateg5">
+					{$woman_shoes = $wa->shop->productSet("man_bags")}
+					{if $woman_shoes}
+					   	{include file="list-thumbs-product-home.html" products=$woman_shoes name="Мужские сумки"}
+					{/if}
+                </div>
+
+            </div>
+
+            <a href="/novinki/" class="lookall">БОЛЬШЕ НОВИНОК</a>
+        </div>
+    </div>
+</div>
+
+{$wa->block("shop.block_main_actions")}
+
+{if $articles = shopCustom::GetLastArtcles("",3,false)}
+	<div class="bestnews">
+	    <div class="container">
+	        <div class="title bord">Лучшие статьи</div>
+	        <div class="row">
+				{foreach $articles as $val}
+		            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+		                <a href="/journal/{$val.blog_url}/{$val.url}/" title="{$val.title}" class="onenew">
+		                    <div class="flip-container" ontouchstart="this.classList.toggle('hover');">
+		                        <div class="flipper">
+		                            <div class="front">
+		                                {if $val.photo}
+		                                	<img src="/wa-data/public/blog/img/{$val.id}.jpg" alt="{$val.title}">
+		                                {else}
+		                            		<img src="{$wa_theme_url}images/img-8.jpg" alt="{$val.title}"/>
+		                                {/if}
+		                            </div>
+		                            <div class="back">
+		                                <div class="opis">
+		                                    <p>{$val.title|truncate:58}</p>
+		                                </div>
+		                            </div>
+		                        </div>
+		                    </div>
+		                </a>
+		            </div>
+				{/foreach}
+	        </div>
+	    </div>
+	</div>
+{/if}
+
+{$wa->block("shop.block_main_advantages")}
+
+{$mostpopular = shopCustom::MostPopularViewProducts()}
+{if $mostpopular}
+<div class="lookbefore">
+    <div class="container">
+        <div class="title bord">Недавно просмотренные товары</div>
+	   	{include file="list-thumbs-product.html" products=$mostpopular name="Недавно просмотренные товары"}
+    </div>
+</div>
+{/if}
+
+<div class="delivery">
+    <div class="container text-center">
+        <div class="delivery-bg">
+        	{$wa->block("shop.block_main_delivery")}
+
+			<div class="delivery-wrapper">
+				<form name="form-send-delivery" method="post" class="form-send-delivery">
+					<input name="email" id="email" type="text" placeholder="Введите E-mail">
+					<input name="send" type="hidden" value="1">
+					<input name="category" type="hidden" value="2">
+					<input type="submit" value="Подписаться">
+				</form>
+			</div>
+        </div>
+    </div>
+</div>
+
+<div class="home-text">
+	<div class="seotext">{$wa->block("shop.block_main_about")}</div>
+</div>
+
+<div class="container text-right">
+	<br /><a class="slideToggle">Подробнее...</a>
+</div>
+

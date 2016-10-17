@@ -1,0 +1,33 @@
+<div class="block double-padded" id="s-bwredirect-form">
+
+    <form id="s-plugin-bwredirect" method="post" action="?plugin=bwredirect&module=run" enctype="multipart/form-data">
+	    {$wa->csrf()}
+	    <div class="fields form" style="width: 100%;">
+	        {include file="./CsvProductsetup.export.html"}
+
+	        {include file="./Settings.html"}
+	    </div>
+    </form>
+
+</div>
+
+<div class="clear"></div>
+
+<!--//<script type="text/javascript">
+    $("#s-plugin-bwredirect").submit(function () {
+        var f = $(this);
+
+        $("#s-plugin-bwredirect-status").after("<i style='vertical-align:middle' class='icon16 loading yes'></i>");
+
+        $.post(f.attr('action'), f.serialize(), function (response) {
+            $(".loading").remove();
+            $("#s-plugin-bwredirect-status").fadeIn('slow', function () {
+               $(this).fadeOut(1000);
+            });
+
+            $("#s-bwredirect-report").css("display","block");
+        }, "json")
+        return false;
+    });
+</script>
+//-->

@@ -1,0 +1,80 @@
+<h2>Earnberry</h2>
+<a href="javascript: void(0)" onclick="earnberry_open_nofitication_dialog('{$order.id}');">Нотифицировать сумму</a>
+<a href="{$lookup_url}" target="_blank">Подробно о транзакции</a>
+<br>
+<div style="line-height: 16px;">
+    <strong>TID: </strong> {$earnberry_conversion.order_id}     
+</div>
+
+{if $earnberry_conversion.notified_total}
+    <div style="line-height: 16px;">
+        <strong>Прибыль:</strong> {if $earnberry_conversion.notified_total.total == 0}<span style="color:red;">Обнулено</span>{else}{$earnberry_conversion.notified_total.total} {$earnberry_conversion.notified_total.currency}{/if}
+        @ {$earnberry_conversion.notified_total.created_at|date_format:"%c"}
+    </div>
+
+{/if}
+
+{if $earnberry_conversion.notified_grossprofit}
+<div style="line-height: 16px;">
+    <strong>Оборот:</strong> {if $earnberry_conversion.notified_grossprofit.total == 0}<span style="color:red;">Обнулено</span>{else}{$earnberry_conversion.notified_grossprofit.total} {$earnberry_conversion.notified_grossprofit.currency}{/if}
+    @ {$earnberry_conversion.notified_grossprofit.created_at|date_format:"%c"}
+</div>
+
+{/if}
+
+<script type="text/javascript">
+
+function earnberry_open_nofitication_dialog(orderId)
+{
+    $('<div class="earnberry-dialog-content"><i class="icon16 loading" style="text-align: center;"></i><span>Загрузка формы</span></div>').waDialog({
+        'buttons': '<span class="notify-button-c"><input type="submit" value="Нотифицировать" class="button green"/> или</span> <a class="cancel" href="javascript:void(0);">отмена</a>',
+        title: 'Нотификация суммы заказа',
+        width: '500px',
+        height: '310px',
+        onLoad: function() {
+            var self = this;
+
+           $.getJSON(earnberry_ajax_actions.loadordernotification + '&orderId=' + orderId, function(json) {
+
+                if (json.status == 'ok')
+                {
+                    $(self).find('.earnberry-dialog-content').html(json.data.html);
+                }
+            });
+        },
+        onSubmit: function (d) {
+            var self = this;
+            var d = d;
+            var url = earnberry_ajax_actions.notificateordertotal;
+
+           $.ajax({
+                url: url,
+                data: d.find('form').serializeArray(),
+                dataType: 'json',
+                type: 'post',
+                success: function (response) {
+                    var data = response.data;
+                    if (data.result == 'OK')
+                    {
+                        alert('Сумма нотифицированна успешно!');
+                        d.trigger('close');
+                        window.location.reload();
+                    }
+                    else
+                    {
+                        d.find('.notify-button-c').hide();
+                        d.find('.earnberry-dialog-content').html('<div style="color:red;">' + data.error_text + '</div>');
+                    }
+                },
+                error: function () {
+                    alert('Ошибка соединения!');
+                }
+            }).always(function() {
+
+            });
+            return false;
+        },
+        disableButtonsOnSubmit: true
+    });
+}
+</script>

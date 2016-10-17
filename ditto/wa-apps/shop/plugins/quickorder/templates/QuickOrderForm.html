@@ -1,0 +1,63 @@
+<div class="form"><!--НАЧАЛО ФОРМЫ-->
+    <form name="form" action="{$quickOrderSubmitUrl}" method="post" enctype="multipart/form-data" id="callback-product">
+        <div class="title_form">БЫСТРЫЙ ЗАКАЗ ЭТОГО ТОВАРА</div>
+        <div class="subtitle_form">Оставьте телефон и мы Вам позвоним</div>
+        <div class="text_input">
+            <input class="quickortder-input" name="name" type="text" value="" id="name-product" placeholder="Введите Ваше имя"/>
+        </div>
+        <div class="text_input">
+            <input class="quickortder-input" name="phone" type="text" value="" id="phone-product" placeholder="Введите Ваш телефон"/>
+        </div>
+        <div class="btn_form">
+            <div class="button-confirm"><input type="submit" value="Отправить заявку немедленно!" /></div>
+        </div>
+        <input name="comment" type="hidden" value="Быстрый заказ товара {$product.name|escape}">
+        <input name="referer" type="hidden" value="{$wa->shop->productUrl($product)}">
+        <div class="clear"></div>
+    </form>
+</div>
+{literal}
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#callback-product').on('submit', function(e) {
+            $('#callback-product input[type=submit]').attr('disabled', true).css('opacity', 0.5);
+
+            $.ajax({
+                type: "POST",
+                url: $(this).attr('action'),
+                data: $(this).serialize(),
+
+                success: function(data) {
+                    var response = data.data;
+                    if (response.status == 'ok')
+                    {
+                        if (response.conversion_js)
+                        {
+                            eval(response.conversion_js);
+                        }
+                        $('input.quickortder-input').css({'border': '1px solid #b9b9b9'});
+                        $('input.quickortder-input').val('');
+                        $.colorbox({html: response.confirm_window_html, title:"Спасибо за вашу заявку!", innerWidth:500, innerHeight:150});
+                    }
+                    else if (response.status == 'fail')
+                    {
+                        if (response.errors)
+                        {
+                            $.each(response.errors, function(k,v) {
+                                $('input[name=' + k + ']').css({'border':'1px solid #ff0000'});
+                            });
+                        }
+                    }
+
+                },
+                dataType: 'json'
+            }).always(function() {
+                $('#callback-product input[type=submit]').attr('disabled', false).css('opacity', 1);
+            });
+            e.stopPropagation();
+            return false;
+        });
+    });
+
+</script>
+{/literal}

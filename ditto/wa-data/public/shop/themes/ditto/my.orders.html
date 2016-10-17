@@ -1,0 +1,51 @@
+<p class="breadcrumb"><a href="/">главная</a>&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;<a href="/my/">Мой кабинет</a>&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;<span>[`My orders`]</span></p>
+
+<div class="page width">
+	<h1>[`My orders`]</h1>
+
+	<div class="text">
+
+		<table class="table" width="100%">
+		{foreach $orders as $o}
+		    <tr>
+		        <td class="nowrap">
+		            <a href="{$o.url}" class="bold">
+		                {$o.id_str}
+		            </a>
+		        </td>
+		        <td class="nowrap">
+		            <span class="nowrap order-status" style="{$o.state->getStyle(1)}">
+		                {$o.state->getName()}
+		            </span>
+		        </td>
+		        <td>
+		            {foreach $o.items as $i}
+		                {$i.name|escape} <span class="gray">x {$i.quantity}</span><br />
+		            {/foreach}
+		        </td>
+		        <td>
+		            {if $o.shipping_name}
+		                {$o.shipping_name|escape}
+		            {else}
+		                &nbsp;
+		            {/if}
+		        </td>
+		        <td>
+		            {if $o.payment_name}
+		                {$o.payment_name|escape}
+		            {else}
+		                &nbsp;
+		            {/if}
+		        </td>
+		        <td>
+		            <span class="gray">{$o.create_datetime|wa_date:'humandate'}</span>
+		        </td>
+		    </tr>
+		{/foreach}
+		</table>
+
+		<div class="clr"></div>
+	</div>
+
+	<div class="clr"></div>
+</div>

@@ -1,0 +1,65 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>{$wa->title()|escape}</title>
+    <meta name="Keywords" content="{$wa->meta('keywords')|escape}" />
+    <meta name="Description" content="{$wa->meta('description')|escape}" />
+
+	<link rel="shortcut icon" href="{$wa_theme_url}/images/favicon.ico">
+
+	<!--Meta Fix IE-->
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+
+	<link href="{$wa_theme_url}css/style.css" rel="stylesheet" />
+	<!--[if lt IE 9]>
+		<link rel="stylesheet" href="{$wa_theme_url}css/ie/style.css" />
+		<script type="text/javascript" src="{$wa_theme_url}js/html5.js"></script>
+	<![endif]-->
+
+    <script type="text/javascript" src="{$wa_url}wa-content/js/jquery/jquery-1.8.2.min.js"></script>
+    <script type="text/javascript" src="{$wa_url}wa-content/js/jquery-wa/wa.core.js"></script>
+    <script type="text/javascript" src="{$wa_theme_url}js/default.js"></script>
+    <script type="text/javascript" src="{$wa_theme_url}js/lazyloading.js"></script>
+    {if !empty($nofollow)}
+        <meta name="robots" content="noindex,nofollow" />
+    {/if}
+    {$wa->js()}
+    {$wa->headJs()}
+    <script type="text/javascript" src="{$wa_app_static_url}js/lazy.load.js?v={$wa->version()}"></script>
+
+    <!-- plugin hook: 'frontend_head' -->
+    {* @event frontend_head.%plugin_id% *}
+    {foreach $frontend_head as $_}{$_}{/foreach}
+
+    <script type="text/javascript" src="{$wa_theme_url}js/jquery.cycle2.js"></script>
+    <script type="text/javascript" src="{$wa_theme_url}js/jquery.cycle2.carousel.js"></script>
+    <script type="text/javascript" src="{$wa_theme_url}js/js.js"></script>
+	<script type="text/javascript" src="{$wa_theme_url}js/selectbox.js" ></script>
+
+	<link rel="stylesheet" type="text/css" href="{$wa_theme_url}js/colorbox/colorbox.css"/>
+	<script type="text/javascript" src="{$wa_theme_url}js/colorbox/jquery.colorbox-min.js"></script>
+
+	<script type="text/javascript" src="{$wa_theme_url}js/jquery.mask.min.js"></script>
+
+</head>
+<body style="postition:relative;">
+
+    {*<script type="text/javascript" src="{$wa_theme_url}js/sticky/jquery-contained-sticky-scroll.js"></script>*}
+	{$content}
+
+<script type="text/javascript">
+{literal}
+(function(){
+var siteId = 'C8B3E1158AFC478EA260A0BA86451CB3';
+var scScr = document.createElement('script');
+scScr.async = true;
+scScr.src = 'https://cdnanalytics.datasoftcube.com/' + siteId + '/sc.js?r=' + 1*new Date();
+document.body.appendChild(scScr);
+}());
+{/literal}
+</script>
+
+<script type="text/javascript">{literal}ga('send', 'pageview');{/literal}</script>
+</body>
+</html>

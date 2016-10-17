@@ -1,0 +1,28 @@
+<p class="breadcrumb"><a href="/">главная</a>&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;<span>карта сайта</span></p>
+
+<h1>карта сайта</h1>
+
+<div class="sitemap">
+
+	<div class="additional_block">
+		{$wa->block("shop.sitemap_block")}
+	</div>
+
+	<ul class="sitemap-data">
+	{foreach $sitemap as $name => $site}
+		<li>
+			<h2>{$name}</h2>
+			{foreach $site as $data}
+			<div class="link">
+				<a href="{$data.link}" title="{$data.name|escape}">{$data.name|escape}</a>
+
+				<div class="clr"></div>
+			</div>
+            {/foreach}
+			<div class="clr"></div>
+		</li>
+	{/foreach}
+	</ul>
+
+	<div class="clr"></div>
+</div>

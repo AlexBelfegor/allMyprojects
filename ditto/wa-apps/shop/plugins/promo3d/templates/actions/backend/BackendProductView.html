@@ -1,0 +1,25 @@
+<form enctype="multipart/form-data" method="post" action="?plugin=promo3d&action=edit&id={$product.id}">
+	{$wa->csrf()}
+	<div class=" ">
+		<div style="background: #EEEEEE;text-align:center;">Промо 3D</div><br />
+		<div style="font-size:11px;background: #F2F7FF;" >
+		{if $promo}
+			<font style="color:green;">3Д Промо Банер Загружен, на сайт</font>
+		{else}
+			<font style="color:red;">3Д Промо Банер еще не Загружен</font>
+		{/if}
+		<div>&nbsp;</div>
+		Загрузить промо 3Д Большая:  <input type="file" class="file" name="promo_big"><br />
+		Загрузить промо 3Д крутилка:  <input type="file" class="file" name="promo_all">
+
+        {if $promo}
+
+        <div>&nbsp;</div>
+		Статус промо 3Д включен: <input name="promo_check" type="radio" value="0" {if $data.status==0}checked{/if}><br />
+		Статус промо 3Д выключен: <input name="promo_check" type="radio" value="1" {if $data.status==1}checked{/if}><br />
+	    {/if}
+	    <div>&nbsp;</div>
+	    <input type="submit" name="save" value="Сохранить">
+	    </div>
+    </div>
+</form>

@@ -1,0 +1,8 @@
+{shopCustomernotesPluginViewHelper::getRatePic($note.rate)}<span>{$note.note|escape}</span>
+<br />
+<a href="#/orders/id={$note.order_id}/" data-order_id="{$note.order_id}" data-note_id="{$note.id}">
+    <i class="icon16 move"></i>
+</a>
+<a href="javascript:void(0);" onclick="$.Customernotes.deleteNote(this)">
+    <i class="icon16 delete"></i>
+</a>

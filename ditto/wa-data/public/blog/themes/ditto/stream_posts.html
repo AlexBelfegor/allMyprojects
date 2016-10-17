@@ -1,0 +1,32 @@
+{foreach $posts as $post}
+    <section class="post" id="post-{$post.id}" {if $wa->param('blog_url')}{/if}itemscope itemtype="http://schema.org/BlogPosting">
+        <div class="onestat">
+        	<div class="imgst">
+        		<a href="{$post.link}"><img src="/wa-data/public/blog/img/{$post.id}.jpg" alt="{$post.title}" itemprop="image"></a>
+        	</div>
+            <div class="fortext">
+            	<p class="title" itemprop="headline"><a href="{$post.link}">{$post.title}</a></p>
+                <meta itemprop="datePublished" content="{$post.datetime|date_format:'Y-m-d\TH:i'}">
+                <p class="datest">{$post.datetime|wa_datetime:"humandate"}</p>
+                <p class="author" itemprop="author">{$post.user.name}</p>
+                <div class="clr"></div>
+                <p class="intro" itemprop="description">
+                	{strip_tags($post.text|truncate:350)}
+                </p>
+                {*
+                <a href="#" class="socbut"><img src="/wa-apps/shop/themes/ditto/images/vk1.png" /></a>
+                <a href="#" class="socbut"><img src="/wa-apps/shop/themes/ditto/images/fb1.png" /></a>
+                <a href="#" class="socbut"><img src="/wa-apps/shop/themes/ditto/images/tw1.png" /></a>
+                <a href="#" class="socbut"><img src="/wa-apps/shop/themes/ditto/images/gp1.png" /></a>
+                <a href="#" class="socbut"><img src="/wa-apps/shop/themes/ditto/images/ok1.png" /></a>
+                *}
+                <a href="{$post.link}" itemprop="url" class="podrob">подробнее</a>
+            </div>
+            <div class="clr"></div>
+        </div>
+    </section>
+{foreachelse}
+    {if $page lt 2}
+        {_w('%d post','%d posts',0)}
+    {/if}
+{/foreach}

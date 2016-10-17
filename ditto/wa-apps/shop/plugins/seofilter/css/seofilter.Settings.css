@@ -1,0 +1,123 @@
+.seo-settings h2 {
+    margin-bottom: 20px;
+    font-size: 1.2em;
+}
+
+.seo-settings-group * {
+    box-sizing: border-box;
+}
+
+.seo-settings-group {
+    min-width: 794px;
+}
+
+.seo-settings-group__fields {
+    display: inline-block;
+    vertical-align: top;
+}
+
+.seo-settings-group__value:not(.no-shift) {
+    width: 408px;
+}
+.seo-settings-group__value select .filled {
+    color: red;
+}
+.seo-features_url input {
+    display: none;
+}
+
+.seo-settings-group__input,
+.seo-features-group__input {
+    width: 408px !important;
+    min-width: auto !important;
+}
+
+.seo-settings-group__helper {
+    display: inline-block;
+    vertical-align: top;
+    width: 300px;
+    margin: 5px;
+}
+
+
+.seo-settings__storefront,
+.seo-settings-storefront-name {
+    display: none;
+}
+
+.seo-settings__storefront_open {
+    display: block;
+}
+
+.seo-settings__extra {
+    border-bottom: 1px dashed #03c;
+    font-size: 13px;
+    display: inline-block;
+    margin-top: 25px;
+}
+.seo-settings__extra:hover {
+    border-bottom: 1px dashed transparent;
+}
+
+.seo-settings__features-extra {
+    display: none;
+    margin-top: 20px;
+}
+
+.helper {
+    background: #F7F7F7;
+    padding: 15px 15px 5px;
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
+    color: #AAA;
+    font-size: 0.8em;
+    border: 1px solid #efefef;
+}
+
+.helper__header {
+    font-size: 1.2em;
+    color: #777;
+}
+
+.helper__var {
+    margin: 5px 0;
+}
+
+.helper__var-code {
+    color: #777;
+    display: inline-block;
+    padding: 3px;
+    background: #eee;
+    border: 1px solid #eee;
+    border-radius: 3px;
+}
+
+.helper__var-code:hover {
+    border-color: #ddd;
+}
+
+#wa .redactor_editor, #wa .redactor-editor {
+    border: 1px solid #eeeeee;
+}
+
+.seo-settings__success-message {
+    display: inline-block;
+    margin-left: 20px;
+}
+
+.seo-settings__description {
+    font-size: 12px;
+}
+
+.seo-settings__footer {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 7px 7px 7px 230px;
+    background: #f7f7f7;
+    border-top: 2px solid #EEE;
+    z-index: 101;
+}
+.seo-settings__footer .value.submit {
+    margin-left: 0;
+}

@@ -1,0 +1,39 @@
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <p class="breadcrumb">
+            	<a href="/">Главная</a>&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;
+            	<span>[`Sign up`]</span>
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="katalogbl">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="content">
+				    <div class="center">
+
+				        {if !empty($contact)}
+				            <h1 class="text-center">[`Thank you!`]</h1>
+				            <p class="text-center">[`You have successfully signed up.`]</p>
+				        {else}
+				            <h1 class="text-center">[`Sign up`]</h1>
+				            <br>
+				            {$wa->authAdapters()}
+				            <br>
+				            {$wa->signupForm($errors)}
+
+				            <div class="text-center">
+				            	<div>Поля выделенные красным являются обязательными для заполнения.</div>
+				            </div>
+				        {/if}
+				    </div>
+				</div>
+            </div>
+        </div>
+    </div>
+</div>
+

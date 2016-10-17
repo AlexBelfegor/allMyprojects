@@ -1,0 +1,104 @@
+<script type="text/javascript" src="{$wa_app_static_url}js/rate.widget.js"></script>
+<script type="text/javascript" src="/wa-apps/shop/plugins/reviews/js/reviews.js"></script>
+<link rel="stylesheet" type="text/css" href="/wa-apps/shop/plugins/reviews/css/review.css"/>
+
+<div class="dotted"></div>
+<div class="dottedico"><img src="/wa-apps/shop/themes/ditto/images/ico8.png" /></div>
+<div class="dotted"></div>
+<div class="clr"></div>
+<p class="titleH">Отзывы о товаре</p>
+<p class="otzforp">Вы пишете отзыв о товаре <span>{$product.name|escape}</span></p>
+<p class="otzforp">Поставьте оценку товару</p>
+
+<form name="" action="" method="post" id="form-add-comment">
+	<div class="ostotzbl">
+		<div class="big-stars">
+			<!--noindex-->
+			<ul class="big-stars-rating">
+				<li id="big-currant-black" class="big-currant-black" style="width:0px;">&nbsp;</li>
+				<li><a rel="nofollow" href='javascript:void(0)' onclick='javascript:votecomment("1");' class="r1-unit">ужасно</a></li>
+				<li><a rel="nofollow" href='javascript:void(0)' onclick='javascript:votecomment("2");' class="r2-unit">плохо</a></li>
+				<li><a rel="nofollow" href='javascript:void(0)' onclick='javascript:votecomment("3");' class="r3-unit">нормально</a></li>
+				<li><a rel="nofollow" href='javascript:void(0)' onclick='javascript:votecomment("4");' class="r4-unit">хорошо</a></li>
+				<li><a rel="nofollow" href='javascript:void(0)' onclick='javascript:votecomment("5");' class="r5-unit">отлично</a></li>
+			</ul>
+			<!--/noindex-->
+	    </div>
+		<div class="clr"></div>
+		<input name="mark" type="hidden" id="mark" value="5">
+		<input name="review" type="hidden" value="1">
+		<input name="product_url" type="hidden" value="{$wa->shop->productUrl($product, 'page', ['page_url' => $page.url])}" id="product_url">
+		<input name="product_id" type="hidden" value="{$product.id}">
+
+	    <input name="name" placeholder="Введите Ваше имя" type="text" value="" id="name" class="form-input">
+	    <textarea name="text" id="text" class="form-input"></textarea>
+		{$wa->captcha(!empty($errors.captcha))}
+	    <input type="submit" class="dobotz" value="Добавить отзыв">
+	</div>
+</form>
+{if $reviews_data}
+<span itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">
+	<meta itemprop="ratingValue" content="5" />
+	<meta itemprop="bestRating" content="5" />
+	<meta itemprop="reviewCount" content="{count($reviews)}" />
+</span>
+{/if}
+{foreach $reviews_data as $review}
+<ul class="oneotz" itemprop="review" itemscope itemtype="http://schema.org/Review">
+	<meta itemprop="name" content="{$product.name|escape}" />
+	<li>
+    	<div class="otzdata">
+			<span itemprop="author" itemscope itemtype="http://schema.org/Person">
+        	<p class="nameotz" itemprop="name">{if $review.title}{$review.title}{/if}</p></span>
+            <p class="dataotz"><meta itemprop="datePublished" content="{$review.datetime|date_format:'Y-m-d'}" />{$review.datetime|wa_datetime:"humandatetime"}</p>
+			<div class="stars-small" itemprop="reviewRating" itemscope itemtype="http://schema.org/Rating">
+                {$rate = round($review.rate)}
+                <meta itemprop="worstRating" content = "1" />
+                <meta itemprop="ratingValue" content="{$rate}" />
+                <meta itemprop="bestRating" content = "5" />
+                {$wa->shop->ratingHtml($rate)}
+				<ul class="stars-rating">
+					<li class="currant-black" style="width:{$rate*14}px;">&nbsp;</li>
+					<li>ужасно</li>
+					<li>плохо</li>
+					<li>нормально</li>
+					<li>хорошо</li>
+					<li>отлично</li>
+				</ul>
+			</div>
+            <div class="clr"></div>
+        </div>
+        <div class="otztext">
+        	<p itemprop="reviewBody">{if $review.text}{$review.text}{/if}</p>
+            <div class="clr"></div>
+	        {if !empty($review.comments)}
+		    	{foreach $review.comments as $rev}
+			    	<div class="answer" itemprop="review" itemscope itemtype="http://schema.org/Review">
+					    <div class="left-block">
+					        <div class="photo">
+					        	{if $rev.author.photo_url_50}
+					        		<img src="{$rev.author.photo_url_50}" width="40" height="40" alt="{$rev.author.name}" border="0">
+								{/if}
+					        </div>
+					    </div>
+                           <div class="right-block">
+							<span itemprop="author" itemscope itemtype="http://schema.org/Person">
+							<p class="namerev" itemprop="name">{$rev.author.name}</p></span>
+					        <div class="date"><meta itemprop="datePublished" content="{$review.datetime|date_format:'Y-m-d'}" />{$rev.datetime|wa_datetime:"humandatetime"}</div>
+					    	<div class="comment" itemprop="reviewBody">{if $rev.text}{$rev.text}{/if}</div>
+                           </div>
+					    <div class="clr"></div>
+					</div>
+				{/foreach}
+	        {/if}
+        </div>
+        <div class="otzrightblock">
+			<div class="helpful">
+				<div>Отзыв полезен?</div>
+				<a href="#" data-id_review="{$review.id}" class="yes">Да</a> <span id="yes_{$review.id}">{$review.yes}</span> / <a href="#" data-id_review="{$review.id}" class="no">Нет</a> <span id="no_{$review.id}">{$review.no}</span>
+			</div>
+        </div>
+        <div class="clr"></div>
+    </li>
+</ul>
+{/foreach}

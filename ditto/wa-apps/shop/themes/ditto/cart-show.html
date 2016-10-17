@@ -1,0 +1,33 @@
+<a href="{$wa->getUrl('/frontend/cart')}" class="cart-link"></a>
+{$cart_data = shopDitto::getSessionData()}
+<div class="basket">
+	<p>
+		<a class="click-basket">КОРЗИНА</a>
+		<div class="headervspl {if !$cart_data}cart-hidden{/if}">
+			<div class="vsplwrap">
+				<div class="baskettov">
+					{$i = 0}
+					{foreach $cart_data as $item}
+						<div class="onebaskettov {if $i==0}onebaskettov1{/if}">
+							<div class="img">
+								<a href="{$wa->getUrl('/frontend/product', ['product_url' => $item.product.url, 'category_url' => $item.category.full_url])}" title="{$item.product.name|escape}">{$wa->shop->productImgHtml($item.product, '50x50')}</a>
+							</div>
+							<div class="textbask">
+								<p><a href="{$wa->getUrl('/frontend/product', ['product_url' => $item.product.url, 'category_url' => $item.category.full_url])}" class="bold">{$item.product.name|escape|truncate:100}</a></p>
+								<p class="pricetovbasket"><span>{$item.quantity} шт</span> {shop_currency($item.price * $item.quantity, $item.currency)}</p>
+								<a rel="{$item.id}" class="deltovbasket" href="#"></a>
+								<div class="clr"></div>
+							</div>
+							<div class="clr"></div>
+						</div>
+						{$i = $i +1}
+					{/foreach}
+					<a href="{$wa->getUrl('/frontend/cart')}" class="oformzakbasket">ОФОРМИТЬ ЗАКАЗ</a>
+				</div>
+			</div>
+		</div>
+	</p>
+</div>
+<p>
+	<span><nobr class="cart-count">{if $cart_count}{$cart_count}{else}0{/if}</nobr> товара <nobr class="cart-total">{shop_currency($cart_total, true)}</nobr>
+</p>

@@ -1,0 +1,61 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: shop/plugins/orderlogs\n"
+"POT-Creation-Date: 2015-07-16 15:22+0300\n"
+"PO-Revision-Date: \n"
+"Last-Translator: shop/plugins/orderlogs\n"
+"Language-Team: shop/plugins/orderlogs\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-Basepath: .\n"
+"Language: en_US\n"
+"X-Generator: Poedit 1.8.2\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPath-1: .\n"
+
+msgid "name"
+msgstr "Name"
+
+msgid "email"
+msgstr "Email"
+
+msgid "phone"
+msgstr "Phone"
+
+msgid "quantity"
+msgstr "Quantity"
+
+msgid "sku_id"
+msgstr "Param"
+
+msgid "shipping"
+msgstr "Shipping"
+
+msgid "discount"
+msgstr "Discount"
+
+msgid "payment_name"
+msgstr "Payment Name"
+
+msgid "shipping_address.city"
+msgstr "City"
+
+msgid "shipping_address.street"
+msgstr "Address"
+
+msgid "shipping_name"
+msgstr "Shipping Name"
+
+msgid "price"
+msgstr "Price"
+
+msgid "shipping_address.zip"
+msgstr "Zip"
+
+msgid "comment"
+msgstr "Comment"
+
+msgid "shipping_address.metro"
+msgstr "Metro"

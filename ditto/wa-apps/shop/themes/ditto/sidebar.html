@@ -1,0 +1,43 @@
+    {if !empty($filters)}
+    <div class="filtr">
+        <form method="get" action="">
+
+		    <div class="primfiltr"><input type="submit" value="применить"></div>
+
+		    {foreach $filters as $fid => $filter}
+	            {if $fid == 'price'}
+	                {*
+	                {$c = $wa->shop->currency(true)}
+	                <b>[`Price`]</b><br>
+	                [`from`] <input type="text" name="price_min" {if $wa->get('price_min')}value="{(int)$wa->get('price_min')}"{/if} placeholder="0">
+	                [`to`] <input type="text" name="price_max" {if $wa->get('price_max')}value="{(int)$wa->get('price_max')}"{/if} placeholder="&infin;"> {$c.sign}
+	                *}
+	            {else}
+	                <p class="filtrname">{$filter.name|escape}</p>
+	                <ul class="filtrlist">
+	                {foreach $filter.values as $v_id => $v}
+	                    <li>
+	                        <input id="c{$v_id}" type="checkbox" name="{$filter.code}[]" {if in_array($v_id, (array)$wa->get($filter.code, array()))}checked{/if} value="{$v_id}"><label for="c{$v_id}">{$v}</label>
+	                    </li>
+	                {/foreach}
+	                </ul>
+	            {/if}
+	        {/foreach}
+
+		    <p class="filtrname">цена</p>
+		    <div class="filtrslide">
+		    	<img src="{$wa_theme_url}images/filtrslider.png" />
+		    </div>
+
+		    <a href="#" class="sbros">сбросить цену</a>
+		    <div class="clr"></div>
+		    <p class="filtrprice">от  1 500 грн.  до  2 000 грн.</p>
+		    <a href="#" class="sbrosprice">сбросить</a>
+
+        </form>
+	</div>
+    {/if}
+
+    <!-- plugin hook: 'frontend_nav' -->
+    {* @event frontend_nav.%plugin_id% *}
+    {foreach $frontend_nav as $_}{$_}{/foreach}

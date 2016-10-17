@@ -1,0 +1,68 @@
+<div class="container" itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <p class="breadcrumb">
+            	<a href="/" itemprop="url">Главная</a>&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;
+				{if $breadcrumbs = shopCustom::breadcrumbscategory($category)}
+				    {foreach $breadcrumbs as $breadcrumb name=breads}
+						<a href="{$breadcrumb.url}" itemprop="url" itemscope itemtype="http://data-vocabulary.org/Breadcrumb">{$breadcrumb.name|escape}</a>&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;
+						{if $smarty.foreach.breads.last}
+							<a href="/{$category.full_url}/" itemprop="url" itemscope itemtype="http://data-vocabulary.org/Breadcrumb">{$category.name|escape}</a>
+						{/if}
+				    {/foreach}
+				{else}
+					<a href="/{$category.full_url}/" itemprop="url" itemscope itemtype="http://data-vocabulary.org/Breadcrumb">{$category.name|escape}</a>
+				{/if}
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="katalogbl">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+
+           		{include file="sidebar.html" filters=$filters collection_sql=$collection_sql}
+
+            </div>
+            <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+
+				{if isset($category.params.h1)}
+					<h1 class="category-name">{$category.params.h1|escape}{if $smarty.get.page} - страница {$smarty.get.page}{/if}</h1>
+				{else}
+					<h1 class="category-name">{$category.name|escape}</h1>
+				{/if}
+
+			    <div id="product-list" class="product-list">
+				    {if $category.full_url == 'muzhskie'}
+				    	{include file="page-muzhskie.html"}
+				    {elseif $category.full_url == 'zhenskie'}
+				    	{include file="page-zhenskie.html"}
+				    {elseif !$products}
+				        [`This category does not contain any products.`]
+				    {else}
+				        {include file='list-thumbs.html' sorting=!empty($category.params.enable_sorting) products=$products pages_count=$pages_count list="{if isset($name_list)}{$name_list}{/if}"}
+				    {/if}
+			    </div>
+
+			    {if (strlen($category.description) < 500) && !$smarty.get.page && ($smarty.get.sort == false)}
+			        <div class="textbl category-desc">
+			        	{$category.description}
+			        </div>
+		        {elseif (strlen($category.description) >= 500) && !$smarty.get.page && ($smarty.get.sort == false)}
+	                <div class="textbl category-desc">
+				        <div class="home-text">
+			        		<div class="seotext">{$category.description}</div>
+			       		</div>
+			       		<div class="slideToggle home-text-category">Подробнее...</div>
+	                </div>
+		        {/if}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- plugin hook: 'frontend_category' -->
+{* @event frontend_category.%plugin_id% *}
+{foreach $frontend_category as $_}{$_}{/foreach}

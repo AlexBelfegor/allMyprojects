@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<!--Meta Fix IE-->
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+	<meta charset="utf-8">
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1{if $wa->isMobile()}, maximum-scale=1, user-scalable=0{/if}" />
+    {if $error_code == '404'}
+    <title>Страница не найдена</title>
+    {else}
+    <title>{$wa->title()|escape}</title>
+    {/if}
+    <meta name="Keywords" content="{$wa->meta('keywords')|escape}" />
+    <meta name="Description" content="{$wa->meta('description')|escape}" />
+
+    {if !empty($canonical)}<link rel="canonical" href="{$canonical}"/>{/if}
+    <link rel="shortcut icon" href="{$wa_theme_url}images/favicon.ico"/>
+    {if $wa->blog}
+        <!-- rss -->
+        {$rss=$wa->blog->rssUrl()}
+        {if $rss}<link rel="alternate" type="application/rss+xml" title="{$wa->accountName()}" href="{$rss}">{/if}
+    {/if}
+
+    <!-- css -->
+	<link rel="stylesheet" href="{$wa_theme_url}css/bootstrap.css">
+	<link rel="stylesheet" href="{$wa_theme_url}css/style.css">
+	<link rel="stylesheet" href="{$wa_theme_url}fonts/stylesheet.css">
+
+    <link href='https://fonts.googleapis.com/css?family=PT+Sans:400,700,400italic,700italic&subset=latin,cyrillic-ext,latin-ext,cyrillic' rel='stylesheet' type='text/css'>
+
+    <link rel="stylesheet" href="{$wa_theme_url}css/owl.carousel.css">
+    <link rel="stylesheet" href="{$wa_theme_url}css/owl.theme.default.css">
+
+    <link href="{$wa_theme_url}css/custom.css" rel="stylesheet" type="text/css"/>
+
+	<link rel="stylesheet" href="{$wa_theme_url}css/media.css">
+    {$wa->css()}
+
+    <!-- js -->
+    <script type="text/javascript" src="{$wa_static_url}wa-content/js/jquery/jquery-1.11.1.min.js" ></script>
+    <script type="text/javascript" src="{$wa_static_url}wa-content/js/jquery/jquery-migrate-1.2.1.min.js"></script>
+
+	<script src="{$wa_theme_url}js/bootstrap.min.js"></script>
+    <script src="{$wa_theme_url}js/owl.carousel.min.js"></script>
+    <script src="{$wa_theme_url}js/jquery.mask.min.js"></script>
+    <script src="{$wa_theme_url}js/wow.min.js"></script>
+
+    <script type="text/javascript" src="{$wa_theme_url}js/owl.js"></script>
+    <script type="text/javascript" src="{$wa_theme_url}js/custom.js"></script>
+
+	<link rel="stylesheet" type="text/css" property="stylesheet" href="{$wa_theme_url}js/colorbox/colorbox.css" />
+	<script type="text/javascript" src="{$wa_theme_url}js/colorbox/jquery.colorbox-min.js"></script>
+
+    {$wa->js()}
+
+    {$wa->head()}
+
+	<!-- plugin hook: 'frontend_head' -->
+	{* @event frontend_head.%plugin_id% *}
+	{foreach $frontend_head as $_}{$_}{/foreach}
+
+	{$cart_total = $wa->shop->cart->total()}
+	{$cart_count = $wa->shop->cart->count()}
+    {$cart_data = shopCustom::getSessionData()}
+
+</head>
+<body>
+{literal}
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-M8SLFX"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-M8SLFX');</script>
+<!-- End Google Tag Manager -->
+{/literal}
+    <div class="top">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-7 col-md-7 col-sm-7 col-xs-12">
+                    {$wa->block("shop.block_top_cupon")}
+                </div>
+                <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
+                    <nav>
+                        {$wa->block("shop.block_top_menu")}
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+    <header>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 center">
+                    <div class="fortel">
+						<p class="tel">(044) 700-47-97</p>
+						<div class="btn-group">
+						    <div class="btn-lookall"><span>Смотреть все</span>
+		                        {$wa->block("shop.block_top_contacts")}
+						    </div>
+						</div>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 center">
+                	{include file="callback-show.html"}
+                </div>
+                <div class="col-lg-4 col-md-2 col-sm-12 col-xs-12">
+                    <a class="logo" href="/" title="{$wa->accountName()}"><img src="{$wa_theme_url}images/logo.png" alt="{$wa->accountName()}" title="{$wa->accountName()}" /></a>
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 center">
+					{include file="auth-show.html"}
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 center">
+					{include file="cart-show.html" cart_total=$cart_total cart_count=$cart_count cart_data=$cart_data}
+                </div>
+            </div>
+        </div>
+	</header>
+
+    <div class="menu" id="myAffix">
+        <div class="container">
+            <div class="row">
+				{if $categories = shopCustom::categories()}
+					{include file="category-list.html" categories=$categories}
+                {/if}
+
+                <a href="/" class="logotop">
+                	{$wa->block("shop.block_top_contacts")}
+                </a>
+
+                {if $cart_count}
+
+                	<div class="cart-short">
+                		<a href="/cart/" class="menu-cart"></a>
+                    	{include file="cart-show-items.html" cart_data=$cart_data}
+                    </div>
+
+                {/if}
+
+                <div class="search{if $cart_count} cart{/if}">
+                	{include file="search-list.html"}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="main{if $error_code == '404'} error-404{/if}">
+        {include file="`$wa_active_theme_path`/main.html" inline}
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12">
+                    {$wa->block("shop.block_bottom_menu")}
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                    {$wa->block("shop.block_bottom_social")}
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                    {$wa->block("shop.block_bottom_info")}
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12">
+                    {$wa->block("shop.block_bottom_cats")}
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

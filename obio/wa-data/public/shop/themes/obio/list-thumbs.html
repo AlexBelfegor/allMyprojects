@@ -1,0 +1,26 @@
+{if waRequest::isXMLHttpRequest()}
+	<script type="text/javascript" src="{$wa_theme_url}js/owl.js"></script>
+	<div class="html-title" style="display: none;">{if $category.meta_title}{$category.meta_title|escape}{else}{$category.name|escape}{/if}</div>
+{/if}
+
+<ul class="katalog row product-list">
+	<span itemprop="numberOfItems" style="display:none;">{count($products)}</span>
+	{foreach $products as $p}
+	    <li itemscope itemtype ="http://schema.org/Product" class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+	        <div class="oneitem">
+	        	{include file="product-item.html" p=$p}
+	        </div>
+	    </li>
+	{/foreach}
+</ul>
+
+<hr class="hr" />
+
+{if isset($pages_count) && $pages_count > 1}
+	{capture assign=pagination}
+	    {wa_pagination_custom total=$pages_count attrs=['class' => "pagination"]}
+	{/capture}
+
+	{shopSeofilterViewHelper::paginationDecorate($pagination)}
+{/if}
+

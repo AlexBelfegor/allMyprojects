@@ -1,0 +1,329 @@
+<link type="text/css" rel="stylesheet" href="{$wa_url}wa-content/js/redactor/redactor.css" />
+<link type="text/css" rel="stylesheet" href="{$seofilter_css}?v{$plugin_version}" />
+<script type="text/javascript" src="{$wa_url}wa-content/js/redactor/redactor.min.js"></script>
+<script type="text/javascript" src="{$wa_url}wa-content/js/redactor/ru.js"></script>
+<script type="text/javascript" src="{$seofilter_js}?v{$plugin_version}"></script>
+
+<style>
+    .description {
+        border-bottom: 1px solid #dadada;
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+    }
+    .description ul {
+        display: none;
+    }
+</style>
+
+<div class="seo-settings">
+
+    <h1 class="seo-settings__header">[`Optimization results of the filter`]</h1>
+
+    <div class="description">
+        <p><i class="icon16 exclamation-red"></i> Для того, чтобы во время работы фильтра заголовок, описание и тайтл менялись без перезагрузки, необходимо внести некоторые изменения в тему дизайна.</p>
+        <a href="#" id="bc_instruction"><i class="icon16 agreement"></i> Инструкция</a>
+        <ul>
+            <li>Откройте файл <i>category.html</i> и в самое начало добавьте код:
+                <pre>
+                <code>
+                {literal}
+                {if waRequest::isXMLHttpRequest()}
+                &lt;div class="html-title" style="display: none;"&gt;{if $category.meta_title}{$category.meta_title|escape}{else}{$category.name|escape}{/if}&lt;/div&gt;
+                {/if}
+                {/literal}
+                </code>
+                </pre>
+            </li>
+
+            <li>Убедитесь, что название категории расположено в блоке с классом 'category-name', а описание - в блоке с классом 'category-desc'! Если этих классов нет - обязательно добавьте их, иначе заголовок и описание не будут меняться автоматически.</li>
+        </ul>
+    </div>
+
+    <div class="fields form">
+        <form class="seo-settings__form" action="?plugin=seofilter&module=settings" method="post">
+
+            <div class="field">
+                <div class="name">
+                    <label>[`Status`]</label>
+                </div>
+
+                <div class="value seo-settings-group__value">
+                    <select name="seo_settings[enable]">
+                        <option value="0">[`Off`]</option>
+                        <option value="1" {if $seofilter_settings.enable}selected{/if}>[`On`]</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="field">
+                <div class="name">
+                    <label>[`Index`]</label>
+                </div>
+
+                <div class="value seo-settings-group__value">
+                    <select name="seo_settings[sitemap]">
+                        <option value="0">[`All pages`]</option>
+                        <option value="1" {if $seofilter_settings.sitemap}selected{/if}>[`Only pages with semantic URL`]</option>
+                    </select>
+                    <span class="hint" style="display: block; margin: 5px 0 13px;">В зависимости от выбора указанные страницы будут добавляться в sitemap и на них будет снят тег rel="canonical". При этом rel="canonical" снимается только в том случае, если задан шаблон или прописаны персональные значения.<br/>Для того, чтобы у страницы появился ЧПУ, необходимо заполнить SEO наименование значения характеристики.</span>
+                </div>
+            </div>
+
+            <div class="field">
+                <div class="name">
+                    <label>[`Storefronts`]</label>
+                </div>
+
+                <div class="value seo-settings-group__value">
+                    <select class="seo-settings__storefront-select">
+                        {foreach $storefronts as $key => $storefront}
+                        <option value="{$key}">{if $key == '0'}[`General`]{else}{$storefront|escape}{/if}</option>
+                        {/foreach}
+                    </select>
+
+                    <input type="hidden" name="current_storefront" value="general">
+                </div>
+            </div>
+
+            {foreach $storefronts as $key => $storefront}
+            <div class="field seo-settings__storefront_key_{$key} seo-settings-storefront-name">
+                <div class="name">
+                    <label>[`Storefront name`]</label>
+                </div>
+
+                <div class="value seo-settings-group__value">
+                    <input name="seo_settings[{$storefront|escape}][storefront_name]" type="text" class="large seo-settings-group__input" value="{$seofilter_settings[$storefront].storefront_name|default:''|escape}">
+                </div>
+            </div>
+            {/foreach}
+
+            <hr/>
+
+            <h2>[`Alternative name for feature values`]</h2>
+
+            <div class="seo-settings__features">
+                <div class="field">
+                    <div class="name">
+                        <label>[`Features`]</label>
+                    </div>
+                    <div class="value seo-settings-group__value">
+                        <select name="seo-features[feature_id]" class="seo-features_select">
+                            {foreach $features as $feature}
+                                <option value="{$feature.id}" {if in_array($feature.id, $filled_features)}class="filled"{/if}>{$feature.name}</option>
+                            {/foreach}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <div class="name">
+                        <label>[`Values`]</label>
+                    </div>
+                    <div class="value seo-settings-group__value">
+                        <select name="seo-features[value_id]" class="seo-features_values-select">
+                            {foreach $values as $v_id => $value}
+                                <option value="{$v_id}" {if in_array($v_id, $filled_values)}class="filled"{/if}>{$value}</option>
+                            {/foreach}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <div class="name">
+                        <label>[`SEO name`]</label>
+                        <span class="hint">{literal}[`SEO name variable`]{/literal}</span>
+                    </div>
+
+                    <div class="value seo-settings-group__value">
+                        <input name="seo-features[seo_name]" type="text" class="large seo-features-group__input seo-features_seo-name" value="{if isset($seofilter_features.seo_name)}{$seofilter_features.seo_name|escape}{/if}">
+                        <span class="hint" style="display: block;">[`Alternate names of feature's values, that can be used in the formation of meta tags and descriptions for the template`]</span>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <div class="name">
+                        <label>[`Semantic URL`]</label>
+                    </div>
+
+                    <div class="value seo-settings-group__value">
+                        <div class="seo-features_url">
+                            <span>{if isset($seofilter_features.url)}{$seofilter_features.url}{/if}</span>
+                            <input name="seo-features[url]" type="text" value="{if isset($seofilter_features.url)}{$seofilter_features.url}{/if}">
+                            <a href="" class="small gray inline-link" id="seo-features_url-edit" {if !isset($seofilter_features.url)}style="display:none;"{/if}>
+                                <i class="icon10 edit"></i><b><i>[`edit`]</i></b>
+                            </a>
+                        </div>
+
+                        <a href="#" class="seo-settings__extra">[`Set personal meta tags and descriptions`]</a>
+                    </div>
+                </div>
+
+                <div class="seo-settings__features-extra">
+                    <h2>[`Personal meta tags and descriptions`]</h2>
+
+                    <div class="seo-settings-group__content">
+                        <div class="field">
+                            <div class="name">
+                                <label>[`Categories`]</label>
+                            </div>
+                            <div class="value seo-settings-group__value">
+                                <select name="seo-features[category_id]" class="seo-features_category-select">
+                                    <option value="0">-- Выбрать --</option>
+
+                                    {foreach $categories as $category}
+                                        <option value="{$category.id}" {if in_array($category.id, $filled_categories)}class="filled"{/if}>
+                                            {if isset($category.marker)}
+                                            {$category.marker}
+                                            {/if}
+
+                                            {$category.name|escape}
+                                        </option>
+                                    {/foreach}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <div class="name">
+                                <label>[`Title`]</label>
+                            </div>
+
+                            <div class="value seo-settings-group__value">
+                                <input name="seo-features[meta_title]" type="text" class="large seo-features-group__input" value="{if isset($seofilter_features.meta_title)}{$seofilter_features.meta_title|escape}{/if}">
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <div class="name">
+                                <label>[`META Description`]</label>
+                            </div>
+
+                            <div class="value seo-settings-group__value">
+                                <textarea name="seo-features[meta_description]" class="seo-features-group__input">{if isset($seofilter_features.meta_description)}{$seofilter_features.meta_description|escape}{/if}</textarea>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <div class="name">
+                                <label>[`META Keywords`]</label>
+                            </div>
+
+                            <div class="value seo-settings-group__value">
+                                <textarea name="seo-features[meta_keywords]" class="seo-features-group__input">{if isset($seofilter_features.meta_keywords)}{$seofilter_features.meta_keywords|escape}{/if}</textarea>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <div class="name">
+                                <label>[`Title H1`]</label>
+                            </div>
+
+                            <div class="value seo-settings-group__value">
+                                <input name="seo-features[h1]" class="seo-features-group__input" value="{if isset($seofilter_features.h1)}{$seofilter_features.h1|escape}{/if}">
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <div class="name">
+                                <label>[`SEO description`]</label>
+                            </div>
+
+                            <div class="value seo-settings-group__value">
+                                <textarea name="seo-features[seo_desc]" class="seo-features-group__input seo-features_seo-desc">{if isset($seofilter_features.seo_desc)}{$seofilter_features.seo_desc|escape}{/if}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr/>
+
+            <h2>[`Common template for meta tags and descriptions`]</h2>
+
+            {foreach $storefronts as $key => $storefront name = sf}
+            <div class="seo-settings__storefront seo-settings__storefront_key_{$key} seo-settings-storefront {if $key == '0'}seo-settings__storefront_open{/if}">
+                <div class="field-group seo-settings__group seo-settings-group">
+                    <div class="seo-settings-group__content">
+                        <div class="seo-settings-group__fields">
+                            <div class="field">
+                                <div class="name">
+                                    <label>[`Title`]</label>
+                                </div>
+
+                                <div class="value seo-settings-group__value">
+                                    <input name="seo_settings[{$storefront|escape}][meta_title]" type="text" class="large seo-settings-group__input" value="{if $seofilter_settings[$storefront].meta_title}{$seofilter_settings[$storefront].meta_title|escape}{elseif $smarty.foreach.sf.first}{literal}{category_name} {seo_name|lower} купить в интернет-магазине {store_name}{/literal}{/if}" placeholder="{literal}{category_name} {seo_name|lower} купить в интернет-магазине {store_name}{/literal}">
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="name">
+                                    <label>[`META Description`]</label>
+                                </div>
+
+                                <div class="value seo-settings-group__value">
+                                    <textarea name="seo_settings[{$storefront|escape}][meta_description]" class="seo-settings-group__input" placeholder="{literal}{seo_name} купить в интернет-магазине {store_name}{/literal}">{$seofilter_settings[$storefront].meta_description|escape}</textarea>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="name">
+                                    <label>[`META Keywords`]</label>
+                                </div>
+
+                                <div class="value seo-settings-group__value">
+                                    <textarea name="seo_settings[{$storefront|escape}][meta_keywords]" class="seo-settings-group__input" placeholder="{literal}{category_name} {seo_name|lower}{/literal}">{if $seofilter_settings[$storefront].meta_keywords}{$seofilter_settings[$storefront].meta_keywords|escape}{elseif $smarty.foreach.sf.first}{literal}{category_name} {seo_name|lower}{/literal}{/if}</textarea>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="name">
+                                    <label>[`Title H1`]</label>
+                                </div>
+
+                                <div class="value seo-settings-group__value">
+                                    <input name="seo_settings[{$storefront|escape}][h1]" type="text" class="large seo-settings-group__input" value="{if $seofilter_settings[$storefront].h1}{$seofilter_settings[$storefront].h1|escape}{elseif $smarty.foreach.sf.first}{literal}{category_name} {seo_name}{/literal}{/if}" placeholder="{literal}{category_name} {seo_name}{/literal}">
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="name">
+                                    <label>[`Description`]</label>
+                                </div>
+
+                                <div class="value seo-settings-group__value">
+                                    <textarea name="seo_settings[{$storefront|escape}][description]" class="seo-settings-group__input seo-settings_common-desc" placeholder="{literal}{category_name} {seo_name} купить в интернет-магазине {store_name}. Шаблон описания на странице подбора товара по характеристикам. Вы можете указать персональное описание для страницы подбора выше.{/literal}">{$seofilter_settings[$storefront].description|escape}</textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="seo-settings-group__helper helper">
+                            {include file=$variables_template_path base_variables=true}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {/foreach}
+
+            <hr/>
+
+            <div class="field">
+                <div class="name">
+                    <label>seofilter.js</label>
+                </div>
+
+                <div class="value seo-settings-group__value no-shift">
+                    <a id="template-link" class="s-product-edit-link" href="#"><i class="icon16 edit"></i>[`edit`]</a>
+                    <div id="template-div" class="s-editor-core-wrapper" style="display:none">
+                        <textarea id="template-textarea" disabled name="seo_settings[js]">{ifset($seofilter_settings.js)}</textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="field seo-settings__footer">
+                <div class="value submit">
+                    <button type="submit" name="save" class="button green" value="1">[`Save`]</button>
+                    {if isset($success) and $success == true}
+                    <div class="seo-settings__success-message successmsg">[`Saved`]</div>
+                    {/if}
+                </div>
+            </div>
+            <input type="hidden" name="is_submit" value="1">
+        </form>
+    </div>
+</div>

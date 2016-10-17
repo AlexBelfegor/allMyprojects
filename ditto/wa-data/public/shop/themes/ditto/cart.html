@@ -1,0 +1,191 @@
+<script type="text/javascript" src="{$wa_theme_url}js/cart.js"></script>
+
+<div class="content basket">
+
+	<p class="breadcrumb">
+		<a href="/" class="cartLogo"></a>
+		<a href="/">Магазин обуви Ditto</a>&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;<span>корзина</span></p>
+	<h1>корзина</h1>
+
+{if !$cart.count}
+    <p>[`Your shopping cart is empty.`]</p>
+{else}
+
+	<form method="post">
+		<table width="780" border="0" cellspacing="0" cellpadding="0" class="basketlist cart">
+	    {$show_discount_form = false}
+	    {$i = 0}
+	    {foreach $cart.items as $item}
+			{$brand = shopDitto::getFeaturesProd($item.product_id)}
+			{$i = $i + 1}
+			{if $item.compare_price == 0}{$show_discount_form = true}{/if}
+			<tr data-id="{$item.id}">
+				<td class="get-product-data"
+					data-id="{$item.product_id}"
+					data-name="{$item.product.name|escape}"
+					data-price="{$item.price * $item.quantity}"
+					data-brand="{$brand}"
+					data-category="{$item.product.category_url}"
+					data-variant="size"
+					data-dimension1="{if $item.sku_name && $item.sku_name != $item.product.name}{$item.sku_name|escape}{/if}"
+					data-list="Корзина"
+					data-quantity="{$item.quantity}"
+					data-position="{$i}"
+				>
+					<a href="{$wa->getUrl('/frontend/product', ['product_url' => $item.product.url])}" title="{$item.product.name|escape}">{$wa->shop->productImgHtml($item.product, '60x60')}</a>
+				</td>
+				<td>
+					<span><a href="{$wa->shop->productUrl($item.product)}" title="{$item.product.name|escape}">{$item.product.name|escape}</a></span>
+
+					{*$features_selectable = shopDitto::getFeaturesProductAvailable($item.product.id)}
+                	{if $features_selectable}
+	                <div class="item-size">
+	                	<span class="size">Размер:</span>
+			                <select name="features">
+			                    {foreach $features_selectable.features_short as $id => $v}
+			                    <option {if $id == -1}selected{/if} value="{$id}">{$v|escape}</option>
+			                    {/foreach}
+			                </select>
+						</select>
+					</div>
+	                {/if*}
+
+                    {if $item.sku_name && $item.sku_name != $item.product.name}
+	                <div class="item-size">
+	                	<span class="size">Размер: <b>{$item.sku_name|escape}</b></span>
+					</div>
+                    {/if}
+
+                    {if !empty($item.services)}
+	                <div class="services">
+	                    {foreach $item.services as $service_id => $s}
+	                    <!-- one option -->
+	                    <div {if !empty($s.id)}data-id="{$s.id}"{/if}>
+	                    <label>
+	                        <input {if !empty($s.id)}checked{/if} type="checkbox" name="services[{$item.id}][]" value="{$service_id}"> {$s.name|escape} {if $s.price && !isset($s.variants)}(+{shop_currency($s.price, $s.currency)}){/if}
+	                    </label>
+	                    {if isset($s.variants)}
+	                    <select name="service_variant[{$item.id}][{$service_id}]" {if empty($s.id)}disabled{/if}>
+	                        {foreach $s.variants as $variant_id => $v}
+	                        <option {if $s.variant_id == $variant_id}selected{/if} value="{$variant_id}">{$v.name|escape} (+{shop_currency($v.price, $s.currency)})</option>
+	                        {/foreach}
+	                    </select>
+	                    {/if}
+	                    </div>
+	                    {/foreach}
+	                </div>
+	                {/if}
+				</td>
+				<td>
+					<div>
+				    	<p class="price">{shop_currency($item.price, $item.currency)} {if $item.compare_price > 0}<s style="display:block;line-height:5px;">{shop_currency($item.compare_price, $item.currency)}</s>{/if}</p>
+				        <div class="umn"></div>
+				        <div class="number">
+				        	<span class="minus" data-type="minus">-</span>
+				            <input type="text" name="quantity[{$item.id}]" value="{$item.quantity}" class="kol qty">
+				            <span class="plus" data-type="plus">+</span>
+				        </div>
+				        <div class="clr"></div>
+				    </div>
+				</td>
+				<td class="item-total">
+					{shop_currency($item.price * $item.quantity, $item.currency)}
+				</td>
+				<td>
+					<a class="delete delbask RemoveFromCartProduct" href="#" title="[`Remove from cart`]"></a>
+				</td>
+			</tr>
+	    {/foreach}
+
+        {if 1}
+        <tr>
+            <td colspan="5" align="left" class="discount">
+                <div class="promo"><a href="#">указать промокод или код сертификата</a></div>
+                <div class="promo-show">
+                	{if $show_discount_form}
+
+	                	{if $coupon_code}{shopDitto::addcouponetosession($coupon_code)}{/if}
+
+	                	<span>[`Discount coupon (if you have one)`]:</span>
+	                	<div class="discount-block">
+	                		<input type="text" name="coupon_code" value="{$coupon_code|escape}">
+	                		<div class="discount-submit"><input type="submit" value="[`Apply`]"></div>
+	                	</div>
+                	{else}
+                		<span>Купон не может быть применен к товарам со скидкой.</span>
+                	{/if}
+                </div>
+            </td>
+        </tr>
+        {/if}
+
+        {if shopAffiliate::isEnabled() && $affiliate_bonus}
+        <!-- affiliate bonus -->
+        <tr>
+            <td colspan="5" align="left" class="affiliate">
+                <div class="aff-left">
+                	<div class="affiliate-block">
+                		<div>Вы можете использовать свой партнерский бонус в <span class="bold">{$affiliate_bonus} баллов</span></div>
+                		<div>для получения дополнительной скидки в размере <span class="bold">{shop_currency(shopAffiliate::convertBonus($affiliate_bonus))}</span></div>
+                	</div>
+                    <div class="clr"></div>
+
+	                {if $use_affiliate}
+	                <a class="affiliate-submit-cancel" id="cancel-affiliate" href="#">[`Cancel`]</a>
+	                {else}
+	                <input class="affiliate-submit" type="submit" name="use_affiliate" value="[`Use bonus`]">
+	                {/if}
+                </div>
+
+                <div class="aff-right">&minus; {if $use_affiliate}{shop_currency(shopAffiliate::convertBonus($used_affiliate_bonus))}{else}0 грн.{/if}</div>
+            </td>
+        </tr>
+        {/if}
+	</table>
+
+    {if $discount}
+    <div class="foritog">
+        <p class="itogp">Скидка:</p>
+        <p class="itogprice cart-discount">&minus; {shop_currency($discount, true)}</p>
+        <div class="clr"></div>
+    </div>
+    <div class="itogdot"></div>
+	{/if}
+
+    <div class="foritog">
+        <p class="itogp">ИТОГО:</p>
+        <p class="itogprice cart-total">{shop_currency($cart.total, true)}</p>
+        <div class="clr"></div>
+    </div>
+    <div class="itogdot"></div>
+    <div class="foroformzak">
+    	<input name="checkout" type="submit" value="Оформить заказ" class="button large">
+    	<div class="clr"></div>
+    </div>
+
+    {if !empty($add_affiliate_bonus)}
+    <div class="clr"></div>
+    <div class="foritog">
+    	<br /><em class="float-right">{sprintf("[`This order will add +%s points to your affiliate bonus.`]", $add_affiliate_bonus)}</em>
+    </div>
+    {/if}
+
+    <!-- plugin hook: 'frontend_cart' -->
+    {* @event frontend_cart.%plugin_id% *}
+    {foreach $frontend_cart as $_}{$_}{/foreach}
+
+	</form>
+
+{/if}
+
+</div>
+<script type="text/javascript">{literal}ga("ec:setAction", "checkout", {"step": 1});{/literal}</script>
+
+<script type="text/javascript">
+{literal}
+var itemIDs = "{$item.product.id}";
+var hldr = "&r"+Math.round((Math.random()*10000000));
+document.cookie="holder=1; path=/";if(document.cookie)hldr+="&c1";
+(new Image()).src=window.location.protocol + '//r.holder.com.ua/e?s76&e2&k1377626842&i' + itemIDs + hldr;
+{/literal}
+</script>

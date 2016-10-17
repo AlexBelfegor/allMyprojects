@@ -1,0 +1,76 @@
+<div class="block double-padded" id="s-bwexport-form">
+
+    <form id="s-plugin-bwexport" method="post" action="?plugin=bwexport&module=run" style="border-bottom: 1px solid #ccc;margin-top:-35px;">
+	    <input type="hidden" name="direction" value="export">
+	    {$wa->csrf()}
+	    <div class="fields form" style="width: 100%;">
+	        {include file="./CsvProductsetup.export.html"}
+	    </div>
+    </form>
+
+    <form id="s-plugin-bwexport-contacts" method="post" action="?plugin=bwexport&module=contacts" style="border-bottom: 1px solid #ccc;">
+	    <input type="hidden" name="direction" value="export">
+	    {$wa->csrf()}
+	    <div class="fields form" style="width: 100%;">
+	        {include file="./CsvContactsSetup.export.html"}
+
+			{if $file_exists}
+			<div class="field-group" style="border-top: 1px solid #ccc;">
+			    <div class="field">
+			        <div class="name bold">
+			            Скачать
+			        </div>
+			        {foreach $info as $f}
+			        <div class="value" style="min-width: 300px;">
+			            <p>
+			                <a href="?plugin=bwexport&action=download" class="bold nowrap inline"><i class="icon16 download" style="margin-top: 0.3em;"></i>Скачать {$f.name}</a>
+			                <span class="hint inline">{$f.size|wa_format_file_size}</span>
+			                <br>
+			                <span class="hint inline" style="color: #aaa;">Обновлено: {$f.mtime|wa_datetime:"humandatetime"}</span>
+			            </p>
+			        </div>
+			        {/foreach}
+			    </div>
+			</div>
+			{/if}
+
+	    </div>
+    </form>
+
+</div>
+
+<div class="clear"></div>
+
+<script type="text/javascript">
+    $("#s-plugin-bwexport").submit(function () {
+        var f = $(this);
+
+        $("#s-plugin-bwexport-status").after("<i style='vertical-align:middle' class='icon16 loading yes'></i>");
+
+        $.post(f.attr('action'), f.serialize(), function (response) {
+            $(".loading").remove();
+            $("#s-plugin-bwexport-status").fadeIn('slow', function () {
+               $(this).fadeOut(1000);
+            });
+
+            $("#s-bwexport-report").css("display","block");
+        }, "json")
+        return false;
+    });
+
+    $("#s-plugin-bwexport-contacts").submit(function () {
+        var f = $(this);
+
+        $("#s-plugin-bwexport-status-contacts").after("<i style='vertical-align:middle' class='icon16 loading yes'></i>");
+
+        $.post(f.attr('action'), f.serialize(), function (response) {
+            $(".loading").remove();
+            $("#s-plugin-bwexport-status-contacts").fadeIn('slow', function () {
+               $(this).fadeOut(1000);
+            });
+
+            $("#s-bwexport-report-contacts").css("display","block");
+        }, "json")
+        return false;
+    });
+</script>

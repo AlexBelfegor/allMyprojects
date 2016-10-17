@@ -1,0 +1,65 @@
+<div class="bestst">
+	<p class="discount">Получи книгу</p>
+	<img width="204" height="229" src="/promo/banners/banner-book.jpg" alt="Получи книгу!" />
+	<div id="mail_iFrame"></div>
+	{*old -> настройка вывода iframe и ссылки в шаблоне index_main.html (выводится с помощью javascript, сделано для отслеживания подписки в Google_Analytics)*}
+	<div class="clr"></div>
+	<br />
+	{* old
+	<form name="form-send-delivery" method="post" class="form-send-delivery">
+		<input type="text" name="email" id="email" placeholder="Введите е-mail" />
+		<input name="send" type="hidden" value="1">
+		<input name="category" type="hidden" value="2">
+		<input type="submit" class="podpisright" value="Подписаться" />
+	</form>
+	*}
+	<p class="besttit">Лучшие статьи</p>
+	{*
+	<div class="onebestst">
+		<div class="bestimg">
+			<a href="/journal/aktsii/grandioznye-skidki---do-70/">
+				<img width="220" height="160" src="/wa-data/public/blog/img/20.jpg" alt="Грандиозные скидки - до 70%!" />
+			</a>
+		</div>
+		<p>Грандиозные скидки - до 100%!</p>
+	</div>
+	*}
+	{if $articles = blogDitto::GetLastArtcles()}
+	{foreach $articles as $val}
+	<div class="onebestst">
+		{if $val.photo}
+		<div class="bestimg"><a href="/journal/{$val.blog_url}/{$val.url}/"><img width="220" height="180" src="/wa-data/public/blog/img/{$val.id}.jpg" alt="{$val.title}"></a></div>
+		{/if}
+		<p>{$val.title|truncate:128}</p>
+	</div>
+	{/foreach}
+	{/if}
+	<div class="forvk">
+		<script type="text/javascript" src="//vk.com/js/api/openapi.js?115"></script>
+		<!-- VK Widget -->
+		<div id="vk_groups"></div>
+		<script type="text/javascript">
+			{literal}
+			VK.Widgets.Group("vk_groups", {mode: 0, width: "220", height: "280", color1: 'FFFFFF', color2: '2B587A', color3: '555759'}, 73549047);
+			{/literal}
+		</script>
+		{*<img src="/wa-apps/shop/themes/ditto/images/sharevk1.png" />*}
+	</div>
+	<div class="forfb" style="text-align:center;">
+		<div id="fb-root"></div>
+		<script>{literal}(function (d, s, id) {
+			var js, fjs = d.getElementsByTagName(s)[0];
+			if (d.getElementById(id)) return;
+			js = d.createElement(s);
+			js.id = id;
+			js.src = "//connect.facebook.net/ru_RU/sdk.js#xfbml=1&appId=543855722430282&version=v2.4";
+			fjs.parentNode.insertBefore(js, fjs);
+		}(document, 'script', 'facebook-jssdk'));{/literal}</script>
+		<div class="fb-page" data-href="https://www.facebook.com/ditto.ukraine" data-width="220" data-small-header="false" data-adapt-container-width="true" data-hide-cover="true" data-show-facepile="true" data-show-posts="false">
+			<div class="fb-xfbml-parse-ignore">
+				<blockquote cite="https://www.facebook.com/ditto.ukraine"><a href="https://www.facebook.com/ditto.ukraine">Ditto Shop</a></blockquote>
+			</div>
+		</div>
+		{*<img src="/wa-apps/shop/themes/ditto/images/sharefb1.png" />*}
+	</div>
+</div>

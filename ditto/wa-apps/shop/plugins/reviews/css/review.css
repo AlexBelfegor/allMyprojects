@@ -1,0 +1,33 @@
+h3{text-align:center;}
+
+.wa-captcha{display:inline-block;}
+.wa-captcha-input{margin-top: -8px!important;height:38px!important;display: block;margin-left:150px;width: 50px!important;}
+.wa-captcha strong{display: none;}
+
+/*1*/
+.big-stars{display: inline-block;text-align:center;margin: 0px 0px 10px 165px;}
+.big-currant-black{background:transparent url(/wa-apps/shop/plugins/reviews/img/big-star-full.png) repeat-x  scroll left top;height:20px;position:absolute;z-index:20;cursor:pointer;}
+.big-stars-rating {width:130px;list-style:none;margin: 0px;padding:0px;height: 20px;position: relative;background: url('/wa-apps/shop/plugins/reviews/img/big-star-empty.png') top left repeat-x;}
+.big-stars-rating li{text-indent: -90000px;padding:0px;margin:0px;float: left;}
+.big-stars-rating li a {outline: none;display:block;width:26px;height: 20px;text-decoration: none;text-indent: -9000px;z-index: 20;position: absolute;padding: 0px;}
+.big-stars-rating li a:hover{background: url('/wa-apps/shop/plugins/reviews/img/big-star-full.png') left center;z-index: 2;left: 0px;}
+
+.big-stars-rating a.r1-unit{left: 0px;}
+.big-stars-rating a.r1-unit:hover{width:26px;}
+.big-stars-rating a.r2-unit{left:26px;}
+.big-stars-rating a.r2-unit:hover{width: 52px;}
+.big-stars-rating a.r3-unit{left: 52px;}
+.big-stars-rating a.r3-unit:hover{width: 78px;}
+.big-stars-rating a.r4-unit{left: 78px;}
+.big-stars-rating a.r4-unit:hover{width: 104px;}
+.big-stars-rating a.r5-unit{left: 104px;}
+.big-stars-rating a.r5-unit:hover{width: 130px;}
+
+/*2*/
+.stars-small{width:130px;padding:0px 0px 10px 0px;float:left;}
+.currant-black{background:transparent url(/wa-apps/shop/plugins/reviews/img/star-full.png) repeat-x  scroll left top!important;height:10px!important;z-index:20;cursor:pointer;}
+.stars-rating {list-style:none;float:left;width:70px;margin: 0px;padding:0px;height: 10px;background: url('/wa-apps/shop/plugins/reviews/img/star-empty.png') top left repeat-x;}
+.stars-rating li{text-indent: -90000px;padding:0px!important;margin:0px!important;float: left!important;width:10px;border-bottom:0px!important;}
+.stars-rating li a {display:block;width:14px;height: 10px;padding: 0px;}
+.stars-rating li a:hover{background: url('/wa-apps/shop/plugins/reviews/img/star-full.png') left center;}
+

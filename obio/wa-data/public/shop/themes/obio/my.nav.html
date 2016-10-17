@@ -1,0 +1,23 @@
+<ul class="links">
+	<li class="{if $my_nav_selected == 'orders'}selected{/if}">
+		<a href="{$wa->getUrl('/frontend/myOrders')}"><img src="{$wa_theme_url}images/my-orders.png" border="0">[`My orders`]</a>
+	</li>
+	<li class="{if $my_nav_selected == 'profile'}selected{/if}">
+		<a href="{$wa->getUrl('/frontend/myProfile')}"><img src="{$wa_theme_url}images/my-profile.png" border="0">[`My profile`]</a>
+	</li>
+	{if shopAffiliate::isEnabled()}
+		<li class="{if $my_nav_selected == 'affiliate'}selected{/if}">
+			<a href="{$wa->getUrl('/frontend/myAffiliate')}"><img src="{$wa_theme_url}images/my-partner.png" border="0">Партнерская программа</a>
+		</li>
+	{/if}
+	<li>
+		<a href="?logout"><img src="{$wa_theme_url}images/my-logout.png" border="0">Выйти</a>
+	</li>
+	<!-- plugin hook: 'frontend_my_nav' -->
+	{* @event frontend_my_nav.%plugin_id% *}
+	{foreach $frontend_my_nav as $_plugin => $_}
+		<li class="shop {if waRequest::param('plugin') == str_replace('-plugin', '', $_plugin)}selected{/if}">{$_}</li>
+	{/foreach}
+</ul>
+
+{$wa->globals('isMyAccount', true)}

@@ -1,0 +1,86 @@
+<div class="block double-padded" id="s-bwexport-form">
+
+    <form id="s-plugin-bwexport" method="post" action="?plugin=bwexport&module=report&timeframe={$timeframe}&from={$from}&to={$to}">
+	    <input type="hidden" name="direction" value="export">
+	    {$wa->csrf()}
+	    <div class="fields form" style="width: 100%;">
+			<h1>Отчет для заказа</h1>
+			<p>
+				Экспорт отчета в формате CSV
+				<i class="icon10 new-window"></i>
+			</p>
+
+			{if $file_exists}
+			<div class="field-group" style="border-bottom: 1px solid #ccc;">
+			    <div class="field">
+			        <div class="name bold">
+			            Скачать
+			        </div>
+			        {foreach $info as $f}
+			        <div class="value" style="min-width: 300px;">
+			            <p>
+			                <a href="?plugin=bwexport&action=download&file=order.csv" class="bold nowrap inline"><i class="icon16 download" style="margin-top: 0.3em;"></i>Скачать</a>
+			                <span class="hint inline">{$f.size|wa_format_file_size}</span>
+			                <br>
+			                <span class="hint inline" style="color: #aaa;">Обновлено: {$f.mtime|wa_datetime:"humandatetime"}</span>
+			            </p>
+			        </div>
+			        {/foreach}
+			    </div>
+			</div>
+			{/if}
+
+			<div class="clear-left"></div>
+
+			<div class="field-group" id="s-bwexport-submit">
+			    <div class="field1">
+			        <div class="value submit">
+			            <input type="submit" class="button green" value="Экспортировать">
+			            <span id="s-plugin-bwexport-status" style="display:none">
+			                <i style="vertical-align:middle" class="icon16 yes"></i> Сохранено
+			            </span>
+			        </div>
+			        <br>
+			        <br>
+			        <em class="errormsg"></em>
+			    </div>
+			</div>
+
+
+			<div class="field-group" id="s-bwexport-report" style="display:none;">
+				<div class="field">
+					<div class="value">
+						<div class="s-csv-importexport-stats done">
+							<h2>Экспорт завершен!</h2>
+						</div>
+					</div>
+					<div class="value">
+						<br>
+						<a href="?plugin=bwexport&action=download&file=order.csv" class="bold nowrap inline"><i class="icon16 download" style="margin-top: 0.3em;"></i>Скачать</a>
+					</div>
+				</div>
+			</div>
+	    </div>
+    </form>
+
+</div>
+
+<div class="clear"></div>
+
+<script type="text/javascript">
+    $("#s-plugin-bwexport").submit(function () {
+        var f = $(this);
+
+        $("#s-plugin-bwexport-status").after("<i style='vertical-align:middle' class='icon16 loading yes'></i>");
+
+        $.post(f.attr('action'), f.serialize(), function (response) {
+            $(".loading").remove();
+            $("#s-plugin-bwexport-status").fadeIn('slow', function () {
+               $(this).fadeOut(1000);
+            });
+
+            $("#s-bwexport-report").css("display","block");
+        }, "json")
+        return false;
+    });
+</script>

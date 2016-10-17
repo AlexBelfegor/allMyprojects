@@ -1,0 +1,41 @@
+	{if $sidebarcategories = shopDitto::sidebarcategories($category)}
+	<div class="menu-sidebar">
+		<ul>
+	        {foreach $sidebarcategories as $c}
+				{if isset($c.show)}{$show = 1}{else}{$show = 0}{/if}
+				<li {if isset($c.active)}class="active"{/if}>
+					<a href="{$c.url}" {if $category.id == $c.id}class="active"{/if}>{$c.name|escape}</a>
+					{if count($c.subcategories) && $c.active}
+						<ul>
+							{foreach $c.subcategories as $s}
+                				{if !isset($s.params.hidden)}
+									<li><a href="{$s.url}" {if $category.id == $s.id}class="active"{/if}>{$s.name|escape}</a>
+								{/if}
+							{/foreach}
+						</ul>
+					{/if}
+				</li>
+	        {/foreach}
+	    </ul>
+    </div>
+    {/if}
+
+    {if !empty($filters)}
+    <div class="filtr">
+        {if $collection_sql}
+            {shopFeatures3000::injectJs('.filtr', $collection_sql, $filters, 'custom_sql')}
+        {else}
+            {shopFeatures3000::injectJs('.filtr', $category.id, $filters)}
+        {/if}
+    </div>
+    {/if}
+
+	{if ($link_category_sidebar = shopCallbackPlugin::GetLinkCategorySidebar($category.id))}
+		<div>
+			{$link_category_sidebar}
+		</div>
+	{/if}
+	
+    <!-- plugin hook: 'frontend_nav' -->
+    {* @event frontend_nav.%plugin_id% *}
+    {foreach $frontend_nav as $_}{$_}{/foreach}

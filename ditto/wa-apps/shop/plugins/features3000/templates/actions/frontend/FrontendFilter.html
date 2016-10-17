@@ -1,0 +1,104 @@
+    <script type="text/javascript">
+        Filters3000Core.container_selector = '{$f3000_elements_selector}';
+        Filters3000Core.url = '{$filters3000_url}';
+        Filters3000Core.currency_rate = '{$filters3000_currency_rate}';
+    </script>
+
+
+        <div>
+        <div><b><u>Вы выбрали:</u></b></div>
+
+         <div>
+             {if $f3000_conditions|sizeof > 0}
+                {foreach $f3000_conditions as $key => $condition}
+                    {if $condition.type == 'price'}
+                        <div><b>Цена:</b> от {if $condition.min > 0}{shop_currency($condition.min)}{else}0{/if} до {if $condition.max > 0}{shop_currency($condition.max)}{else}...{/if} <a href="javascript: void(0);" onclick="f3000_flush_price();" style="color: red;">[X]</a></div>
+                    {else}
+                        <div><b>{$condition.filter}:</b> {$condition.value} <a href="javascript: void(0);" onclick="f3000_flush_value('{$condition.filterId}', '{$condition.valueId}');" style="color: red;">[X]</a></div>
+                    {/if}
+                {/foreach}
+            {else}
+                <div><i>Фильтр сброшен</i></div>
+            {/if}
+                <div style="display:none;" class="f3000_something_changed">
+                    <input type="button" value="Сохранить" onclick="$('#filters3000').submit();">
+                </div>
+        </div>
+        <hr>
+        </div>
+
+    <form method="get" action="" id="filters3000">
+        {if $features3000->hasPriceFilter()}
+            <p>
+                <b>Цена</b><br>
+                {$c = $wa->shop->currency(true)}
+                <div>
+                    <p>
+                        <input id="f3000_price_slider" type="slider" name="price" value="{if $priceMinFilter > 0}{$priceMinFilter}{else}{shop_currency($features3000->minPriceCurrent, false, false, false)}{/if};{if $priceMaxFilter > 0}{$priceMaxFilter}{else}{shop_currency($features3000->maxPriceCurrent, false, false, false)}{/if}" />
+                        <script type="text/javascript" charset="utf-8">
+                            jQuery("#f3000_price_slider").slider({ from: {shop_currency($features3000->minPrice, false, false, false)}, to: {shop_currency($features3000->maxPrice, false, false, false)}, step: 1, dimension: '&nbsp;{$c.sign}',
+                                callback: function(value) {
+                                    var minMax = value.split(';');
+                                    var min = minMax[0];
+                                    var max = minMax[1];
+                                    $('input[name=price_min]').val(min);
+                                    $('input[name=price_max]').val(max);
+                                    $('.f3000_price').keydown();
+                                } });
+                        </script>
+                    </p>
+                    [`from`] <input class="f3000_price_flush f3000_price" type="text" name="price_min" {if $priceMinFilter}value="{$priceMinFilter}"{/if} placeholder="{shop_currency($features3000->minPriceCurrent, false, false, false)|floor}">
+                    [`to`]   <input class="f3000_price_flush f3000_price" type="text" name="price_max" {if $priceMaxFilter}value="{$priceMaxFilter}"{/if} placeholder="{shop_currency($features3000->maxPriceCurrent, false, false, false)|floor}"> {$c.sign}
+                    <input type="button" class="price_submit" name="filter_price" value="OK">
+                </div>
+            </p>
+            <hr>
+        {/if}
+        <div class="filters_lockers">
+        {foreach $filters3000->filters as $fid => $filter}
+
+                <p>
+                    <b>{$filter->getDataKey('name')|escape}</b><br>
+                    {foreach $filter->values as $v_id => $v}
+
+                            <label>
+                                {if $filter->type == 'boolean'}
+                                     <input class="f3000_value f3000_{$filter->id} f3000_{$filter->id}_{$v->id}" type="radio" name="{$filter->id}" {if $v->isSelected == true}checked{/if} value="{$v->id}" {if $v->status == 'invisible'}disabled="disabled"{/if}>
+                                    {$v->getDataKey('name')}
+                                    {if $v->status == 'pluser'}
+
+                                    {elseif $v->status == 'notselected'}
+                                        ({$v->getCount()})
+                                    {elseif $v->status == 'invisible'}
+
+                                    {/if}
+                                {else}
+
+                                    <input class="f3000_value f3000_{$filter->id} f3000_{$filter->id}_{$v->id}" type="checkbox" name="{$filter->id}[]" {if $v->isSelected == true}checked{/if} value="{$v->id}" {if $v->status == 'invisible'}disabled="disabled"{/if}>
+                                    {$v->getDataKey('name')}
+                                    {if $v->status == 'pluser'}
+                                        (+ {$v->getCount()})
+                                    {elseif $v->status == 'notselected'}
+                                        ({$v->getCount()})
+                                    {elseif $v->status == 'invisible'}
+                                        (0)
+                                    {/if}
+                                {/if}
+                            </label><br>
+
+                    {/foreach}
+                    {if $filter->type == 'boolean'}
+                         <label>
+                            <input class="f3000_value f3000_{$filter->id} f3000_{$filter->id}_{$v->id}" type="radio" name="{$filter->id}" {if !$filter->hasSelected()}checked{/if} value="" {if $filter->isEmpty}disabled="disabled"{/if}>
+                             [`Not defined`]
+                        </label><br>
+                    {/if}
+                </p>
+
+        {/foreach}
+        <div style="display:none;" class="f3000_something_changed">
+            <input type="submit" value="[`Filter products`]">
+        </div>
+        </div>
+    </form>
+

@@ -1,0 +1,98 @@
+<div class="katalog">
+	<script>$.fn.cycle.defaults.autoSelector = '.slideshow';</script>
+
+	<ul class="product-list">
+	{foreach $products as $p}
+	    <li itemscope itemtype = "http://schema.org/Product">
+			<div class="oneitem">
+				<div class="itemslider">
+					<div class="slideshow"
+						data-cycle-slides="> div"
+						data-cycle-fx=carousel
+						data-cycle-timeout="0"
+						data-cycle-carousel-visible="1"
+						data-cycle-next=".next-slide-{$p.id}"
+						data-cycle-prev=".prev-slide-{$p.id}"
+						data-allow-wrap=true
+					>
+                        {$show_prev_next = false}
+						{$images = shopDitto::getImages($p.id,array('220x220'))}
+
+						{if count($images) == 1}
+							<div>
+								<a href="{$p.frontend_url}" title="{$p.name|escape}{if $p.summary} &mdash; {strip_tags($p.summary)}{/if}">
+									{$wa->shop->productImgHtml($p, '220x220', ['itemprop' => 'image', 'default' => "`$wa_theme_url`img/dummy200.png"])}
+								</a>
+							</div>
+						{else}
+							{$show_prev_next = true}
+							{foreach $images as $image}
+								<div>
+									<a href="{$p.frontend_url}" title="{$p.name|escape}{if $p.summary} &mdash; {strip_tags($p.summary)}{/if}">
+										<img src="{$image.url_0}" alt="{$p.name}" title="{$p.name}">
+									</a>
+								</div>
+							{/foreach}
+						{/if}
+					</div>
+
+					{if $show_prev_next}
+						<div class="next-slide-{$p.id} next"></div>
+						<div class="prev-slide-{$p.id} prev"></div>
+					{/if}
+				</div>
+
+	            {$badge_html = $wa->shop->badgeHtml($p.badge)}
+	            {if $badge_html}
+	                {$badge_html}
+					{*<p class="dopstat new">новинка</p><p class="dopstat hit">хит продаж</p><p class="dopstat akc">АКция</p>*}
+					<div class="clr"></div>
+	            {else}
+	            	<p class="prod-height"></p>
+	            {/if}
+
+				<p class="itemtitle">{$p.name}</p>
+				<p class="itemprice">{shop_currency($p.price)} {if $p.compare_price > 0}<span>{shop_currency($p.compare_price)}</span>{/if}</p>
+				<p class="nalich">Есть в наличии</p>
+				<script type="text/javascript">
+				{literal}
+				$(document).ready(function () {
+					$("#popup-product-review-{/literal}{$p.id}{literal}").colorbox({href:"/callback/product_preview/?product_id={/literal}{$p.id}{literal}",iframe:true, width:"590px", height:"590px"});
+				});
+				{/literal}
+				</script>
+
+				<a href="#" class="openitem" id="popup-product-review-{$p.id}">быстрый просмотр</a>
+				<div class="clr"></div>
+				<p class="razmp">
+					{$features_selectable = shopDitto::getFeaturesProduct($p.id)}
+	                {if $features_selectable}
+						Размеры в наличии
+						<br/>
+		                <span>
+			                {foreach $features_selectable as $f}
+		                        {foreach $f.values as $v_id => $v}
+		                            {if !isset($default_sku_features[$f.id])}{$default_sku_features[$f.id]=$v_id}{/if}
+		                            {if $f.type == 'color'}&nbsp;<span class="color_name">{strip_tags($v)}</span>{else}{$v}{/if}
+		                        {/foreach}
+			                {/foreach}
+		                </span>
+	                {/if}
+				</p>
+			</div>
+	    </li>
+	{/foreach}
+	</ul>
+
+    <div class="clr"></div>
+</div>
+
+<div class="dottitem"></div>
+
+{if isset($pages_count) && $pages_count > 1}
+<div class="pagination">
+    {wa_pagination_ditto total=$pages_count attrs=['class' => "menu-h"]}
+    <div class="clr"></div>
+</div>
+{/if}
+

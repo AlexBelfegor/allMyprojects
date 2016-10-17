@@ -1,0 +1,184 @@
+<script type="text/javascript" src="{$wa_theme_url}js/cart.js"></script>
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <p class="breadcrumb">
+            	<a href="">Главная</a>&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;
+            	<span>Корзина</span>
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="katalogbl">
+    <div class="container">
+        <div class="row">
+			{if !$cart.count}
+		        <h1 class="text-center">[`Shopping cart`]</h1>
+
+			    <div class="cart your-cart-is-empty col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <ul class="navorder">
+                        <li class="active">1. Корзина</li>
+                        <li>2. Контактные данные</li>
+                        <li>3. Доставка</li>
+                        <li>4. Оплата</li>
+                    </ul>
+
+			        <div class="basketlist">
+			        	<p>[`Your shopping cart is empty.`]</p>
+					</div>
+			    </div>
+			{else}
+			    <form method="post">
+
+			        <div class="cart cart-summary-page col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <ul class="navorder left">
+                            <li class="active">1. Корзина</li>
+                            <li>2. Контактная информация</li>
+                            <li>3. Доставка</li>
+                            <li>4. Оплата</li>
+                        </ul>
+
+						<div class="next-button">
+							<a href="/checkout/contactinfo/" class="next-step simple">далее</a>
+						</div>
+
+						<div class="clr"></div>
+
+                        <div class="basketlist">
+	                        <div class="linebasket firstlinebasket">
+	                            <div class="onecell">Товар</div>
+	                            <div class="onecell sizet">Размер</div>
+	                            <div class="onecell pricet">Цена</div>
+	                            <div class="onecell kolt">Количество</div>
+	                            <div class="onecell sumt">Сумма</div>
+	                            <div class="onecell delt">Удалить</div>
+	                        </div>
+
+	                        {foreach $cart.items as $item}
+				                <div class="row linebasket" data-id="{$item.id}">
+				                    <div class="col w1 item-thumb onecell img">
+				                    	<a href="{$wa->shop->productUrl($item.product)}" title="{$item.product.name|escape}">
+				                    		{$wa->shop->productImgHtml($item.product, '96x96', ['default' => "`$wa_theme_url`img/dummy48.png"])}
+				                    	</a>&nbsp;
+				                    </div>
+				                    <div class="col w2 item-name onecell">
+				                        <h4><a href="{$wa->shop->productUrl($item.product)}">{$item.product.name|escape}</a></h4>
+
+					                    {if !empty($item.services)}
+					                    <div class="clear-both">
+					                        <div class="col w1 item-thumb">&nbsp;</div>
+					                        <div class="col w15 services">
+					                            {foreach $item.services as $service_id => $s}
+						                            <div {if !empty($s.id)}data-id="{$s.id}"{/if}>
+							                            <label>
+							                                <input {if !empty($s.id)}checked{/if} type="checkbox" name="services[{$item.id}][]" value="{$service_id}"> {$s.name|escape} {if $s.price && !isset($s.variants)}(<span>+{shop_currency_html($s.price, $s.currency)}</span>){/if}
+							                            </label>
+							                            {if isset($s.variants)}
+								                            <select name="service_variant[{$item.id}][{$service_id}]" {if empty($s.id)}disabled{/if}>
+								                                {foreach $s.variants as $variant_id => $v}
+								                                <option {if $s.variant_id == $variant_id}selected{/if} value="{$variant_id}">{$v.name|escape} (+{shop_currency($v.price, $s.currency)})</option>
+								                                {/foreach}
+								                            </select>
+							                            {else}
+							                            	<input type="hidden" name="service_variant[{$item.id}][{$service_id}]" value="{$s.variant_id}">
+							                            {/if}
+						                            </div>
+					                            {/foreach}
+					                        </div>
+					                    </div>
+					                    {/if}
+				                    </div>
+				                    <div class="col w3 onecell sizet">
+				                    	{if $item.sku_name && $item.sku_name != $item.product.name}{$item.sku_name|escape}{/if}
+				                    </div>
+				                    <div class="col w4 onecell pricet">
+				                    	{if $item.compare_price > 0}
+				                    		<span class="oldprice">{shop_currency($item.compare_price, true)}</span>
+				                    		<span class="newprice">{shop_currency_html($item.price, true)}</span>
+				             			{else}
+				             				{shop_currency_html($item.price, true)}
+				                    	{/if}
+				                    </div>
+				                    <div class="col w5 item-qty align-center nowrap onecell kolt">
+				                    	<span class="minus" data-type="minus"></span>
+				                    	<input type="text" name="quantity[{$item.id}]" value="{$item.quantity}" class="qty{if !empty($item.error)} error{/if} kol">
+				                    	<span class="plus" data-type="plus"></span>
+				                    </div>
+				                    <div class="col w6 align-center item-total nowrap onecell sumt">
+				                    	{shop_currency_html($item.full_price, true)}
+				                    </div>
+				                    <div class="col w7 item-remove onecell delt">
+				                    	<a class="delete" href="#" title="[`Remove from cart`]"><i class="icon16 remove"></i></a>
+				                    </div>
+
+				                </div>
+				                {if !empty($item.error)}<script>alert({json_encode($item.error)});</script>{/if}
+				            {/foreach}
+
+			            </div>
+
+                        <div class="undertableleft">
+                            {if shopDiscounts::isEnabled('coupons')}
+                            	У Вас есть промокод или код сертификата? <a href="#" class="not-visited" id="use-coupon">Укажите его здесь</a>
+                            {/if}
+                        </div>
+
+                        <div class="undertableright">
+                            СУММА ЗАКАЗА: <span class="lastprice cart-total">{shop_currency_html($cart.total, true)}</span>
+                        </div>
+                        <div class="clr"></div>
+
+                        <div class="forpromokod" {if !shopDiscounts::isEnabled('coupons') && !$discount || !$coupon_code}style="display:none"{/if} id="discount-row">
+                            {if shopDiscounts::isEnabled('coupons')}
+	                            <div class="oneblpromo cart-coupon" {if !$coupon_code}style="display: none;"{/if} id="apply-coupon-code">
+	                                <input type="text" class="{if $coupon_code && empty($coupon_discount)}err{/if}" name="coupon_code" value="{$coupon_code|escape}">
+		                            {if $coupon_code && $coupon_discount}
+	                                	<p class="thankpromo">Ваш код успешно применен</p>
+		                            {/if}
+		                            {if $coupon_code && empty($coupon_discount)}
+		                                <p class="thankpromo err">[`Invalid coupon code`]</p>
+		                            {/if}
+	                            </div>
+                                <div class="oneblpromo">
+                                	<input class="submit" type="submit" value="[`Apply`]">
+                                </div>
+                            {/if}
+                        </div>
+
+                        <div class="forpoints">
+				            {if shopAffiliate::isEnabled() && !empty($add_affiliate_bonus) && 0}
+				            	<p class="affiliate"><i class="icon16 like"></i> {sprintf("[`This order will add <strong>+%s bonuses</strong> to  your account, which you will be able to spend on getting additional discounts later.`]", $add_affiliate_bonus)}</p>
+				            	<br />
+				            {/if}
+
+				            {if shopAffiliate::isEnabled() && $affiliate_bonus > 0}
+			                    {if $use_affiliate}
+		                            <p class="left">Сумма заказа пересчитана</p>
+		                            <p class="right">&minus; {shop_currency_html(shopAffiliate::convertBonus($used_affiliate_bonus))}</p>
+		                            <div class="clr"></div>
+			                	    <a id="cancel-affiliate" class="cansel" href="#">Отмена</a>
+			                    {else}
+		                            <p>Вы можете использовать свой партнерский бонус: <span>{$affiliate_bonus} баллов</span></p>
+		                            <p>Для получения дополнительной скидки в размере <span class="affiliate-discount-available">{shop_currency_html($affiliate_discount)}</span></p>
+			                	    <input type="submit" name="use_affiliate" class="small gray usepoints" value="Использовать баллы">
+			                    {/if}
+				            {/if}
+
+                        </div>
+
+                        <a href="/checkout/contactinfo/" class="next-step">далее</a>
+                        <p class="backlink"><a href="/">Вернуться к покупкам</a></p>
+
+			        </div>
+
+			        <!-- plugin hook: 'frontend_cart' -->
+			        {* @event frontend_cart.%plugin_id% *}
+			        {foreach $frontend_cart as $_}{$_}{/foreach}
+
+			    </form>
+			{/if}
+        </div>
+    </div>
+</div>

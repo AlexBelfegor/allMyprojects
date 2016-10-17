@@ -1,0 +1,8 @@
+{if $error_code == '404'}
+	{include file="index_error.html"}
+{elseif $action == 'cart' || $action == 'checkout'}
+	{*  || $action == 'myProfile' || $action == 'myOrders' || $action == 'myOrder'*}
+	{include file="index_cart.html"}
+{else}
+	{include file="index_main.html"}
+{/if}
